@@ -7,9 +7,16 @@ class Gui():
         #ce se zapre okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
+        self.stevec1 = IntVar(master, value=9)
+        
+        Label(master, text= "Preostale: {}".format(self.stevec1.get())).grid(row=0, column=0)
+
+        self.stevec2 = IntVar(master, value=9)
+        Label(master, text= "Preostale: {}".format(self.stevec2.get())).grid(row=2, column=0)
+        
         #igralna plosca
         self.plosca = Canvas(master, width = velikost_plosce, height = velikost_plosce)
-        self.plosca.pack()
+        self.plosca.grid(row=1, column=0)
 
         ##############################################
         #ustvarim 24 pik/polj
