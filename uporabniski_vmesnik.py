@@ -13,122 +13,40 @@ class Gui():
 
         ##############################################
         #ustvarim 24 pik/polj
-        polje1 = self.plosca.create_oval(velikost_plosce/8 - velikost_polja,
-                                         velikost_plosce/8 - velikost_polja,
-                                         velikost_plosce/8 + velikost_polja,
-                                         velikost_plosce/8 + velikost_polja)
-        polje2 = self.plosca.create_oval(velikost_plosce/2 - velikost_polja,
-                                         velikost_plosce/8 - velikost_polja,
-                                         velikost_plosce/2 + velikost_polja,
-                                         velikost_plosce/8 + velikost_polja)
-        polje3 = self.plosca.create_oval(7 * velikost_plosce/8 - velikost_polja,
-                                             velikost_plosce/8 - velikost_polja,
-                                         7 * velikost_plosce/8 + velikost_polja,
-                                             velikost_plosce/8 + velikost_polja)
-        polje4 = self.plosca.create_oval(velikost_plosce/4 - velikost_polja,
-                                         velikost_plosce/4 - velikost_polja,
-                                         velikost_plosce/4 + velikost_polja,
-                                         velikost_plosce/4 + velikost_polja)
-        polje5 = self.plosca.create_oval(velikost_plosce/2 - velikost_polja,
-                                         velikost_plosce/4 - velikost_polja,
-                                         velikost_plosce/2 + velikost_polja,
-                                         velikost_plosce/4 + velikost_polja)
-        polje6 = self.plosca.create_oval(3 * velikost_plosce/4 - velikost_polja,
-                                             velikost_plosce/4 - velikost_polja,
-                                         3 * velikost_plosce/4 + velikost_polja,
-                                             velikost_plosce/4 + velikost_polja)
-        polje7 = self.plosca.create_oval(3 * velikost_plosce/8 - velikost_polja,
-                                         3 * velikost_plosce/8 - velikost_polja,
-                                         3 * velikost_plosce/8 + velikost_polja,
-                                         3 * velikost_plosce/8 + velikost_polja)
-        polje8 = self.plosca.create_oval(    velikost_plosce/2 - velikost_polja,
-                                         3 * velikost_plosce/8 - velikost_polja,
-                                             velikost_plosce/2 + velikost_polja,
-                                         3 * velikost_plosce/8 + velikost_polja)
-        polje9 = self.plosca.create_oval(5 * velikost_plosce/8 - velikost_polja,
-                                        3 * velikost_plosce/8 - velikost_polja,
-                                        5 * velikost_plosce/8 + velikost_polja,
-                                        3 * velikost_plosce/8 + velikost_polja)
-        polje10 = self.plosca.create_oval(velikost_plosce/8 - velikost_polja,
-                                          velikost_plosce/2 - velikost_polja,
-                                          velikost_plosce/8 + velikost_polja,
-                                          velikost_plosce/2 + velikost_polja)
-        polje11 = self.plosca.create_oval(velikost_plosce/4 - velikost_polja,
-                                          velikost_plosce/2 - velikost_polja,
-                                          velikost_plosce/4 + velikost_polja,
-                                          velikost_plosce/2 + velikost_polja)
-        polje12 = self.plosca.create_oval(3 * velikost_plosce/8 - velikost_polja,
-                                              velikost_plosce/2 - velikost_polja,
-                                          3 * velikost_plosce/8 + velikost_polja,
-                                              velikost_plosce/2 + velikost_polja)
-        polje13 = self.plosca.create_oval(5 * velikost_plosce/8 - velikost_polja,
-                                              velikost_plosce/2 - velikost_polja,
-                                          5 * velikost_plosce/8 + velikost_polja,
-                                              velikost_plosce/2 + velikost_polja)
-        polje14 = self.plosca.create_oval(3 * velikost_plosce/4 - velikost_polja,
-                                              velikost_plosce/2 - velikost_polja,
-                                          3 * velikost_plosce/4 + velikost_polja,
-                                              velikost_plosce/2 + velikost_polja)
-        polje15 = self.plosca.create_oval(7 * velikost_plosce/8 - velikost_polja,
-                                              velikost_plosce/2 - velikost_polja,
-                                          7 * velikost_plosce/8 + velikost_polja,
-                                              velikost_plosce/2 + velikost_polja)
-        polje16 = self.plosca.create_oval(3 * velikost_plosce/8 - velikost_polja,
-                                          5 * velikost_plosce/8 - velikost_polja,
-                                          3 * velikost_plosce/8 + velikost_polja,
-                                          5 * velikost_plosce/8 + velikost_polja)
-        polje17 = self.plosca.create_oval(    velikost_plosce/2 - velikost_polja,
-                                          5 * velikost_plosce/8 - velikost_polja,
-                                              velikost_plosce/2 + velikost_polja,
-                                          5 * velikost_plosce/8 + velikost_polja)
-        polje18 = self.plosca.create_oval(5 * velikost_plosce/8 - velikost_polja,
-                                          5 * velikost_plosce/8 - velikost_polja,
-                                          5 * velikost_plosce/8 + velikost_polja,
-                                          5 * velikost_plosce/8 + velikost_polja)
-        polje19 = self.plosca.create_oval(velikost_plosce/4 - velikost_polja,
-                                         3 * velikost_plosce/4 - velikost_polja,
-                                         velikost_plosce/4 + velikost_polja,
-                                         3 * velikost_plosce/4 + velikost_polja)
-        
-        polje20 = self.plosca.create_oval(velikost_plosce/2 - velikost_polja,
-                                         3 * velikost_plosce/4 - velikost_polja,
-                                         velikost_plosce/2 + velikost_polja,
-                                         3 * velikost_plosce/4 + velikost_polja)
-        
-        polje21 = self.plosca.create_oval(3 * velikost_plosce/4 - velikost_polja,
-                                          3 * velikost_plosce/4 - velikost_polja,
-                                          3 * velikost_plosce/4 + velikost_polja,
-                                          3 * velikost_plosce/4 + velikost_polja)
-        
-        polje22 = self.plosca.create_oval(velikost_plosce/8 - velikost_polja,
-                                          7 *velikost_plosce/8 - velikost_polja,
-                                          velikost_plosce/8 + velikost_polja,
-                                          7 * velikost_plosce/8 + velikost_polja)
-        
-        polje23 = self.plosca.create_oval(velikost_plosce/2 - velikost_polja,
-                                          7 * velikost_plosce/8 - velikost_polja,
-                                          velikost_plosce/2 + velikost_polja,
-                                          7 *velikost_plosce/8 + velikost_polja)
-        
-        polje24 = self.plosca.create_oval(7 * velikost_plosce/8 - velikost_polja,
-                                          7 *velikost_plosce/8 - velikost_polja,
-                                          7 * velikost_plosce/8 + velikost_polja,
-                                          7 * velikost_plosce/8 + velikost_polja)
+        for i in range(0, 3):
+            for k in range(0, 2):
+                self.plosca.create_oval(velikost_plosce * (1/8 + i * 3/8) - velikost_polja,
+                                        velikost_plosce * (1/8 + k * 3/4) - velikost_polja,
+                                        velikost_plosce *(1/8 + i * 3/8) + velikost_polja,
+                                        velikost_plosce * (1/8 + k * 3/4) + velikost_polja)
+        for i in range(0, 3):
+            for k in range(0, 2):
+                self.plosca.create_oval(velikost_plosce * (1/4 + i/4) - velikost_polja,
+                                        velikost_plosce * (1/4 + k/2) - velikost_polja,
+                                        velikost_plosce * (1/4 + i/4) + velikost_polja,
+                                        velikost_plosce * (1/4 + k/2) + velikost_polja)
 
-        self.plosca.create_rectangle(velikost_plosce/8,
-                                     velikost_plosce/8,
-                                 7 * velikost_plosce/8,
-                                 7 * velikost_plosce/8)
+        for i in range(0, 3):
+            for k in range(0,2):
+                self.plosca.create_oval(velikost_plosce * (3/8 + i/8) - velikost_polja,
+                                        velikost_plosce * (3/8 + k/4) - velikost_polja,
+                                        velikost_plosce * (3/8 + i/8) + velikost_polja,
+                                        velikost_plosce * (3/8 + k/4) + velikost_polja)
 
-        self.plosca.create_rectangle(velikost_plosce/4,
-                                     velikost_plosce/4,
-                                 3 * velikost_plosce/4,
-                                 3 * velikost_plosce/4)
+        for i in range(0, 3):
+            for k in range(0,2):
+                self.plosca.create_oval(velikost_plosce * (1/8 + i/8 + k/2) - velikost_polja,
+                                          velikost_plosce/2 - velikost_polja,
+                                          velikost_plosce * (1/8 + i/8 + k/2) + velikost_polja,
+                                          velikost_plosce/2 + velikost_polja)
         
-        self.plosca.create_rectangle(3 * velikost_plosce/8,
-                                     3 * velikost_plosce/8,
-                                     5 * velikost_plosce/8,
-                                     5 * velikost_plosce/8)
+        ###povezem polja med seboj
+        for i in range(0, 3):
+            self.plosca.create_rectangle(velikost_plosce * (1/8 + i/8),
+                                         velikost_plosce * (1/8 + i/8),
+                                         velikost_plosce * (7/8 - i/8) ,
+                                         velikost_plosce * (7/8 - i/8))
+
 
         self.plosca.create_line(velikost_plosce/2, velikost_plosce/8,velikost_plosce/2,
                                 3 * velikost_plosce/8)
@@ -143,7 +61,7 @@ class Gui():
                                 velikost_plosce/2)
         
                                          
-        
+        #################################
 
 
 
