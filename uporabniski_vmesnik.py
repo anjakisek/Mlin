@@ -1,11 +1,22 @@
 from tkinter import *
+from igra import *
 #dolocimo velikost plosce, polja, ime igralcev ter barvo posameznih zetonov
 velikost_plosce = 400
 velikost_polja = velikost_plosce/25
-IGRALEC_1 = 'igralec1'
-BARVA_1 = 'blue'
-IGRALEC_2 = 'igralec2'
-BARVA_2 = 'red'
+#Igralci in barve testno prestavljeni v igra.py
+##IGRALEC_1 = 'igralec1'
+##BARVA_1 = 'blue'
+##IGRALEC_2 = 'igralec2'
+##BARVA_2 = 'red'
+
+##OSTEVILCENJE POLJ
+## 1  -  -  2  -  -  3
+## |  4  -  5  -  6  |
+## |  -  7  8  9  -  |
+##10 11 12  - 13 14 15
+## |  - 16 17 18  -  |
+## | 19  - 20  - 21  |
+##22  -  - 23  -  - 24
 
 def sredisce(krogec):
     (x1, y1, x2, y2) = krogec
@@ -20,12 +31,16 @@ class Gui():
         #stevec, ki se bo prikazoval, koliko zetonov
         #lahko prvi igralec se polozi na plosco
         self.stevec1 = IntVar(master, value=9)
-        Label(master, text= "Preostale: {}".format(self.stevec1.get())).grid(row=0, column=0)
-
+        Label(#TODO: popravi label, da se text spreminja s stevcem 1
+            master,
+            text= "Preostale: {}".format(self.stevec1.get())).grid(row=0, column=0)
+        
         #stevec, ki se bo prikazoval, koliko zetonov
         #lahko drugi igralec se polozi na plosco
         self.stevec2 = IntVar(master, value=9)
-        Label(master, text= "Preostale: {}".format(self.stevec2.get())).grid(row=2, column=0)
+        Label(#TODO: popravi label, da se text spreminja s stevcem 2
+            master,
+            text= "Preostale: {}".format(self.stevec2.get())).grid(row=2, column=0)
 
         #string, ki pove, kdo je na potezi
         self.na_vrsti = StringVar(master, value=IGRALEC_1)
@@ -91,12 +106,6 @@ class Gui():
                 self.seznam_krogcev = seznam + self.seznam_krogcev
             else:
                 self.seznam_krogcev = self.seznam_krogcev + seznam
-
-        # za vsak krogec, narisan na canvas, ustvarim objekt POLJE in jih shranim v slovar pod
-        #zaporedno stevilko med 1 in 24
-        for i in range(len(self.seznam_krogcev)):
-            polje = Polje(self.plosca, self.seznam_krogcev[i], stevilka_polja=i+1)
-            self.slovar_polj[i+1]=polje
                 
         #povezem polja med seboj
         for i in range(0, 3):
@@ -118,6 +127,12 @@ class Gui():
         #################################
         #################################
 
+        # za vsak krogec, narisan na canvas, ustvarim objekt POLJE in jih shranim
+        # v slovar podzaporedno stevilko med 1 in 24
+        for i in range(len(self.seznam_krogcev)):
+            polje = Polje(self.plosca, self.seznam_krogcev[i], stevilka_polja=i+1)
+            self.slovar_polj[i+1]=polje
+
         #ob kliku na plosco poklice funkcijo postavi zeton
         self.plosca.bind("<Button-1>", self.postavi_zeton)
 
@@ -137,6 +152,13 @@ class Gui():
                 polje = self.slovar_polj[i+1]
                 polje.spremeni_zasedenost(self.na_vrsti.get())
                 self.pobarvaj_polje(polje)
+                #popravi ustrezen števec žetonov
+                if polje.zasedenost == IGRALEC_1:
+                    self.stevec1.set(self.stevec1.get()-1)
+                elif polje.zasedenost == IGRALEC_2:
+                    self.stevec2.set(self.stevec2.get()-1)
+                else:
+                    pass
 
     
     def pobarvaj_polje(self, polje):
@@ -149,6 +171,8 @@ class Gui():
             barva = 'white'
         self.plosca.itemconfigure(polje.id_krogca, fill=barva)
         
+
+        
     def zapri_okno(self, master):
         self.prekini_igralce()
         master.destroy()
@@ -157,22 +181,23 @@ class Gui():
         #TODO
         pass
 
-class Polje():
-
-    def __init__(self, canvas, id_krogca, stevilka_polja):#master?
-        self.canvas = canvas #/plosca
-        self.id_krogca = id_krogca
-        self.stevilka_polja = stevilka_polja
-        self.zasedenost = None
-
-
-    def spremeni_zasedenost(self, igralec=None):
-        #spremenimo zasedenost polja: ce na vrsti ni noben igralec, vrne None, sicer pa pripadajoco
-        #barvo igralca, ki je na vrsti
-        if igralec != IGRALEC_1 and igralec != IGRALEC_2:
-            self.zasedenost = None
-        else:
-            self.zasedenost = igralec
+#Class Polje testno prestavljeno v igra.py
+##class Polje():
+##
+##    def __init__(self, canvas, id_krogca, stevilka_polja):#master?
+##        self.canvas = canvas #/plosca
+##        self.id_krogca = id_krogca
+##        self.stevilka_polja = stevilka_polja
+##        self.zasedenost = None
+##
+##
+##    def spremeni_zasedenost(self, igralec=None):
+##        #spremenimo zasedenost polja: ce na vrsti ni noben igralec, vrne None, sicer pa pripadajoco
+##        #barvo igralca, ki je na vrsti
+##        if igralec != IGRALEC_1 and igralec != IGRALEC_2:
+##            self.zasedenost = None
+##        else:
+##            self.zasedenost = igralec
 
 
 
