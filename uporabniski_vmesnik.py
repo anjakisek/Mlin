@@ -134,11 +134,13 @@ class Gui():
             self.slovar_polj[i+1]=polje
 
         #ob kliku na plosco poklice funkcijo postavi zeton
-        self.plosca.bind("<Button-1>", self.postavi_zeton)
+        self.plosca.bind("<Button-1>", self.klik)
 
         #igro zacne vedno prvi igralec
         self.na_vrsti = StringVar(master, value='igralec1')
 
+    def klik(self, event):
+        self.postavi_zeton(event)
 
     def postavi_zeton(self, event):
         (a,b) = (event.x, event.y)
