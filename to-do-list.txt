@@ -1,0 +1,3 @@
+﻿Treba je:
+-popraviti Label-a, da pravilno izpisujeta stevilo zetonov
+-sprogramirati logiko igre, cloveka, racunalnik, minimax
