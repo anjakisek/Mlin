@@ -3,11 +3,6 @@ from igra import *
 #dolocimo velikost plosce, polja, ime igralcev ter barvo posameznih zetonov
 velikost_plosce = 400
 velikost_polja = velikost_plosce/25
-#Igralci in barve testno prestavljeni v igra.py
-##IGRALEC_1 = 'igralec1'
-##BARVA_1 = 'blue'
-##IGRALEC_2 = 'igralec2'
-##BARVA_2 = 'red'
 
 ##OSTEVILCENJE POLJ
 ## 1  -  -  2  -  -  3
@@ -31,16 +26,18 @@ class Gui():
         #stevec, ki se bo prikazoval, koliko zetonov
         #lahko prvi igralec se polozi na plosco
         self.stevec1 = IntVar(master, value=9)
-        Label(#TODO: popravi label, da se text spreminja s stevcem 1
+        self.napis1 = Label(#TODO: popravi label, da se text spreminja s stevcem 1
             master,
-            text= "Preostale: {}".format(self.stevec1.get())).grid(row=0, column=0)
+            text= "Preostale: {}".format(self.stevec1.get()))
+        self.napis1.grid(row=0, column=0)
         
         #stevec, ki se bo prikazoval, koliko zetonov
         #lahko drugi igralec se polozi na plosco
         self.stevec2 = IntVar(master, value=9)
-        Label(#TODO: popravi label, da se text spreminja s stevcem 2
+        self.napis2 = Label(#TODO: popravi label, da se text spreminja s stevcem 2
             master,
-            text= "Preostale: {}".format(self.stevec2.get())).grid(row=2, column=0)
+            text= "Preostale: {}".format(self.stevec2.get()))
+        self.napis2.grid(row=2, column=0)
 
         #string, ki pove, kdo je na potezi
         self.na_vrsti = StringVar(master, value=IGRALEC_1)
@@ -139,10 +136,12 @@ class Gui():
         #igro zacne vedno prvi igralec
         self.na_vrsti = StringVar(master, value='igralec1')
 
-    def klik(self, event):
-        self.postavi_zeton(event)
+        #Določimo vmesno fazo poteze
+        self.odstranitev_zetona = False
 
-    def postavi_zeton(self, event):
+        self.igra = Igra(self)
+
+    def klik(self, event):
         (a,b) = (event.x, event.y)
         for i in range(len(self.seznam_krogcev)):
             id_krogca = self.seznam_krogcev[i]
@@ -151,16 +150,51 @@ class Gui():
             #ce smo kliknili znotraj krogca, bomo na polju oznacili, da je
             #zaseden s trenutnim igralcem. Na koncu pobarvamo polje na pravilno barvo
             if razdalja <= velikost_polja:
-                polje = self.slovar_polj[i+1]
-                polje.spremeni_zasedenost(self.na_vrsti.get())
-                self.pobarvaj_polje(polje)
-                #popravi ustrezen števec žetonov
-                if polje.zasedenost == IGRALEC_1:
-                    self.stevec1.set(self.stevec1.get()-1)
-                elif polje.zasedenost == IGRALEC_2:
-                    self.stevec2.set(self.stevec2.get()-1)
+                index_polja = i+1
+                if self.odstranitev_zetona:
+                    self.odstrani_zeton(index_polja)
                 else:
-                    pass
+                    self.naredi_potezo(index_polja)
+                break
+        
+
+    def naredi_potezo(self, index_polja):
+        if self.igra.je_veljavna_poteza(index_polja):
+            if self.igra.faza == 1:
+                self.postavi_zeton(index_polja)
+            else:
+                pass
+        else:
+            pass
+        if self.igra.preveri_trojke(index_polja):
+            self.odstranitev_zetona = True
+        else:
+            self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+
+    def postavi_zeton(self, index_polja):
+        polje = self.slovar_polj[index_polja]
+        polje.spremeni_zasedenost(self.na_vrsti.get())
+        self.pobarvaj_polje(polje)
+        #popravi ustrezen števec žetonov
+        if polje.zasedenost == IGRALEC_1:
+            self.stevec1.set(self.stevec1.get()-1)
+            self.napis1.config(
+                text = "Preostale: "+ str(self.stevec1.get()))
+        elif polje.zasedenost == IGRALEC_2:
+            self.stevec2.set(self.stevec2.get()-1)
+            self.napis2.config(
+                text = "Preostale: "+ str(self.stevec2.get()))
+        else:
+            print('Neki čudnga se je zgodil')
+
+    def odstrani_zeton(self, index_polja):
+        if not self.igra.je_veljavna_poteza(index_polja):
+            pass
+        else:
+            self.slovar_polj[index_polja].spremeni_zasedenost()
+            self.pobarvaj_polje(self.slovar_polj[index_polja])
+            self.odstranitev_zetona = False
+            self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
 
     
     def pobarvaj_polje(self, polje):
@@ -182,24 +216,6 @@ class Gui():
     def prekini_igralce(self):
         #TODO
         pass
-
-#Class Polje testno prestavljeno v igra.py
-##class Polje():
-##
-##    def __init__(self, canvas, id_krogca, stevilka_polja):#master?
-##        self.canvas = canvas #/plosca
-##        self.id_krogca = id_krogca
-##        self.stevilka_polja = stevilka_polja
-##        self.zasedenost = None
-##
-##
-##    def spremeni_zasedenost(self, igralec=None):
-##        #spremenimo zasedenost polja: ce na vrsti ni noben igralec, vrne None, sicer pa pripadajoco
-##        #barvo igralca, ki je na vrsti
-##        if igralec != IGRALEC_1 and igralec != IGRALEC_2:
-##            self.zasedenost = None
-##        else:
-##            self.zasedenost = igralec
 
 
 
