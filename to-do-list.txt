@@ -1,3 +1,8 @@
 ﻿Treba je:
--zanke se ne prekinjajo pri iskanju trojk
+-popraviti odstranitev zetona: odstrani se lahko le zeton, ki ni v trojki, razen, ce takega ni
+-popraviti je treba barvo polja po odstranitvi zetona - zdaj je bela in to se opazi
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
+
+Popravljeno:
+-zanke pravilno najdejo trojke
+-pravilno odstrani zeton
