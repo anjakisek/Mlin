@@ -20,39 +20,50 @@ def sredisce(krogec):
 class Gui():
 
     def __init__(self, master):
-        #ce se zapre okno
+        #Ce uporabnik zapre okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
-        #stevec, ki se bo prikazoval, koliko zetonov
+        #Glavni menu
+        menu = Menu(master)
+        master.config(menu=menu)
+
+        #Podmenu
+        menu_igra = Menu(menu)
+        menu.add_cascade(label="Igra", menu=menu_igra)
+        menu_igra.add_command(label="Nova igra",
+                              command=lambda: self.zacni_igro())
+
+        #stevec, ki bo prikazoval, koliko zetonov
         #lahko prvi igralec se polozi na plosco
         self.stevec1 = IntVar(master, value=9)
-        self.napis1 = Label(#TODO: popravi label, da se text spreminja s stevcem 1
+        self.napis1 = Label(
             master,
             text= "Preostale: {}".format(self.stevec1.get()))
         self.napis1.grid(row=0, column=0)
         
-        #stevec, ki se bo prikazoval, koliko zetonov
+        #stevec, ki bo prikazoval, koliko zetonov
         #lahko drugi igralec se polozi na plosco
         self.stevec2 = IntVar(master, value=9)
-        self.napis2 = Label(#TODO: popravi label, da se text spreminja s stevcem 2
+        self.napis2 = Label(
             master,
             text= "Preostale: {}".format(self.stevec2.get()))
         self.napis2.grid(row=2, column=0)
 
-        #string, ki pove, kdo je na potezi
+        #String, ki pove, kdo je na potezi
         self.na_vrsti = StringVar(master, value=IGRALEC_1)
 
-        #seznam vseh krogcev, narisanih na canvas
+        #Seznam vseh krogcev, narisanih na canvas
         self.seznam_krogcev = []
 
-        #slovar, ki stevilom 1 - 24 doloca pripadajoc objekt POLJE.
+        #Slovar, ki stevilom 1 - 24 doloca pripadajoc objekt POLJE.
         #polja so oznacena od leve proti desni, od zgoraj navzdol
         self.slovar_polj = {}
         
-        #igralna plosca
+        #Igralna plosca
         self.plosca = Canvas(master, width = velikost_plosce, height = velikost_plosce)
         self.plosca.grid(row=1, column=0)
 
+        ##############################################
         ##############################################
         #ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
         # vrstnem redu
@@ -125,21 +136,27 @@ class Gui():
         #################################
 
         # za vsak krogec, narisan na canvas, ustvarim objekt POLJE in jih shranim
-        # v slovar podzaporedno stevilko med 1 in 24
+        # v slovar pod zaporedno stevilko med 1 in 24
         for i in range(len(self.seznam_krogcev)):
             polje = Polje(self.plosca, self.seznam_krogcev[i], stevilka_polja=i+1)
             self.slovar_polj[i+1]=polje
 
-        #ob kliku na plosco poklice funkcijo postavi zeton
+        #ob kliku na plosco poklice funkcijo, primerno trenutni fazi igre
         self.plosca.bind("<Button-1>", self.klik)
 
         #igro zacne vedno prvi igralec
         self.na_vrsti = StringVar(master, value='igralec1')
 
         #Določimo vmesno fazo poteze
-        self.odstranitev_zetona = False
+        #self.odstranitev_zetona = False
 
         self.igra = Igra(self)
+
+    def zacni_igro():
+        pass
+
+
+
 
     def klik(self, event):
         (a,b) = (event.x, event.y)
@@ -151,7 +168,7 @@ class Gui():
             #zaseden s trenutnim igralcem. Na koncu pobarvamo polje na pravilno barvo
             if razdalja <= velikost_polja:
                 index_polja = i+1
-                if self.odstranitev_zetona:
+                if self.igra.odstranitev_zetona:
                     print('Klicem odstranitev zetona')
                     self.odstrani_zeton(index_polja)
                 else:
@@ -168,7 +185,7 @@ class Gui():
         else:
             pass
         if self.igra.preveri_trojke(index_polja):
-            self.odstranitev_zetona = True
+            self.igra.odstranitev_zetona = True
         else:
             self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
 
@@ -197,7 +214,7 @@ class Gui():
             self.slovar_polj[index_polja].spremeni_zasedenost()
             print(self.slovar_polj[index_polja].zasedenost)
             self.pobarvaj_polje(self.slovar_polj[index_polja])
-            self.odstranitev_zetona = False
+            self.igra.odstranitev_zetona = False
             self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
             print('Dokoncal odstranitev')
 
