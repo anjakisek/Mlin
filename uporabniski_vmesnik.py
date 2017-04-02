@@ -152,6 +152,7 @@ class Gui():
             if razdalja <= velikost_polja:
                 index_polja = i+1
                 if self.odstranitev_zetona:
+                    print('Klicem odstranitev zetona')
                     self.odstrani_zeton(index_polja)
                 else:
                     self.naredi_potezo(index_polja)
@@ -185,16 +186,20 @@ class Gui():
             self.napis2.config(
                 text = "Preostale: "+ str(self.stevec2.get()))
         else:
-            print('Neki čudnga se je zgodil')
+            print('Napaka pri postavitvi zetona')
 
     def odstrani_zeton(self, index_polja):
+        print('Odstranjujem zeton')
         if not self.igra.je_veljavna_poteza(index_polja):
+            print('Baje imamo neveljavno potezo')
             pass
         else:
             self.slovar_polj[index_polja].spremeni_zasedenost()
+            print(self.slovar_polj[index_polja].zasedenost)
             self.pobarvaj_polje(self.slovar_polj[index_polja])
             self.odstranitev_zetona = False
             self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+            print('Dokoncal odstranitev')
 
     
     def pobarvaj_polje(self, polje):
