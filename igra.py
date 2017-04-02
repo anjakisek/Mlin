@@ -53,13 +53,20 @@ class Igra():
         self.zgodovina = []
 
     def je_veljavna_poteza(self, index_polja):
+        #ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
+        #ce je poteza veljavna, ter False sicer.
         aktivno_polje = self.gui.slovar_polj[index_polja]
         if self.gui.odstranitev_zetona:
+            #ce v potezi tece faza odstranitve, pogleda, ce je polje,
+            #ki ga je treba odstraniti, nasprotnikovo
             if aktivno_polje.zasedenost == nasprotnik(self.gui.na_vrsti):
+                #TODO ce je polje v trojki, ga ne smem odstraniti, razen
+                #ce so vsi zetoni v trojki 
                 return True
             else:
                 return False
         elif self.faza == 1:
+        #ce smo v fazi dodajanja zetonov, lahko dodamo zeton na prazno polje
             if aktivno_polje.zasedenost == None:
                 return True
             else:
@@ -77,24 +84,33 @@ class Igra():
         print(je_v_trojkah)
         for trojka in je_v_trojkah:
             zasedenost = None
+            koncaj = None
             for index in trojka: #neki ne dela
                 #okupiranost = kdo je po potezi na polju
                 okupiranost = self.gui.slovar_polj[index].zasedenost
-                if okupiranost == None:
-                    print('a')
-                    break #eno polje v trojki je prazno - trojke ni
-                elif zasedenost == None:
-                     #nastavimo barvo trojke, ki jo iščemo
-                    print('b')
-                    zasedenost = okupiranost
-                elif zasedenost != okupiranost:
-                    print('c')
-                    #v trojki je kakšna drugačna barva kot prej
-                    break
+                if koncaj is None:
+                    if okupiranost == None:
+                        print(index, okupiranost, zasedenost, 'a')
+                        koncaj = True
+                        break
+                        #eno polje v trojki je prazno - trojke ni
+                    elif zasedenost == None:
+                        #nastavimo barvo trojke, ki jo iščemo
+                        print(index, okupiranost, zasedenost, 'b')
+                        zasedenost = okupiranost
+                    elif zasedenost != okupiranost:
+                        print(index, okupiranost, zasedenost, 'c')
+                        #v trojki je kakšna drugačna barva kot prej
+                        koncaj = True
+                        break
                 else:
-                    print('Našel sem trojko')
-                    return True
+                    pass
+            if koncaj is None:
+                print('nasel sem trojko')
+                return True
+            
         #Če ni našel nobene trojke:
+        print('Nisem nasel trojke')
         return False
 
 
