@@ -6,3 +6,4 @@
 Popravljeno:
 -zanke pravilno najdejo trojke
 -pravilno odstrani zeton
+-self.odstranitev_zetona sem premaknila v Igra()
