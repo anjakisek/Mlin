@@ -51,12 +51,13 @@ class Igra():
         self.na_potezi = IGRALEC_1
         self.faza = 1
         self.zgodovina = []
+        self.odstranitev_zetona = False
 
     def je_veljavna_poteza(self, index_polja):
         #ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
         #ce je poteza veljavna, ter False sicer.
         aktivno_polje = self.gui.slovar_polj[index_polja]
-        if self.gui.odstranitev_zetona:
+        if self.odstranitev_zetona:
             print('preverjam veljavnost poteze')
             #ce v potezi tece faza odstranitve, pogleda, ce je polje,
             #ki ga je treba odstraniti, nasprotnikovo
@@ -75,7 +76,7 @@ class Igra():
             else:
                 return False
         else:
-            print('Nismo öe tako daleË')
+            print('Nismo ≈°e tako dalec')
 
     def preveri_trojke(self, index_polja):
         je_v_trojkah = []
@@ -97,10 +98,10 @@ class Igra():
                         break
                         #eno polje v trojki je prazno - trojke ni
                     elif zasedenost == None:
-                        #nastavimo barvo trojke, ki jo iöËemo
+                        #nastavimo barvo trojke, ki jo i≈°ƒçemo
                         zasedenost = okupiranost
                     elif zasedenost != okupiranost:
-                        #v trojki je kaköna drugaËna barva kot prej
+                        #v trojki je kak≈°na drugaƒçna barva kot prej
                         koncaj = True
                         break
                 else:
@@ -109,7 +110,7 @@ class Igra():
                 print('Nasel sem trojko')
                 return True
             
-        #»e ni naöel nobene trojke:
+        #ƒåe ni na≈°el nobene trojke:
         print('Nisem nasel trojke')
         return False
 
