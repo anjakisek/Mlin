@@ -1,8 +1,8 @@
 from tkinter import *
 from igra import *
 #dolocimo velikost plosce, polja, ime igralcev ter barvo posameznih zetonov
-velikost_plosce = 400
-velikost_polja = velikost_plosce/25
+VELIKOST_PLOSCE = 400
+VELIKOST_POLJA = VELIKOST_PLOSCE/25
 
 ##OSTEVILCENJE POLJ
 ## 1  -  -  2  -  -  3
@@ -60,7 +60,9 @@ class Gui():
         self.slovar_polj = {}
         
         #Igralna plosca
-        self.plosca = Canvas(master, width = velikost_plosce, height = velikost_plosce)
+        self.plosca = Canvas(
+            master, width = VELIKOST_PLOSCE, height = VELIKOST_PLOSCE,
+            bg = 'white')
         self.plosca.grid(row=1, column=0)
 
         ##############################################
@@ -69,19 +71,19 @@ class Gui():
         # vrstnem redu
         for k in range(0, 2): #krogci 10-15
             for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(velikost_plosce * (1/8 + i/8 + k/2) - velikost_polja,
-                                          velikost_plosce/2 - velikost_polja,
-                                          velikost_plosce * (1/8 + i/8 + k/2) + velikost_polja,
-                                          velikost_plosce/2 + velikost_polja)
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/8 + i/8 + k/2) - VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE/2 - VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE * (1/8 + i/8 + k/2) + VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE/2 + VELIKOST_POLJA)
                 self.seznam_krogcev.append(id_krogca)
 
         for k in range(0, 2):#krogci 7-9, 16-18
             seznam=[]
             for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(velikost_plosce * (3/8 + i/8) - velikost_polja,
-                                        velikost_plosce * (3/8 + k/4) - velikost_polja,
-                                        velikost_plosce * (3/8 + i/8) + velikost_polja,
-                                        velikost_plosce * (3/8 + k/4) + velikost_polja)
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (3/8 + i/8) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + k/4) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + i/8) + VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + k/4) + VELIKOST_POLJA)
                 seznam.append(id_krogca)
             if k == 0:
                 self.seznam_krogcev = seznam + self.seznam_krogcev
@@ -91,10 +93,10 @@ class Gui():
         for k in range(0, 2):#krogci 4-6, 19-21
             seznam = []
             for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(velikost_plosce * (1/4 + i/4) - velikost_polja,
-                                        velikost_plosce * (1/4 + k/2) - velikost_polja,
-                                        velikost_plosce * (1/4 + i/4) + velikost_polja,
-                                        velikost_plosce * (1/4 + k/2) + velikost_polja)
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/4 + i/4) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + k/2) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + i/4) + VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + k/2) + VELIKOST_POLJA)
                 seznam.append(id_krogca)
             if k == 0:
                 self.seznam_krogcev = seznam + self.seznam_krogcev
@@ -105,10 +107,10 @@ class Gui():
             seznam = []
             for i in range(0, 3):
                 id_krogca = self.plosca.create_oval(
-                    velikost_plosce * (1/8 + i * 3/8) - velikost_polja,
-                    velikost_plosce * (1/8 + k * 3/4) - velikost_polja,
-                    velikost_plosce *(1/8 + i * 3/8) + velikost_polja,
-                    velikost_plosce * (1/8 + k * 3/4) + velikost_polja)
+                    VELIKOST_PLOSCE * (1/8 + i * 3/8) - VELIKOST_POLJA,
+                    VELIKOST_PLOSCE * (1/8 + k * 3/4) - VELIKOST_POLJA,
+                    VELIKOST_PLOSCE *(1/8 + i * 3/8) + VELIKOST_POLJA,
+                    VELIKOST_PLOSCE * (1/8 + k * 3/4) + VELIKOST_POLJA)
                 seznam.append(id_krogca)
             if k == 0:
                 self.seznam_krogcev = seznam + self.seznam_krogcev
@@ -117,19 +119,19 @@ class Gui():
                 
         #povezem polja med seboj
         for i in range(0, 3):
-            self.plosca.create_rectangle(velikost_plosce * (1/8 + i/8),
-                                         velikost_plosce * (1/8 + i/8),
-                                         velikost_plosce * (7/8 - i/8) ,
-                                         velikost_plosce * (7/8 - i/8))
+            self.plosca.create_rectangle(VELIKOST_PLOSCE * (1/8 + i/8),
+                                         VELIKOST_PLOSCE * (1/8 + i/8),
+                                         VELIKOST_PLOSCE * (7/8 - i/8) ,
+                                         VELIKOST_PLOSCE * (7/8 - i/8))
 
-        self.plosca.create_line(velikost_plosce/2, velikost_plosce/8,velikost_plosce/2,
-                                3 * velikost_plosce/8)
-        self.plosca.create_line(velikost_plosce/2, 5 * velikost_plosce/8,velikost_plosce/2,
-                                7 * velikost_plosce/8)
-        self.plosca.create_line(velikost_plosce/8, velikost_plosce/2,3 * velikost_plosce/8,
-                                velikost_plosce/2)
-        self.plosca.create_line(5 * velikost_plosce/8, velikost_plosce/2,7 * velikost_plosce/8,
-                                velikost_plosce/2)
+        self.plosca.create_line(VELIKOST_PLOSCE/2, VELIKOST_PLOSCE/8,VELIKOST_PLOSCE/2,
+                                3 * VELIKOST_PLOSCE/8)
+        self.plosca.create_line(VELIKOST_PLOSCE/2, 5 * VELIKOST_PLOSCE/8,VELIKOST_PLOSCE/2,
+                                7 * VELIKOST_PLOSCE/8)
+        self.plosca.create_line(VELIKOST_PLOSCE/8, VELIKOST_PLOSCE/2,3 * VELIKOST_PLOSCE/8,
+                                VELIKOST_PLOSCE/2)
+        self.plosca.create_line(5 * VELIKOST_PLOSCE/8, VELIKOST_PLOSCE/2,7 * VELIKOST_PLOSCE/8,
+                                VELIKOST_PLOSCE/2)
         
                                          
         #################################
@@ -164,9 +166,8 @@ class Gui():
             id_krogca = self.seznam_krogcev[i]
             x, y = sredisce(self.plosca.coords(id_krogca))
             razdalja = ((a-x)**2 + (b-y)**2)**0.5
-            #ce smo kliknili znotraj krogca, bomo na polju oznacili, da je
-            #zaseden s trenutnim igralcem. Na koncu pobarvamo polje na pravilno barvo
-            if razdalja <= velikost_polja:
+            #Ce smo kliknili znotraj krogca, bomo naredili ustrezno potezo.
+            if razdalja <= VELIKOST_POLJA:
                 index_polja = i+1
                 if self.igra.odstranitev_zetona:
                     print('Klicem odstranitev zetona')
