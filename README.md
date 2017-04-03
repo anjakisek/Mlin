@@ -1,9 +1,9 @@
 # Mlin
 Igrica [Mlin](https://en.wikipedia.org/wiki/Nine_Men%27s_Morris).
 
-#Naèrt dela:
-- 20. - 26. 3.: Postavitev repozitorija, uporabniški vmesnik
-- 27.3 - 2.4.: uporabniški vmesnik in prva faza igre
-- 3.3 - 9.4.: druga faza in igrica 1 na 1, zaèetek dela na raèunalniku kot igralcu
-- 10.4. - 16.4.: raèunalnik proti raèunalniku, odprava napak
+# NaÄrt dela:
+- 20.3. - 26. 3.: Postavitev repozitorija, uporabniÅ¡ki vmesnik
+- 27.3. - 2.4.: uporabniÅ¡ki vmesnik in prva faza igre
+- 3.3. - 9.4.: druga faza in igrica 1 na 1, zaÄetek dela na raÄunalniku kot igralcu
+- 10.4. - 16.4.: raÄunalnik proti raÄunalniku, odprava napak
 - 16.4. - : odprava napak, testiranje
