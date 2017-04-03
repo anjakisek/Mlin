@@ -1,6 +1,6 @@
 ﻿Treba je:
 -popraviti odstranitev zetona: odstrani se lahko le zeton, ki ni v trojki, razen, ce takega ni
--popraviti je treba barvo polja po odstranitvi zetona - zdaj je bela in to se opazi
+-krogci se morajo narisati nad črtami
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
 
 Popravljeno:
