@@ -1,9 +1,12 @@
 ﻿Treba je:
--popraviti odstranitev zetona: odstrani se lahko le zeton, ki ni v trojki, razen, ce takega ni
--krogci se morajo narisati nad črtami
+-vkljuciti "sporocevalca" v poteze
+-(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
 
 Popravljeno:
+-preuredil metodo naredi_potezo, da preverja trojke le v primeru, da je poteza veljavna
+-krogci se narisejo nad crtami
+-dodelana je odstranitev zetona: odstrani se lahko le zeton, ki ni v trojki, razen, ce takega ni
 -zanke pravilno najdejo trojke
 -pravilno odstrani zeton
 -self.odstranitev_zetona sem premaknila v Igra()
