@@ -1,8 +1,8 @@
 from tkinter import *
 
-IGRALEC_1 = 'igralec1'
+IGRALEC_1 = 'modri'
 BARVA_1 = 'blue'
-IGRALEC_2 = 'igralec2'
+IGRALEC_2 = 'rdeci'
 BARVA_2 = 'red'
 
 ##OSTEVILCENJE POLJ
@@ -44,6 +44,7 @@ class Polje():
     def spremeni_zasedenost(self, igralec=None):
         #spremenimo zasedenost polja: ce na vrsti ni noben igralec, vrne None, sicer pa pripadajoco
         #barvo igralca, ki je na vrsti
+        print('Spreminjam zasedenost')
         if igralec != IGRALEC_1 and igralec != IGRALEC_2:
             self.zasedenost = None
         else:
@@ -58,28 +59,46 @@ class Igra():
         self.faza = 1
         self.zgodovina = []
         self.odstranitev_zetona = False
+        self.poteka = False
 
     def je_veljavna_poteza(self, index_polja):
         #ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
         #ce je poteza veljavna, ter False sicer.
+        print('Preverjam veljavnost poteze')
         aktivno_polje = self.gui.slovar_polj[index_polja]
         if self.odstranitev_zetona:
-            print('preverjam veljavnost poteze')
             #ce v potezi tece faza odstranitve, pogleda, ce je polje,
             #ki ga je treba odstraniti, nasprotnikovo
             print(aktivno_polje.zasedenost, nasprotnik(self.gui.na_vrsti.get()),
                   self.gui.na_vrsti.get() )
             if aktivno_polje.zasedenost == nasprotnik(self.gui.na_vrsti.get()):
-                #TODO ce je polje v trojki, ga ne smem odstraniti, razen
-                #ce so vsi zetoni v trojki
-                return True
+                #Ce zeton, ki ga zelimo odstraniti ni v trojki, je poteza
+                #veljavna:
+                if not self.preveri_trojke(index_polja):
+                    return True
+                #Ce zeton, ki ga zelimo odstraniti je v trojki, bo poteza
+                #veljavna le, ce je vsak nasprotnikov zeton v trojki
+                else:
+                    #TODO?
+                    #Za hitrejse delovanje, bi lahko shranjevali najdene trojke,
+                    #polj v ze-najdenih trojkah potem ni treba preverjati
+                    for index in self.gui.slovar_polj:
+                        polje = self.gui.slovar_polj[index]
+                        if polje.zasedenost == nasprotnik(self.gui.na_vrsti.get()):
+                            if not self.preveri_trojke(index):
+                                print('Izbrati morate zeton, ki ni v trojki')
+                                return False
+                    return True
+                                
             else:
+                print('Niste kliknili na nasprotnikov zeton')
                 return False
-        elif self.faza == 1:
+        if self.faza == 1:
         #ce smo v fazi dodajanja zetonov, lahko dodamo zeton na prazno polje
             if aktivno_polje.zasedenost == None:
                 return True
             else:
+                print('Polje je ze zasedeno')
                 return False
         else:
             print('Nismo še tako dalec')
@@ -93,7 +112,7 @@ class Igra():
                     break
         for trojka in je_v_trojkah:
             zasedenost = None
-            koncaj = None #kontroliramo, ali se mora zanka prkeiniti ali ne
+            koncaj = None #kontroliramo, ali se mora zanka prekiniti ali ne
             for index in trojka: #neki ne dela
                 #okupiranost = kdo je po potezi na polju
                 #zasedenost = kaksne barve zbiramo v trojki
@@ -115,7 +134,6 @@ class Igra():
             if koncaj is None:
                 print('Nasel sem trojko')
                 return True
-            
         #Če ni našel nobene trojke:
         print('Nisem nasel trojke')
         return False
