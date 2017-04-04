@@ -31,23 +31,33 @@ class Gui():
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Nova igra",
-                              command=lambda: self.zacni_igro())
+                              command=self.zacni_igro)
+
+        self.sporocilo = StringVar(
+            master,
+            value='Dobrodosli! Kliknite na Nova igra, da pricnete z igro.')
+        self.sporocevalec = Label(
+            master,
+            textvariable = self.sporocilo)
+        self.sporocevalec.grid(row=0, columnspan = 2)
 
         #stevec, ki bo prikazoval, koliko zetonov
         #lahko prvi igralec se polozi na plosco
         self.stevec1 = IntVar(master, value=9)
         self.napis1 = Label(
             master,
-            text= "Preostale: {}".format(self.stevec1.get()))
-        self.napis1.grid(row=0, column=0)
+            text= "Preostali {}: {}".format(
+                IGRALEC_1, self.stevec1.get()))
+        self.napis1.grid(row=2, column=0)
         
         #stevec, ki bo prikazoval, koliko zetonov
         #lahko drugi igralec se polozi na plosco
         self.stevec2 = IntVar(master, value=9)
         self.napis2 = Label(
             master,
-            text= "Preostale: {}".format(self.stevec2.get()))
-        self.napis2.grid(row=2, column=0)
+            text= "Preostali {}: {}".format(
+                IGRALEC_2, self.stevec2.get()))
+        self.napis2.grid(row=2, column=1)
 
         #String, ki pove, kdo je na potezi
         self.na_vrsti = StringVar(master, value=IGRALEC_1)
@@ -63,60 +73,10 @@ class Gui():
         self.plosca = Canvas(
             master, width = VELIKOST_PLOSCE, height = VELIKOST_PLOSCE,
             bg = 'white')
-        self.plosca.grid(row=1, column=0)
+        self.plosca.grid(row=1, column=0, columnspan=2)
 
         ##############################################
         ##############################################
-        #ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
-        # vrstnem redu
-        for k in range(0, 2): #krogci 10-15
-            for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/8 + i/8 + k/2) - VELIKOST_POLJA,
-                                          VELIKOST_PLOSCE/2 - VELIKOST_POLJA,
-                                          VELIKOST_PLOSCE * (1/8 + i/8 + k/2) + VELIKOST_POLJA,
-                                          VELIKOST_PLOSCE/2 + VELIKOST_POLJA)
-                self.seznam_krogcev.append(id_krogca)
-
-        for k in range(0, 2):#krogci 7-9, 16-18
-            seznam=[]
-            for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (3/8 + i/8) - VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (3/8 + k/4) - VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (3/8 + i/8) + VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (3/8 + k/4) + VELIKOST_POLJA)
-                seznam.append(id_krogca)
-            if k == 0:
-                self.seznam_krogcev = seznam + self.seznam_krogcev
-            else:
-                self.seznam_krogcev = self.seznam_krogcev + seznam
-
-        for k in range(0, 2):#krogci 4-6, 19-21
-            seznam = []
-            for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/4 + i/4) - VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (1/4 + k/2) - VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (1/4 + i/4) + VELIKOST_POLJA,
-                                        VELIKOST_PLOSCE * (1/4 + k/2) + VELIKOST_POLJA)
-                seznam.append(id_krogca)
-            if k == 0:
-                self.seznam_krogcev = seznam + self.seznam_krogcev
-            else:
-                self.seznam_krogcev = self.seznam_krogcev + seznam
-
-        for k in range(0, 2):#krogci 1-3, 22-24
-            seznam = []
-            for i in range(0, 3):
-                id_krogca = self.plosca.create_oval(
-                    VELIKOST_PLOSCE * (1/8 + i * 3/8) - VELIKOST_POLJA,
-                    VELIKOST_PLOSCE * (1/8 + k * 3/4) - VELIKOST_POLJA,
-                    VELIKOST_PLOSCE *(1/8 + i * 3/8) + VELIKOST_POLJA,
-                    VELIKOST_PLOSCE * (1/8 + k * 3/4) + VELIKOST_POLJA)
-                seznam.append(id_krogca)
-            if k == 0:
-                self.seznam_krogcev = seznam + self.seznam_krogcev
-            else:
-                self.seznam_krogcev = self.seznam_krogcev + seznam
-                
         #povezem polja med seboj
         for i in range(0, 3):
             self.plosca.create_rectangle(VELIKOST_PLOSCE * (1/8 + i/8),
@@ -133,6 +93,62 @@ class Gui():
         self.plosca.create_line(5 * VELIKOST_PLOSCE/8, VELIKOST_PLOSCE/2,7 * VELIKOST_PLOSCE/8,
                                 VELIKOST_PLOSCE/2)
         
+        #ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
+        # vrstnem redu
+        for k in range(0, 2): #krogci 10-15
+            for i in range(0, 3):
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/8 + i/8 + k/2) - VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE/2 - VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE * (1/8 + i/8 + k/2) + VELIKOST_POLJA,
+                                          VELIKOST_PLOSCE/2 + VELIKOST_POLJA,
+                                                    fill = 'white')
+                self.seznam_krogcev.append(id_krogca)
+
+        for k in range(0, 2):#krogci 7-9, 16-18
+            seznam=[]
+            for i in range(0, 3):
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (3/8 + i/8) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + k/4) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + i/8) + VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (3/8 + k/4) + VELIKOST_POLJA,
+                                                    fill = 'white')
+                seznam.append(id_krogca)
+            if k == 0:
+                self.seznam_krogcev = seznam + self.seznam_krogcev
+            else:
+                self.seznam_krogcev = self.seznam_krogcev + seznam
+
+        for k in range(0, 2):#krogci 4-6, 19-21
+            seznam = []
+            for i in range(0, 3):
+                id_krogca = self.plosca.create_oval(VELIKOST_PLOSCE * (1/4 + i/4) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + k/2) - VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + i/4) + VELIKOST_POLJA,
+                                        VELIKOST_PLOSCE * (1/4 + k/2) + VELIKOST_POLJA,
+                                                    fill = 'white')
+                seznam.append(id_krogca)
+            if k == 0:
+                self.seznam_krogcev = seznam + self.seznam_krogcev
+            else:
+                self.seznam_krogcev = self.seznam_krogcev + seznam
+
+        for k in range(0, 2):#krogci 1-3, 22-24
+            seznam = []
+            for i in range(0, 3):
+                id_krogca = self.plosca.create_oval(
+                    VELIKOST_PLOSCE * (1/8 + i * 3/8) - VELIKOST_POLJA,
+                    VELIKOST_PLOSCE * (1/8 + k * 3/4) - VELIKOST_POLJA,
+                    VELIKOST_PLOSCE *(1/8 + i * 3/8) + VELIKOST_POLJA,
+                    VELIKOST_PLOSCE * (1/8 + k * 3/4) + VELIKOST_POLJA,
+                    fill = 'white')
+                seznam.append(id_krogca)
+            if k == 0:
+                self.seznam_krogcev = seznam + self.seznam_krogcev
+            else:
+                self.seznam_krogcev = self.seznam_krogcev + seznam
+                
+        
+        
                                          
         #################################
         #################################
@@ -147,34 +163,36 @@ class Gui():
         self.plosca.bind("<Button-1>", self.klik)
 
         #igro zacne vedno prvi igralec
-        self.na_vrsti = StringVar(master, value='igralec1')
+        self.na_vrsti = StringVar(master, value=IGRALEC_1)
 
         #Določimo vmesno fazo poteze
         #self.odstranitev_zetona = False
 
         self.igra = Igra(self)
 
-    def zacni_igro():
-        pass
-
-
+    def zacni_igro(self):
+        self.igra.poteka = True
+        self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
 
 
     def klik(self, event):
-        (a,b) = (event.x, event.y)
-        for i in range(len(self.seznam_krogcev)):
-            id_krogca = self.seznam_krogcev[i]
-            x, y = sredisce(self.plosca.coords(id_krogca))
-            razdalja = ((a-x)**2 + (b-y)**2)**0.5
-            #Ce smo kliknili znotraj krogca, bomo naredili ustrezno potezo.
-            if razdalja <= VELIKOST_POLJA:
-                index_polja = i+1
-                if self.igra.odstranitev_zetona:
-                    print('Klicem odstranitev zetona')
-                    self.odstrani_zeton(index_polja)
-                else:
-                    self.naredi_potezo(index_polja)
-                break
+        if not self.igra.poteka:
+            pass
+        else:
+            (a,b) = (event.x, event.y)
+            for i in range(len(self.seznam_krogcev)):
+                id_krogca = self.seznam_krogcev[i]
+                x, y = sredisce(self.plosca.coords(id_krogca))
+                razdalja = ((a-x)**2 + (b-y)**2)**0.5
+                #Ce smo kliknili znotraj krogca, bomo naredili ustrezno potezo.
+                if razdalja <= VELIKOST_POLJA:
+                    index_polja = i+1
+                    if self.igra.odstranitev_zetona:
+                        print('Klicem odstranitev zetona')
+                        self.odstrani_zeton(index_polja)
+                    else:
+                        self.naredi_potezo(index_polja)
+                    break
         
 
     def naredi_potezo(self, index_polja):
@@ -183,14 +201,17 @@ class Gui():
                 self.postavi_zeton(index_polja)
             else:
                 pass
+            if self.igra.preveri_trojke(index_polja):
+                self.igra.odstranitev_zetona = True
+            else:
+                self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+                self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
         else:
             pass
-        if self.igra.preveri_trojke(index_polja):
-            self.igra.odstranitev_zetona = True
-        else:
-            self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+        
 
     def postavi_zeton(self, index_polja):
+        print('Postavljam zeton')
         polje = self.slovar_polj[index_polja]
         polje.spremeni_zasedenost(self.na_vrsti.get())
         self.pobarvaj_polje(polje)
@@ -198,25 +219,25 @@ class Gui():
         if polje.zasedenost == IGRALEC_1:
             self.stevec1.set(self.stevec1.get()-1)
             self.napis1.config(
-                text = "Preostale: "+ str(self.stevec1.get()))
+                text = "Preostali {}: ".format(IGRALEC_1)+ str(self.stevec1.get()))
         elif polje.zasedenost == IGRALEC_2:
             self.stevec2.set(self.stevec2.get()-1)
             self.napis2.config(
-                text = "Preostale: "+ str(self.stevec2.get()))
+                text = "Preostal {}: ".format(IGRALEC_2)+ str(self.stevec2.get()))
         else:
             print('Napaka pri postavitvi zetona')
 
     def odstrani_zeton(self, index_polja):
-        print('Odstranjujem zeton')
         if not self.igra.je_veljavna_poteza(index_polja):
-            print('Baje imamo neveljavno potezo')
             pass
         else:
+            print('Odstranjujem zeton')
             self.slovar_polj[index_polja].spremeni_zasedenost()
             print(self.slovar_polj[index_polja].zasedenost)
             self.pobarvaj_polje(self.slovar_polj[index_polja])
             self.igra.odstranitev_zetona = False
             self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+            self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
             print('Dokoncal odstranitev')
 
     
