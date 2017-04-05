@@ -1,10 +1,11 @@
 ﻿Treba je:
--faza 3
+- v igra.py v vrstici 139 je delalo narobe, če nisem napisala 'nasprotnik(self.gui.na_vrsti.get())'. Razlog? Zdi se mi, da zdaj dela ok.
 -Playtesting
 -Povoziti staro igro z novo, ko zelimo zaceti novo igro
 -(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
 
 Popravljeno:
+-zetoni letijo v zadnji fazi
 -vkljuciti "sporocevalca" v poteze
 -Clovek vs Clovek skoraj koncano
