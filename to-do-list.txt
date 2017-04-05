@@ -1,12 +1,10 @@
 ﻿Treba je:
--vkljuciti "sporocevalca" v poteze
+-faza 3
+-Playtesting
+-Povoziti staro igro z novo, ko zelimo zaceti novo igro
 -(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
 
 Popravljeno:
--preuredil metodo naredi_potezo, da preverja trojke le v primeru, da je poteza veljavna
--krogci se narisejo nad crtami
--dodelana je odstranitev zetona: odstrani se lahko le zeton, ki ni v trojki, razen, ce takega ni
--zanke pravilno najdejo trojke
--pravilno odstrani zeton
--self.odstranitev_zetona sem premaknila v Igra()
+-vkljuciti "sporocevalca" v poteze
+-Clovek vs Clovek skoraj koncano
