@@ -1,5 +1,6 @@
 from tkinter import *
 
+#Previdno pri spreminjanju imen igralcev!
 IGRALEC_1 = 'modri'
 BARVA_1 = 'blue'
 IGRALEC_2 = 'rdeci'
@@ -100,8 +101,38 @@ class Igra():
             else:
                 print('Polje je ze zasedeno')
                 return False
+        elif self.faza  == 2:
+            print('Preverjam veljavnost premika')
+            if self.gui.premik_zetona == None:
+                if aktivno_polje.zasedenost == self.gui.na_vrsti.get():
+                    return True
+                else:
+                    print('Niste kliknili na svoj zeton')
+                    return False
+            else:
+                #TODO
+                if aktivno_polje.zasedenost is not None:
+                    self.gui.premik_zetona = None
+                    return False
+                je_v_trojkah = []
+                for trojka in trojke:
+                    if self.gui.premik_zetona in trojka:
+                        je_v_trojkah.append(trojka)
+                        if len(je_v_trojkah) == 2:
+                            break
+                for trojka in je_v_trojkah:
+                    a = trojka.index(self.gui.premik_zetona)
+                    if index_polja in trojka:
+                        b = trojka.index(index_polja)
+                        if abs(b-a) == 1:
+                            return True                   
+                print('Niste izbrali veljavnega polja')
+                self.gui.premik_zetona = None
+                return False
+            
+            print('Preverjam veljavnost v fazi 2')
         else:
-            print('Nismo še tako dalec')
+            print('Faze ne delajo prav')
 
     def preveri_trojke(self, index_polja):
         je_v_trojkah = []
@@ -137,6 +168,19 @@ class Igra():
         #Če ni našel nobene trojke:
         print('Nisem nasel trojke')
         return False
+
+    def spremeni_fazo(self, stevilka_faze):
+        self.faza = stevilka_faze
+
+    def ali_je_konec(self):
+        for igralec in self.st_zetonov:
+            if self.st_zetonov[igralec] <= 2:
+                self.poteka = False
+                return True
+        else:
+            return False
+
+
 
 
                 
