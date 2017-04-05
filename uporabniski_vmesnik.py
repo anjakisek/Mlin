@@ -165,6 +165,9 @@ class Gui():
         #igro zacne vedno prvi igralec
         self.na_vrsti = StringVar(master, value=IGRALEC_1)
 
+        #Polje, iz katerega zelimo premakniti zeton (v fazi 2)
+        self.premik_zetona = None
+
         #Določimo vmesno fazo poteze
         #self.odstranitev_zetona = False
 
@@ -172,7 +175,8 @@ class Gui():
 
     def zacni_igro(self):
         self.igra.poteka = True
-        self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
+        self.pripravi_novo_igro()
+        self.sporocilo.set('Na vrsti je {} -> postavite zeton'.format(self.na_vrsti.get()))
 
 
     def klik(self, event):
@@ -199,13 +203,38 @@ class Gui():
         if self.igra.je_veljavna_poteza(index_polja):
             if self.igra.faza == 1:
                 self.postavi_zeton(index_polja)
+                if self.stevec1.get() == 0 and self.stevec2.get() == 0:
+                    self.igra.spremeni_fazo(2)
+            elif self.igra.faza == 2:
+                print('Smo v drugi fazi')
+                self.premakni_zeton(index_polja)
             else:
-                pass
-            if self.igra.preveri_trojke(index_polja):
+                print('Smo v medfazju')
+
+                
+            if self.igra.preveri_trojke(index_polja) and self.premik_zetona is None:
                 self.igra.odstranitev_zetona = True
-            else:
+                self.sporocilo.set(
+                    'Na vrsti je {} -> odstranite zeton'.format(self.na_vrsti.get()))
+            elif self.igra.faza == 1:
                 self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
-                self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
+                self.sporocilo.set(
+                    'Na vrsti je {} -> postavite zeton'.format(self.na_vrsti.get()))
+            elif self.igra.faza == 2:
+                if self.premik_zetona is None:
+                    self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+                    self.sporocilo.set(
+                        'Na vrsti je {} -> izberite zeton za premik'.format(
+                            self.na_vrsti.get()))
+                else:
+                    self.sporocilo.set(
+                        'Na vrsti je {} -> izberite polje, kamor se zelite premakniti'.format(
+                            self.na_vrsti.get()))
+            
+                
+            else:
+                print('Tezave pri koncu poteze')
+                #self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
         else:
             pass
         
@@ -223,9 +252,30 @@ class Gui():
         elif polje.zasedenost == IGRALEC_2:
             self.stevec2.set(self.stevec2.get()-1)
             self.napis2.config(
-                text = "Preostal {}: ".format(IGRALEC_2)+ str(self.stevec2.get()))
+                text = "Preostali {}: ".format(IGRALEC_2)+ str(self.stevec2.get()))
         else:
             print('Napaka pri postavitvi zetona')
+
+    def premakni_zeton(self, index_polja):
+        if not self.igra.je_veljavna_poteza(index_polja):
+            pass
+        else:
+            #Ce se nismo izbrali zetona za premik,
+            #nastavimo premik na izbrano polje
+            if self.premik_zetona == None:
+                self.premik_zetona = index_polja
+                print('Zgodil se je premik A')
+            else:
+                polje1 = self.slovar_polj[self.premik_zetona]
+                polje1.spremeni_zasedenost()
+                self.pobarvaj_polje(polje1)
+                polje2 = self.slovar_polj[index_polja]
+                polje2.spremeni_zasedenost(self.na_vrsti.get())
+                self.pobarvaj_polje(polje2)
+                self.premik_zetona = None
+                #self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+                print('Zgodil se je premik B')
+        
 
     def odstrani_zeton(self, index_polja):
         if not self.igra.je_veljavna_poteza(index_polja):
@@ -236,9 +286,20 @@ class Gui():
             print(self.slovar_polj[index_polja].zasedenost)
             self.pobarvaj_polje(self.slovar_polj[index_polja])
             self.igra.odstranitev_zetona = False
-            self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
-            self.sporocilo.set('Na vrsti je {}'.format(self.na_vrsti.get()))
-            print('Dokoncal odstranitev')
+            self.igra.st_zetonov[self.na_vrsti.get()] -= 1
+            if self.igra.ali_je_konec():
+                self.sporocilo.set(
+                    'Igre je konec, zmagal je {}'.format(
+                        self.na_vrsti.get()))
+            else:
+                self.na_vrsti.set(nasprotnik(self.na_vrsti.get()))
+                if self.igra.faza == 1:
+                    self.sporocilo.set('Na vrsti je {} -> postavite zeton'.format(
+                        self.na_vrsti.get()))
+                elif self.igra.faza == 2:
+                    self.sporocilo.set('Na vrsti je {} -> izberite zeton za premik'.format(
+                        self.na_vrsti.get()))
+                print('Dokoncal odstranitev')
 
     
     def pobarvaj_polje(self, polje):
@@ -254,12 +315,17 @@ class Gui():
 
         
     def zapri_okno(self, master):
-        self.prekini_igralce()
         master.destroy()
         
-    def prekini_igralce(self):
-        #TODO
-        pass
+    def pripravi_novo_igro(self):
+        for index in self.slovar_polj:
+            polje = self.slovar_polj[index]
+            polje.spremeni_zasedenost()
+            self.pobarvaj_polje(polje)
+        self.igra.spremeni_fazo(1)
+        self.na_vrsti.set(IGRALEC_1)
+        self.stevec1.set(9)
+        self.stevec2.set(9)
 
 
 
