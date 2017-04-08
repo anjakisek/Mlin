@@ -34,7 +34,9 @@ def nasprotnik(igralec):
     elif igralec == IGRALEC_2:
         return IGRALEC_1
     else:
-        return 'Zgodila se je napaka pri menjavi igralcev'
+        assert False, 'Zgodila se je napaka pri menjavi igralcev'
+
+    
 
 class Polje():
     def __init__(self, canvas, id_krogca, stevilka_polja):
@@ -57,11 +59,26 @@ class Igra():
     def __init__(self, gui):
         self.gui = gui
         self.st_zetonov = {IGRALEC_1: 9, IGRALEC_2: 9}
-        ##A je to tukaj za brez veze?### self.na_potezi = IGRALEC_1
         self.faza = 1
         self.zgodovina = []
         self.odstranitev_zetona = False
         self.poteka = False
+
+    def shrani_trenutno_stanje(self):
+        pass
+        #TODO
+
+    def kopija(self):
+        #TODO
+        pass
+
+    def razveljavi(self):
+        #TODO
+        pass
+
+
+
+        
 
     def je_veljavna_poteza(self, index_polja):
         #ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
@@ -137,6 +154,7 @@ class Igra():
                 #Ce so na plosci samo se 3 zetoni, lahko z njimi poljubno skacemo
                 ####TODO: zakaj mora biti tu nasprotnik?
                 if self.st_zetonov[nasprotnik(self.gui.na_vrsti.get())] == 3:
+                    print(self.gui.na_vrsti.get())
                     if aktivno_polje.zasedenost is None:
                         return True
                     else:
