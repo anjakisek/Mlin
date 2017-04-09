@@ -8,10 +8,9 @@
 Komentarji:
 -ko bo minimax vlekel poteze, mora vedeti, kdo je na vrsti. Pri nama je na_vrsti shranjeno v guiu. Prenesla ga bom v Igro. Done
 -Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Verjetno bova kmalu naletela na težavo zaradi tega.
-v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze.
+-v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze.
 -pri objektih Polje sem odstranila stevilka_polja, ker se mi je zdelo, da ga nikjer ne uporabimo, ker ima vsako polje itak indeks v slovarju polj. Po odstranitvi program dela :D
-
-Isto problem: ker imava Polje pod svoj objekt, ne vem, kako naj ga prekopirava v kopijo igre, ker polja niso atribut igre. Ce jih samo pokliceva, jih bo med minimaksom zmesal!!!!
+-morda nas mora skrbeti, da v eni potezi (shrani in kopija igre) ustvarimo dvakrat po 24 dodatnih polj. Ampak v tictactoe on ustvari vsakic nov seznam...
 
 
 
