@@ -6,6 +6,7 @@ BARVA_1 = 'blue'
 IGRALEC_2 = 'rdeci'
 BARVA_2 = 'red'
 
+
 ##OSTEVILCENJE POLJ
 ## 1  -  -  2  -  -  3
 ## |  4  -  5  -  6  |
@@ -39,11 +40,12 @@ def nasprotnik(igralec):
     
 
 class Polje():
-    def __init__(self, canvas, id_krogca, stevilka_polja):
+    def __init__(self, canvas, id_krogca):
         self.canvas = canvas
         self.id_krogca = id_krogca
-        self.stevilka_polja = stevilka_polja
+        #self.stevilka_polja = stevilka_polja
         self.zasedenost = None
+        
 
 
     def spremeni_zasedenost(self, igralec=None):
@@ -63,28 +65,59 @@ class Igra():
         self.zgodovina = []
         self.odstranitev_zetona = False
         self.poteka = False
+        self.slovar_polj = {}
+        self.na_vrsti = IGRALEC_1
 
     def shrani_trenutno_stanje(self):
-        pass
-        #TODO
+        '''Shrani nabor s st. zetonov, fazo, odstranitev_zetona,
+        ali poteka, kdo je navrsti in slovarjem polj'''
+        trenutni_slovar_polj = {}
+        for indeks in self.slovar_polj:
+            polje = Polje(self.slovar_polj[indeks].canvas,
+                          self.slovar_polj[indeks].id_krogca)
+            polje.zasedenost = self.slovar_polj[indeks].zasedenost
+            trenutni_slovar_polj[indeks] = polje
+        self.zgodovina.append((self.st_zetonov, self.faza, self.odstranitev_zetona,
+                               self.poteka, self.na_vrsti, trenutni_slovar_polj))
+        
 
     def kopija(self):
-        #TODO
-        pass
+        '''Napravi kopijo trenutne igre tako, da ustvari nove objekte Polja '''
+        kopija = Igra()
+        #kopija.gui = self.gui
+        kopija.st_zetonov = self.st_zetonov
+        kopija.faza = self.faza
+        kopija.odstranitev_zetona = self.odstranitev_zetona
+        kopija.poteka = self.poteka
+        kopija.na_vrsti = self.na_vrsti
+
+        kopija.slovar_polj = {}
+        for indeks in self.slovar_polj:
+            polje = Polje(self.slovar_polj[indeks].canvas,
+                          self.slovar_polj[indeks].id_krogca)
+            polje.zasedenost = self.slovar_polj[indeks].zasedenost
+            kopija.slovar_polj[indeks] = polje
+            
 
     def razveljavi(self):
-        #TODO
-        pass
+        (self.st_zetonov, self.faza, self.odstranitev_zetona,
+         self.poteka, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
 
 
+    def veljavne_poteze(self, index_polja):
+        '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
+        poteze = []
+        for indeks in slovar_polj:
+            if je_veljavna_poteza(indeks):
+                poteze.append(indeks)
 
-        
+
 
     def je_veljavna_poteza(self, index_polja):
         #ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
         #ce je poteza veljavna, ter False sicer.
         print('Preverjam veljavnost poteze')
-        aktivno_polje = self.gui.slovar_polj[index_polja]
+        aktivno_polje = self.slovar_polj[index_polja]
 
         
         ################################
@@ -94,7 +127,7 @@ class Igra():
             #ce v potezi tece faza odstranitve, pogleda, ce je polje,
             #ki ga je treba odstraniti, nasprotnikovo
             
-            if aktivno_polje.zasedenost == nasprotnik(self.gui.na_vrsti.get()):
+            if aktivno_polje.zasedenost == nasprotnik(self.na_vrsti):
                 #Ce zeton, ki ga zelimo odstraniti ni v trojki, je poteza
                 #veljavna:
                 
@@ -107,9 +140,9 @@ class Igra():
                     #TODO?
                     #Za hitrejse delovanje, bi lahko shranjevali najdene trojke,
                     #polj v ze-najdenih trojkah potem ni treba preverjati
-                    for index in self.gui.slovar_polj:
-                        polje = self.gui.slovar_polj[index]
-                        if polje.zasedenost == nasprotnik(self.gui.na_vrsti.get()):
+                    for index in self.slovar_polj:
+                        polje = self.slovar_polj[index]
+                        if polje.zasedenost == nasprotnik(self.na_vrsti):
                             if not self.preveri_trojke(index):
                                 print('Izbrati morate zeton, ki ni v trojki')
                                 return False
@@ -139,7 +172,7 @@ class Igra():
 
             #Ce izbiramo zeton za premik, moramo izbrati svojega
             if self.gui.premik_zetona == None:
-                if aktivno_polje.zasedenost == self.gui.na_vrsti.get():
+                if aktivno_polje.zasedenost == self.na_vrsti:
                     return True
                 else:
                     print('Niste kliknili na svoj zeton')
@@ -153,8 +186,8 @@ class Igra():
 
                 #Ce so na plosci samo se 3 zetoni, lahko z njimi poljubno skacemo
                 ####TODO: zakaj mora biti tu nasprotnik?
-                if self.st_zetonov[nasprotnik(self.gui.na_vrsti.get())] == 3:
-                    print(self.gui.na_vrsti.get())
+                if self.st_zetonov[nasprotnik(self.na_vrsti)] == 3:
+                    print(self.na_vrsti)
                     if aktivno_polje.zasedenost is None:
                         return True
                     else:
@@ -197,7 +230,7 @@ class Igra():
             for index in trojka:
                 #okupiranost = kdo je po potezi na polju
                 #zasedenost = kaksne barve zbiramo v trojki
-                okupiranost = self.gui.slovar_polj[index].zasedenost
+                okupiranost = self.slovar_polj[index].zasedenost
                 if koncaj is None:
                     if okupiranost == None:
                         koncaj = True
