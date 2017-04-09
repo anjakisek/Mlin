@@ -103,13 +103,13 @@ class Igra():
         (self.st_zetonov, self.faza, self.odstranitev_zetona,
          self.poteka, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
 
-
     def veljavne_poteze(self, index_polja):
         '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
         poteze = []
-        for indeks in slovar_polj:
-            if je_veljavna_poteza(indeks):
+        for indeks in self.slovar_polj:
+            if self.je_veljavna_poteza(indeks):
                 poteze.append(indeks)
+        return poteze
 
 
 
@@ -213,6 +213,8 @@ class Igra():
                 
         else:
             print('Faze ne delajo prav')
+
+
 
 
 
