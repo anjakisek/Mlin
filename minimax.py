@@ -2,7 +2,8 @@ import logging
 from igra import IGRALEC_1, IGRALEC_2, nasprotnik, trojke
 
 #vrednost
-
+ZMAGA = 10000
+NESKONCNO = ZMAGA + 1
 
 
 class Minimax:
@@ -18,6 +19,9 @@ class Minimax:
         self.prekinitev = True
 
     def izracunaj_potezo(self, igra):
+        #potezo bo treba vracati kot indeks polja, na katerega se bo igralo
+
+        
         #poklicali jo bomo iz vzporednega vlakna
         self.igra = igra
         self.prekinitev = False
@@ -32,7 +36,10 @@ class Minimax:
             logging.debug("minimax: poteza {0}, vrednost {1}".format(poteza, vrednost))
             self.poteza = poteza
 
-
+    def vrednost_pozicije(self):
+        #Predlagam, da za cenilko: ne glede na fazo vec zetonov
+        #prinese vec pik. Potem prestejeva trojke. Morda se kaj
+        pass
 
 
 
