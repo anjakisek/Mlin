@@ -1,5 +1,10 @@
 from tkinter import *
 from igra import *
+from racunalnik_igralec import *
+#from clovek import *
+
+
+
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
@@ -40,6 +45,24 @@ class Gui():
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Nova igra",
                               command=self.zacni_igro)
+        #menu_igra.add_command(label="Clovek vs. Clovek",
+        #                      command=lambda: self.zacni_igro(
+        #                          Clovek(self),
+        #                        Clovek(self)))
+        #menu_igra.add_command(label="Clovek, Racunalnik",
+        #                      command=lambda: self.zacni_igro(
+        #                          Clovek(self),
+        #                                Racunalnik(self, Minimax(globina))))
+        #menu_igra.add_command(label="Racunalnik, Clovek",
+        #                      command=lambda: self.zacni_igro(
+        #                          Racunalnik(self, Minimax(globina)),
+        #                                        Clovek(self)))
+        #menu_igra.add_command(label="Racunalnik, Racunalnik",
+        #                      command=lambda: self.zacni_igro(
+        #                          Racunalnik(self, Minimax(globina)),
+        #                                Racunalnik(self, Minimax(globina))))
+
+
 
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
@@ -238,6 +261,11 @@ class Gui():
                     self.sporocilo.set(
                         'Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
                 elif self.igra.faza == 2:
+                    #if len(self.igra.veljavne_poteze(index_polja)) == 0:
+                        #ce ni mozne poteze
+                        #self.igra.poteka = False
+                        #'Igre je konec, zmagal je {}'.format(
+                        #nasprotnik(self.igra.na_vrsti))
                     if self.premik_zetona is None:
                         self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
                         self.sporocilo.set(
@@ -330,7 +358,12 @@ class Gui():
 
         
     def zapri_okno(self, master):
+        self.prekini_igralce()
         master.destroy()
+
+    def prekini_igralce(self):
+        #TODO
+        pass
         
     def pripravi_novo_igro(self):
         for index in self.igra.slovar_polj:
