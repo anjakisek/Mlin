@@ -11,6 +11,8 @@ Komentarji:
 -v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze.
 -pri objektih Polje sem odstranila stevilka_polja, ker se mi je zdelo, da ga nikjer ne uporabimo, ker ima vsako polje itak indeks v slovarju polj. Po odstranitvi program dela :D
 -morda nas mora skrbeti, da v eni potezi (shrani in kopija igre) ustvarimo dvakrat po 24 dodatnih polj. Ampak v tictactoe on ustvari vsakic nov seznam...
+-igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
+-pri vzpostavitvi cloveka kot igralca bova verjetno funkcijo klik iz guia morala prenesti v clovek.py
 
 
 
