@@ -5,8 +5,12 @@
 -(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
 -sprogramirati logiko igre, cloveka, racunalnik, minimax
 
-Zadeva:
-v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze. Verjetno bi bilo fino, da bi na koncu poteze raje poklicala neko novo metodo, ki gre po vseh poljih in jih izriše. Tako bi delal lahko tudi undo (zdaj je funkcija barvanje polja poklicana na ene 10ih mestih).
+Komentarji:
+-ko bo minimax vlekel poteze, mora vedeti, kdo je na vrsti. Pri nama je na_vrsti shranjeno v guiu. Prenesla ga bom v Igro. Done
+-Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Verjetno bova kmalu naletela na težavo zaradi tega.
+v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze.
+-pri objektih Polje sem odstranila stevilka_polja, ker se mi je zdelo, da ga nikjer ne uporabimo, ker ima vsako polje itak indeks v slovarju polj. Po odstranitvi program dela :D
+
 Isto problem: ker imava Polje pod svoj objekt, ne vem, kako naj ga prekopirava v kopijo igre, ker polja niso atribut igre. Ce jih samo pokliceva, jih bo med minimaksom zmesal!!!!
 
 
