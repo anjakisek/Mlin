@@ -2,12 +2,14 @@ from tkinter import *
 from igra import *
 from racunalnik_igralec import *
 from clovek import *
+from minimax import *
 
 
 
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
+globina = 3
 
 ##OSTEVILCENJE POLJ
 ## 1  -  -  2  -  -  3
@@ -54,18 +56,18 @@ class Gui():
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
                                 Clovek(self)))
-        #menu_igra.add_command(label="Clovek, Racunalnik",
-        #                      command=lambda: self.zacni_igro(
-        #                          Clovek(self),
-        #                                Racunalnik(self, Minimax(globina))))
-        #menu_igra.add_command(label="Racunalnik, Clovek",
-        #                      command=lambda: self.zacni_igro(
-        #                          Racunalnik(self, Minimax(globina)),
-        #                                        Clovek(self)))
-        #menu_igra.add_command(label="Racunalnik, Racunalnik",
-        #                      command=lambda: self.zacni_igro(
-        #                          Racunalnik(self, Minimax(globina)),
-        #                                Racunalnik(self, Minimax(globina))))
+        menu_igra.add_command(label="Clovek vs. Racunalnik",
+                              command=lambda: self.zacni_igro(
+                                  Clovek(self),
+                                        Racunalnik(self, Minimax(globina))))
+        menu_igra.add_command(label="Racunalnik vs. Clovek",
+                              command=lambda: self.zacni_igro(
+                                  Racunalnik(self, Minimax(globina)),
+                                                Clovek(self)))
+        menu_igra.add_command(label="Racunalnik vs. Racunalnik",
+                              command=lambda: self.zacni_igro(
+                                  Racunalnik(self, Minimax(globina)),
+                                        Racunalnik(self, Minimax(globina))))
 
 
 
@@ -245,6 +247,7 @@ class Gui():
         
 
     def naredi_potezo(self, index_polja):
+        self.igra.shrani_trenutno_stanje()
         if not self.igra.je_veljavna_poteza(index_polja):
             if self.igra.faza == 2 and self.igra.premik_zetona is not None:
                 self.igra.premik_zetona = None
@@ -276,10 +279,20 @@ class Gui():
                         self.igra.odstranitev_zetona = True
                         self.sporocilo.set(
                             'Na vrsti je {} - odstranite žeton'.format(self.igra.na_vrsti))
+                        if self.igra.na_vrsti == IGRALEC_1:
+                            self.igralec_1.igraj()
+                        else:
+                            self.igralec_2.igraj()
+                            
                     elif self.igra.faza == 1:
                         self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
                         self.sporocilo.set(
                             'Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
+                        if self.igra.na_vrsti == IGRALEC_1:
+                            self.igralec_1.igraj()
+                        else:
+                            self.igralec_2.igraj()
+                        
                     elif self.igra.faza == 2:
                         #if len(self.igra.veljavne_poteze(index_polja)) == 0:
                             #ce ni mozne poteze
@@ -291,10 +304,18 @@ class Gui():
                             self.sporocilo.set(
                                 'Na vrsti je {} - izberite žeton za premik'.format(
                                     self.igra.na_vrsti))
+                            if self.igra.na_vrsti == IGRALEC_1:
+                                self.igralec_1.igraj()
+                            else:
+                                self.igralec_2.igraj()
                         else:
                             self.sporocilo.set(
                                 'Na vrsti je {} - izberite polje, kamor se želite premakniti'.format(
                                     self.igra.na_vrsti))
+                            if self.igra.na_vrsti == IGRALEC_1:
+                                self.igralec_1.igraj()
+                            else:
+                                self.igralec_2.igraj()
                 
                     
                     else:
@@ -362,6 +383,11 @@ class Gui():
                     self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'.format(
                         self.igra.na_vrsti))
                 print('Dokoncal odstranitev')
+                
+                if self.igra.na_vrsti == IGRALEC_1:
+                    self.igralec_1.igraj()
+                else:
+                    self.igralec_2.igraj()
 
     
     def pobarvaj_polje(self, polje):
