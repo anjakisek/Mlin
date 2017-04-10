@@ -65,6 +65,9 @@ class Igra():
         self.zgodovina = []
         self.odstranitev_zetona = False
         self.poteka = False
+        
+        #Polje, iz katerega zelimo premakniti zeton (v fazi 2)
+        self.premik_zetona = None
         self.slovar_polj = {}
         self.na_vrsti = IGRALEC_1
 
@@ -78,7 +81,7 @@ class Igra():
             polje.zasedenost = self.slovar_polj[indeks].zasedenost
             trenutni_slovar_polj[indeks] = polje
         self.zgodovina.append((self.st_zetonov, self.faza, self.odstranitev_zetona,
-                               self.poteka, self.na_vrsti, trenutni_slovar_polj))
+                               self.poteka, self.premik_zetona, self.na_vrsti, trenutni_slovar_polj))
         
 
     def kopija(self):
@@ -89,6 +92,7 @@ class Igra():
         kopija.faza = self.faza
         kopija.odstranitev_zetona = self.odstranitev_zetona
         kopija.poteka = self.poteka
+        kopija.premik_zetona = self.premik_zetona
         kopija.na_vrsti = self.na_vrsti
 
         kopija.slovar_polj = {}
@@ -101,7 +105,7 @@ class Igra():
 
     def razveljavi(self):
         (self.st_zetonov, self.faza, self.odstranitev_zetona,
-         self.poteka, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
+         self.poteka, self.premik_zetona, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
 
     def veljavne_poteze(self, index_polja):
         '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
@@ -171,7 +175,7 @@ class Igra():
         elif self.faza  == 2:
 
             #Ce izbiramo zeton za premik, moramo izbrati svojega
-            if self.gui.premik_zetona == None:
+            if self.premik_zetona == None:
                 if aktivno_polje.zasedenost == self.na_vrsti:
                     return True
                 else:
@@ -181,7 +185,6 @@ class Igra():
                
             else:
                 if aktivno_polje.zasedenost is not None:
-                    self.gui.premik_zetona = None
                     return False
 
                 #Ce so na plosci samo se 3 zetoni, lahko z njimi poljubno skacemo
@@ -197,18 +200,17 @@ class Igra():
                 else:
                     je_v_trojkah = []
                     for trojka in trojke:
-                        if self.gui.premik_zetona in trojka:
+                        if self.premik_zetona in trojka:
                             je_v_trojkah.append(trojka)
                             if len(je_v_trojkah) == 2:
                                 break
                     for trojka in je_v_trojkah:
-                        a = trojka.index(self.gui.premik_zetona)
+                        a = trojka.index(self.premik_zetona)
                         if index_polja in trojka:
                             b = trojka.index(index_polja)
                             if abs(b-a) == 1:
                                 return True                   
                     print('Niste izbrali veljavnega polja')
-                    self.gui.premik_zetona = None
                     return False
                 
         else:
@@ -251,7 +253,6 @@ class Igra():
                 print('Nasel sem trojko')
                 return True
         #Če ni našel nobene trojke:
-        print('Nisem nasel trojke')
         return False
 
     def spremeni_fazo(self, stevilka_faze):
