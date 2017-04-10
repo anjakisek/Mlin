@@ -1,5 +1,6 @@
 import logging
-from igra import IGRALEC_1, IGRALEC_2, nasprotnik, trojke
+##from igra import IGRALEC_1, IGRALEC_2, nasprotnik, trojke
+from igra import *
 
 #vrednost
 ZMAGA = 10000
@@ -39,7 +40,24 @@ class Minimax:
     def vrednost_pozicije(self):
         #Predlagam, da za cenilko: ne glede na fazo vec zetonov
         #prinese vec pik. Potem prestejeva trojke. Morda se kaj
-        pass
+        vrednost = 0
+        for trojka in trojke:
+            seznam_zasedenosti = [
+                self.igra.slovar_polj[x].zasedenost for x in trojka]
+            if seznam_zasedenosti.count(self.na_potezi) == 3:
+                vrednost += 240
+            elif seznam_zasedenosti.count(self.na_potezi) == 2 and (
+                seznam_zasedenosti.count(None) == 1):
+                vrednost += 200
+            elif seznam_zasedenosti.count(nasprotnik(self.na_potezi)) == 3:
+                vrednost -= 210
+            elif seznam_zasedenosti.count(nasprotnik(self.na_potezi)) == 2 and (
+                seznam_zasedenosti.count(None) == 1):
+                vrednost -= 170
+            #Dodatne vredne pozicije: ...
+        return vrednost
+                
+               
 
 
 
