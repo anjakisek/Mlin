@@ -3,20 +3,20 @@
 -Playtesting
 -Povoziti staro igro z novo, ko zelimo zaceti novo igro
 -(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
--sprogramirati logiko igre, cloveka, racunalnik, minimax
+-igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
+
 
 Komentarji:
--ko bo minimax vlekel poteze, mora vedeti, kdo je na vrsti. Pri nama je na_vrsti shranjeno v guiu. Prenesla ga bom v Igro. Done
--Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Verjetno bova kmalu naletela na težavo zaradi tega.
--v zgodovino bi shranjevala vsa polja (v atributih bi bilo napisano, kdo zaseda polje), fazo, odstranitev zetona in nadaljevanje poteze.
--pri objektih Polje sem odstranila stevilka_polja, ker se mi je zdelo, da ga nikjer ne uporabimo, ker ima vsako polje itak indeks v slovarju polj. Po odstranitvi program dela :D
--morda nas mora skrbeti, da v eni potezi (shrani in kopija igre) ustvarimo dvakrat po 24 dodatnih polj. Ampak v tictactoe on ustvari vsakic nov seznam...
--igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
--pri vzpostavitvi cloveka kot igralca bova verjetno funkcijo klik iz guia morala prenesti v clovek.py
+PROBLEM! Ko se poteza stori, nimava ločene poteze v igri in risanja na zaslon. Minimax ne sme risati na zaslon NIČ. Čreva je treba raztrančirati.
+-Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Mogoče bova kmalu naletela na težavo zaradi tega
 
 
+Vprašanja prof. Bauer
+-morda nas mora skrbeti, da v eni potezi (shrani in kopija igre) ustvarimo dvakrat po 24 dodatnih polj? Je to preveč?
+-kako se povozi Igra čez igro, ko se naredi novo igro?
+-Kaj se dogaja pri mislecu, minimaxu, kopiji igre?
+-A se da naredi_potezo v guiu nekako brcnit v igro, da jo bo potem minimax lahko klical, ali vse jovo na novo?
 
 Popravljeno:
--zetoni letijo v zadnji fazi
--vkljuciti "sporocevalca" v poteze
--Clovek vs Clovek skoraj koncano
+-Clovek vs Clovek dela!!!!!! :D :D :D
+-dela skok v racunalnik kot igralec
