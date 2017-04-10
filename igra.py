@@ -86,13 +86,14 @@ class Igra():
 
     def kopija(self):
         '''Napravi kopijo trenutne igre tako, da ustvari nove objekte Polja '''
-        kopija = Igra()
-        #kopija.gui = self.gui
+        kopija = Igra(self.gui)
+        kopija.gui = self.gui
         kopija.st_zetonov = self.st_zetonov
         kopija.faza = self.faza
         kopija.odstranitev_zetona = self.odstranitev_zetona
         kopija.poteka = self.poteka
         kopija.premik_zetona = self.premik_zetona
+        print(self.na_vrsti)
         kopija.na_vrsti = self.na_vrsti
 
         kopija.slovar_polj = {}
@@ -106,6 +107,15 @@ class Igra():
     def razveljavi(self):
         (self.st_zetonov, self.faza, self.odstranitev_zetona,
          self.poteka, self.premik_zetona, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
+
+    def povleci_potezo(self, index_polja):
+        print('prisel do povleka poteze')
+        pass
+        #TODO!!!
+
+
+
+
 
     def veljavne_poteze(self, index_polja):
         '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
