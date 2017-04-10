@@ -1,7 +1,7 @@
 from tkinter import *
 from igra import *
 from racunalnik_igralec import *
-#from clovek import *
+from clovek import *
 
 
 
@@ -33,6 +33,11 @@ def sredisce(krogec):
 class Gui():
 
     def __init__(self, master):
+        self.igralec_1 = None 
+        self.igralec_2 = None
+
+
+        
         #Ce uporabnik zapre okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
@@ -45,10 +50,10 @@ class Gui():
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Nova igra",
                               command=self.zacni_igro)
-        #menu_igra.add_command(label="Clovek vs. Clovek",
-        #                      command=lambda: self.zacni_igro(
-        #                          Clovek(self),
-        #                        Clovek(self)))
+        menu_igra.add_command(label="Clovek vs. Clovek",
+                              command=lambda: self.zacni_igro(
+                                  Clovek(self),
+                                Clovek(self)))
         #menu_igra.add_command(label="Clovek, Racunalnik",
         #                      command=lambda: self.zacni_igro(
         #                          Clovek(self),
@@ -91,8 +96,10 @@ class Gui():
                 IGRALEC_2, self.stevec2.get()))
         self.napis2.grid(row=2, column=1)
 
-        #String, ki pove, kdo je na potezi
-        #self.na_vrsti = StringVar(master, value=IGRALEC_1)
+
+
+
+
 
         #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
         #slovar polj
@@ -201,20 +208,20 @@ class Gui():
         #ob kliku na plosco poklice funkcijo, primerno trenutni fazi igre
         self.plosca.bind("<Button-1>", self.klik)
 
-        #igro zacne vedno prvi igralec  ##### ZE NAPISANO?
-        #self.igra.na_vrsti = StringVar(master, value=IGRALEC_1)
-
-        #Polje, iz katerega zelimo premakniti zeton (v fazi 2)
-        self.premik_zetona = None
+    
 
 
         
 
 
-    def zacni_igro(self):
+    def zacni_igro(self, igralec1, igralec2):
+        self.prekini_igralce()
+        self.igralec_1 = igralec1
+        self.igralec_2 = igralec2
         self.igra.poteka = True
         self.pripravi_novo_igro()
         self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
+        self.igralec_1.igraj()
 
 
     def klik(self, event):
@@ -229,14 +236,25 @@ class Gui():
                 #Ce smo kliknili znotraj krogca, bomo naredili ustrezno potezo.
                 if razdalja <= VELIKOST_POLJA:
                     index_polja = i+1
+
+                    if self.igra.na_vrsti == IGRALEC_1:
+                        self.igralec_1.klik(index_polja)
+                    elif self.igra.na_vrsti == IGRALEC_2:
+                        self.igralec_2.klik(index_polja)
                     
-                    self.naredi_potezo(index_polja)
-                    break
         
 
     def naredi_potezo(self, index_polja):
         if not self.igra.je_veljavna_poteza(index_polja):
-            pass
+            if self.igra.faza == 2 and self.igra.premik_zetona is not None:
+                self.igra.premik_zetona = None
+                self.sporocilo.set(
+                                'Na vrsti je {} - izberite žeton za premik'.format(
+                                    self.igra.na_vrsti))
+            else:
+                pass
+            
+        
         else:
             if self.igra.odstranitev_zetona:
                 print('Klicem odstranitev žetona')
@@ -254,7 +272,7 @@ class Gui():
                         print('Smo v medfazju')
 
                     
-                    if self.igra.preveri_trojke(index_polja) and self.premik_zetona is None:
+                    if self.igra.preveri_trojke(index_polja) and self.igra.premik_zetona is None:
                         self.igra.odstranitev_zetona = True
                         self.sporocilo.set(
                             'Na vrsti je {} - odstranite žeton'.format(self.igra.na_vrsti))
@@ -268,7 +286,7 @@ class Gui():
                             #self.igra.poteka = False
                             #'Igre je konec, zmagal je {}'.format(
                             #nasprotnik(self.igra.na_vrsti))
-                        if self.premik_zetona is None:
+                        if self.igra.premik_zetona is None:
                             self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
                             self.sporocilo.set(
                                 'Na vrsti je {} - izberite žeton za premik'.format(
@@ -281,7 +299,6 @@ class Gui():
                     
                     else:
                         print('Tezave pri koncu poteze')
-
         
 
     def postavi_zeton(self, index_polja):
@@ -307,17 +324,17 @@ class Gui():
 ##        else:
             #Ce se nismo izbrali zetona za premik,
             #nastavimo premik na izbrano polje
-            if self.premik_zetona == None:
-                self.premik_zetona = index_polja
+            if self.igra.premik_zetona == None:
+                self.igra.premik_zetona = index_polja
                 print('Zgodil se je premik A')
             else:
-                polje1 = self.igra.slovar_polj[self.premik_zetona]
+                polje1 = self.igra.slovar_polj[self.igra.premik_zetona]
                 polje1.spremeni_zasedenost()
                 self.pobarvaj_polje(polje1)
                 polje2 = self.igra.slovar_polj[index_polja]
                 polje2.spremeni_zasedenost(self.igra.na_vrsti)
                 self.pobarvaj_polje(polje2)
-                self.premik_zetona = None
+                self.igra.premik_zetona = None
                 print('Zgodil se je premik B')
         
 
