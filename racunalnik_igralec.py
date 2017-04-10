@@ -1,4 +1,5 @@
 import threading
+from igra import *
 from minimax import *
 
 class Racunalnik():
@@ -7,8 +8,10 @@ class Racunalnik():
         self.algoritem = algoritem
         self.mislec = None #vlakno za razmisljanje
 
-    def igraj_potezo(self):
+    def igraj(self):
         #sprozimo razmisljanje
+        print(self.gui.igra)
+        print(self.gui.igra.kopija())
         self.mislec = threading.Thread(
             target=lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
 
