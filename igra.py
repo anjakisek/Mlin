@@ -65,7 +65,6 @@ class Igra():
         self.zgodovina = []
         self.odstranitev_zetona = False
         self.poteka = False
-        
         #Polje, iz katerega zelimo premakniti zeton (v fazi 2)
         self.premik_zetona = None
         self.slovar_polj = {}
@@ -119,7 +118,7 @@ class Igra():
 
 
 
-    def veljavne_poteze(self, index_polja):
+    def veljavne_poteze(self):
         '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
         poteze = []
         for indeks in self.slovar_polj:
