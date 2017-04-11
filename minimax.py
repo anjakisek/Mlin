@@ -81,34 +81,32 @@ class Minimax:
                 if maksimiziramo:
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    #M-> Za vsak indeks sproba vse mozne poteze:
-                    for index in self.igra.slovar_polj:
-                        for p in self.igra.veljavne_poteze(index):
-                            self.igra.povleci_potezo(p)
-                            if self.igra.odstrani_zeton or self.igra.premik_zetona is not None:
-                                vrednost = self.minimax(globina-1, maksimiziramo)[1]
-                            else:
-                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                            self.igra.razveljavi()
-                            if vrednost > vrednost_najboljse:
-                                vrednost_najboljse = vrednost
-                                najboljsa_poteza = p
+                    
+                    for p in self.igra.veljavne_poteze():
+                        self.igra.povleci_potezo(p)
+                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            vrednost = self.minimax(globina-1, maksimiziramo)[1]
+                        else:
+                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                        self.igra.razveljavi()
+                        if vrednost > vrednost_najboljse:
+                            vrednost_najboljse = vrednost
+                            najboljsa_poteza = p
                 else:
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    #M-> Za vsak indeks sproba vse mozne poteze:
-                    for index in self.igra.slovar_polj:
-                        for p in self.igra.veljavne_poteze(index):
-                            self.igra.povleci_potezo(p)
-                            #M-> trenutno so odstranitev in premik zetona se v gui-ju
-                            if self.igra.odstrani_zeton or self.igra.premik_zetona is not None:
-                                vrednost = self.minimax(globina-1, maksimiziramo)[1]
-                            else:
-                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                            self.igra.razveljavi()
-                            if vrednost < vrednost_najboljse:
-                                vrednost_najboljse = vrednost
-                                najboljsa_poteza = p
+                    
+                    for p in self.igra.veljavne_poteze():
+                        self.igra.povleci_potezo(p)
+                        #M-> trenutno so odstranitev in premik zetona se v gui-ju
+                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            vrednost = self.minimax(globina-1, maksimiziramo)[1]
+                        else:
+                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                        self.igra.razveljavi()
+                        if vrednost < vrednost_najboljse:
+                            vrednost_najboljse = vrednost
+                            najboljsa_poteza = p
                             
                 assert (najboljsa_poteza is not None), "minimax: izracunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
