@@ -102,6 +102,8 @@ class Igra():
                           self.slovar_polj[indeks].id_krogca)
             polje.zasedenost = self.slovar_polj[indeks].zasedenost
             kopija.slovar_polj[indeks] = polje
+        #M-> Sklepam, da bi radi dobili kopijo ven:
+        return kopija
             
 
     def razveljavi(self):

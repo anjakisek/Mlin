@@ -340,54 +340,48 @@ class Gui():
             print('Napaka pri postavitvi zetona')
 
     def premakni_zeton(self, index_polja):
-##        if not self.igra.je_veljavna_poteza(index_polja):
-##            pass
-##        else:
-            #Ce se nismo izbrali zetona za premik,
-            #nastavimo premik na izbrano polje
-            if self.igra.premik_zetona == None:
-                self.igra.premik_zetona = index_polja
-                print('Zgodil se je premik A')
-            else:
-                polje1 = self.igra.slovar_polj[self.igra.premik_zetona]
-                polje1.spremeni_zasedenost()
-                self.pobarvaj_polje(polje1)
-                polje2 = self.igra.slovar_polj[index_polja]
-                polje2.spremeni_zasedenost(self.igra.na_vrsti)
-                self.pobarvaj_polje(polje2)
-                self.igra.premik_zetona = None
-                print('Zgodil se je premik B')
+        #Ce se nismo izbrali zetona za premik,
+        #nastavimo premik na izbrano polje
+        if self.igra.premik_zetona == None:
+            self.igra.premik_zetona = index_polja
+            print('Zgodil se je premik A')
+        else:
+            polje1 = self.igra.slovar_polj[self.igra.premik_zetona]
+            polje1.spremeni_zasedenost()
+            self.pobarvaj_polje(polje1)
+            polje2 = self.igra.slovar_polj[index_polja]
+            polje2.spremeni_zasedenost(self.igra.na_vrsti)
+            self.pobarvaj_polje(polje2)
+            self.igra.premik_zetona = None
+            print('Zgodil se je premik B')
         
 
     def odstrani_zeton(self, index_polja):
-##        if not self.igra.je_veljavna_poteza(index_polja):
-##            pass
-##        else:
-            print('Odstranjujem zeton')
-            self.igra.slovar_polj[index_polja].spremeni_zasedenost()
-            print(self.igra.slovar_polj[index_polja].zasedenost)
-            self.pobarvaj_polje(self.igra.slovar_polj[index_polja])
-            self.igra.odstranitev_zetona = False
-            self.igra.st_zetonov[self.igra.na_vrsti] -= 1
-            print(self.igra.st_zetonov[self.igra.na_vrsti])
-            if self.igra.ali_je_konec():
-                self.sporocilo.set(
-                    'Igre je konec, zmagal je {}'.format(
-                        self.igra.na_vrsti))
-            else:
-                self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
-                if self.igra.faza == 1:
-                    self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(
-                        self.igra.na_vrsti))
-                elif self.igra.faza == 2:
-                    self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'.format(
-                        self.igra.na_vrsti))
-                print('Dokoncal odstranitev')
+        print('Odstranjujem zeton')
+        self.igra.slovar_polj[index_polja].spremeni_zasedenost()
+        print(self.igra.slovar_polj[index_polja].zasedenost)
+        self.pobarvaj_polje(self.igra.slovar_polj[index_polja])
+        self.igra.odstranitev_zetona = False
+        self.igra.st_zetonov[self.igra.na_vrsti] -= 1
+        print(self.igra.st_zetonov[self.igra.na_vrsti])
+        if self.igra.ali_je_konec():
+            self.sporocilo.set(
+                'Igre je konec, zmagal je {}'.format(
+                    self.igra.na_vrsti))
+        else:
+            self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
+            if self.igra.faza == 1:
+                self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(
+                     self.igra.na_vrsti))
+            elif self.igra.faza == 2:
+                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'.format(
+                     self.igra.na_vrsti))
+            print('Dokoncal odstranitev')
                 
-                if self.igra.na_vrsti == IGRALEC_1:
-                    self.igralec_1.igraj()
-                else:
-                    self.igralec_2.igraj()
+            if self.igra.na_vrsti == IGRALEC_1:
+                self.igralec_1.igraj()
+            else:
+                self.igralec_2.igraj()
 
     
     def pobarvaj_polje(self, polje):
