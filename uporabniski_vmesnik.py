@@ -69,7 +69,10 @@ class Gui():
                                   Racunalnik(self, Minimax(globina)),
                                         Racunalnik(self, Minimax(globina))))
 
-
+        
+        #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
+        #slovar polj
+        self.igra = Igra(self)
 
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
@@ -82,11 +85,11 @@ class Gui():
 
         #Stevec, ki bo prikazoval, koliko zetonov
         #lahko prvi igralec se polozi na plosco
-        self.stevec1 = IntVar(master, value=9)
+        #self.stevec1 = IntVar(master, value=9)
         self.napis1 = Label(
             master,
             text= "Preostali {}: {}".format(
-                IGRALEC_1, self.stevec1.get()))
+                IGRALEC_1, self.igra.stevec1))
         self.napis1.grid(row=2, column=0)
         
         #Stevec, ki bo prikazoval, koliko zetonov
@@ -95,7 +98,7 @@ class Gui():
         self.napis2 = Label(
             master,
             text= "Preostali {}: {}".format(
-                IGRALEC_2, self.stevec2.get()))
+                IGRALEC_2, self.igra.stevec2))
         self.napis2.grid(row=2, column=1)
 
 
@@ -103,9 +106,6 @@ class Gui():
 
 
 
-        #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
-        #slovar polj
-        self.igra = Igra(self)
 
         #Seznam vseh krogcev, narisanih na canvas
         self.seznam_krogcev = []
@@ -246,14 +246,16 @@ class Gui():
                     
         
 
-    def naredi_potezo(self, index_polja):
+    def naredi_potezo(self, index_polja, barvanje=True):
+        print('Delam potezo')
         self.igra.shrani_trenutno_stanje()
         if not self.igra.je_veljavna_poteza(index_polja):
             if self.igra.faza == 2 and self.igra.premik_zetona is not None:
                 self.igra.premik_zetona = None
-                self.sporocilo.set(
-                                'Na vrsti je {} - izberite žeton za premik'.format(
-                                    self.igra.na_vrsti))
+                if barvanje:
+                    self.sporocilo.set(
+                                    'Na vrsti je {} - izberite žeton za premik'.format(
+                                        self.igra.na_vrsti))
             else:
                 pass
             
@@ -261,24 +263,25 @@ class Gui():
         else:
             if self.igra.odstranitev_zetona:
                 print('Klicem odstranitev žetona')
-                self.odstrani_zeton(index_polja)
+                self.odstrani_zeton(index_polja, barvanje)
             else:
                 
                     if self.igra.faza == 1:
-                        self.postavi_zeton(index_polja)
-                        if self.stevec1.get() == 0 and self.stevec2.get() == 0:
+                        self.postavi_zeton(index_polja, barvanje)
+                        if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
                             self.igra.spremeni_fazo(2)
                     elif self.igra.faza == 2:
                         print('Smo v drugi fazi')
-                        self.premakni_zeton(index_polja)
+                        self.premakni_zeton(index_polja, barvanje)
                     else:
                         print('Smo v medfazju')
 
                     
                     if self.igra.preveri_trojke(index_polja) and self.igra.premik_zetona is None:
                         self.igra.odstranitev_zetona = True
-                        self.sporocilo.set(
-                            'Na vrsti je {} - odstranite žeton'.format(self.igra.na_vrsti))
+                        if barvanje:
+                            self.sporocilo.set(
+                                'Na vrsti je {} - odstranite žeton'.format(self.igra.na_vrsti))
                         if self.igra.na_vrsti == IGRALEC_1:
                             self.igralec_1.igraj()
                         else:
@@ -286,12 +289,14 @@ class Gui():
                             
                     elif self.igra.faza == 1:
                         self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
-                        self.sporocilo.set(
-                            'Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
-                        if self.igra.na_vrsti == IGRALEC_1:
-                            self.igralec_1.igraj()
-                        else:
-                            self.igralec_2.igraj()
+                        if barvanje:
+                            self.sporocilo.set(
+                                'Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
+                            #ZAMAKNI NAZAJ
+                            if self.igra.na_vrsti == IGRALEC_1:
+                                self.igralec_1.igraj()
+                            else:
+                                self.igralec_2.igraj()
                         
                     elif self.igra.faza == 2:
                         #if len(self.igra.veljavne_poteze(index_polja)) == 0:
@@ -301,17 +306,19 @@ class Gui():
                             #nasprotnik(self.igra.na_vrsti))
                         if self.igra.premik_zetona is None:
                             self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
-                            self.sporocilo.set(
-                                'Na vrsti je {} - izberite žeton za premik'.format(
-                                    self.igra.na_vrsti))
+                            if barvanje:
+                                self.sporocilo.set(
+                                    'Na vrsti je {} - izberite žeton za premik'.format(
+                                        self.igra.na_vrsti))
                             if self.igra.na_vrsti == IGRALEC_1:
                                 self.igralec_1.igraj()
                             else:
                                 self.igralec_2.igraj()
                         else:
-                            self.sporocilo.set(
-                                'Na vrsti je {} - izberite polje, kamor se želite premakniti'.format(
-                                    self.igra.na_vrsti))
+                            if barvanje:
+                                self.sporocilo.set(
+                                    'Na vrsti je {} - izberite polje, kamor se želite premakniti'.format(
+                                        self.igra.na_vrsti))
                             if self.igra.na_vrsti == IGRALEC_1:
                                 self.igralec_1.igraj()
                             else:
@@ -322,24 +329,27 @@ class Gui():
                         print('Tezave pri koncu poteze')
         
 
-    def postavi_zeton(self, index_polja):
+    def postavi_zeton(self, index_polja, barvanje):
         print('Postavljam zeton')
         polje = self.igra.slovar_polj[index_polja]
         polje.spremeni_zasedenost(self.igra.na_vrsti)
-        self.pobarvaj_polje(polje)
+        if barvanje:
+            self.pobarvaj_polje(polje)
         #popravi ustrezen stevec zetonov
         if polje.zasedenost == IGRALEC_1:
-            self.stevec1.set(self.stevec1.get()-1)
-            self.napis1.config(
-                text = "Preostali {}: ".format(IGRALEC_1)+ str(self.stevec1.get()))
+            self.igra.stevec1 = self.igra.stevec1 -1
+            if barvanje:
+                self.napis1.config(
+                    text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
         elif polje.zasedenost == IGRALEC_2:
-            self.stevec2.set(self.stevec2.get()-1)
-            self.napis2.config(
-                text = "Preostali {}: ".format(IGRALEC_2)+ str(self.stevec2.get()))
+            self.igra.stevec2 = (self.igra.stevec2 -1)
+            if barvanje:
+                self.napis2.config(
+                    text = "Preostali {}: ".format(IGRALEC_2)+ str(self.igra.stevec2))
         else:
             print('Napaka pri postavitvi zetona')
 
-    def premakni_zeton(self, index_polja):
+    def premakni_zeton(self, index_polja, barvanje):
         #Ce se nismo izbrali zetona za premik,
         #nastavimo premik na izbrano polje
         if self.igra.premik_zetona == None:
@@ -348,35 +358,40 @@ class Gui():
         else:
             polje1 = self.igra.slovar_polj[self.igra.premik_zetona]
             polje1.spremeni_zasedenost()
-            self.pobarvaj_polje(polje1)
+            if barvanje:
+                self.pobarvaj_polje(polje1)
             polje2 = self.igra.slovar_polj[index_polja]
             polje2.spremeni_zasedenost(self.igra.na_vrsti)
-            self.pobarvaj_polje(polje2)
+            if barvanje:
+                self.pobarvaj_polje(polje2)
             self.igra.premik_zetona = None
             print('Zgodil se je premik B')
         
 
-    def odstrani_zeton(self, index_polja):
+    def odstrani_zeton(self, index_polja, barvanje):
         print('Odstranjujem zeton')
         self.igra.slovar_polj[index_polja].spremeni_zasedenost()
         print(self.igra.slovar_polj[index_polja].zasedenost)
-        self.pobarvaj_polje(self.igra.slovar_polj[index_polja])
+        if barvanje:
+            self.pobarvaj_polje(self.igra.slovar_polj[index_polja])
         self.igra.odstranitev_zetona = False
         self.igra.st_zetonov[self.igra.na_vrsti] -= 1
         print(self.igra.st_zetonov[self.igra.na_vrsti])
         if self.igra.ali_je_konec():
-            self.sporocilo.set(
-                'Igre je konec, zmagal je {}'.format(
-                    self.igra.na_vrsti))
+            if barvanje:
+                self.sporocilo.set(
+                    'Igre je konec, zmagal je {}'.format(
+                        self.igra.na_vrsti))
         else:
             self.igra.na_vrsti = nasprotnik(self.igra.na_vrsti)
-            if self.igra.faza == 1:
-                self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(
-                     self.igra.na_vrsti))
-            elif self.igra.faza == 2:
-                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'.format(
-                     self.igra.na_vrsti))
-            print('Dokoncal odstranitev')
+            if barvanje:
+                if self.igra.faza == 1:
+                    self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(
+                         self.igra.na_vrsti))
+                elif self.igra.faza == 2:
+                     self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'.format(
+                         self.igra.na_vrsti))
+                print('Dokoncal odstranitev')
                 
             if self.igra.na_vrsti == IGRALEC_1:
                 self.igralec_1.igraj()
@@ -412,12 +427,12 @@ class Gui():
         self.igra.zgodovina = []
         self.igra.spremeni_fazo(1)
         self.igra.na_vrsti = IGRALEC_1
-        self.stevec1.set(9)
+        self.igra.stevec1 = 9
         self.napis1.config(
-                text = "Preostali {}: ".format(IGRALEC_1)+ str(self.stevec1.get()))
-        self.stevec2.set(9)
+                text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
+        self.igra.stevec2 = 9
         self.napis2.config(
-                text = "Preostali {}: ".format(IGRALEC_2)+ str(self.stevec2.get()))
+                text = "Preostali {}: ".format(IGRALEC_2)+ str(self.igra.stevec2))
         self.igra.st_zetonov[IGRALEC_1] = 9
         self.igra.st_zetonov[IGRALEC_2] = 9
 
