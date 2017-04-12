@@ -61,14 +61,19 @@ class Igra():
     def __init__(self, gui):
         self.gui = gui
         self.st_zetonov = {IGRALEC_1: 9, IGRALEC_2: 9}
-        self.faza = 1
-        self.zgodovina = []
+        self.stevec1 = 9
+        self.stevec2 = 9
+        self.faza = 1        
         self.odstranitev_zetona = False
         self.poteka = False
         #Polje, iz katerega zelimo premakniti zeton (v fazi 2)
         self.premik_zetona = None
         self.slovar_polj = {}
         self.na_vrsti = IGRALEC_1
+        self.zgodovina = [(self.st_zetonov, self.stevec1, self.stevec2,
+                           self.faza, self.odstranitev_zetona,
+                           self.premik_zetona,
+                           self.na_vrsti, self.slovar_polj)]
 
     def shrani_trenutno_stanje(self):
         '''Shrani nabor s st. zetonov, fazo, odstranitev_zetona,
@@ -79,21 +84,28 @@ class Igra():
                           self.slovar_polj[indeks].id_krogca)
             polje.zasedenost = self.slovar_polj[indeks].zasedenost
             trenutni_slovar_polj[indeks] = polje
-        self.zgodovina.append((self.st_zetonov, self.faza, self.odstranitev_zetona,
-                               self.poteka, self.premik_zetona, self.na_vrsti, trenutni_slovar_polj))
+        self.zgodovina.append(
+            (self.st_zetonov, self.stevec1, self.stevec2,
+             self.faza, self.odstranitev_zetona,
+             self.premik_zetona, self.na_vrsti,
+             trenutni_slovar_polj))
         
 
     def kopija(self):
         '''Napravi kopijo trenutne igre tako, da ustvari nove objekte Polja '''
+        print('Delam kopijo')
         kopija = Igra(self.gui)
         kopija.gui = self.gui
         kopija.st_zetonov = self.st_zetonov
+        kopija.stevec1 = self.stevec1
+        kopija.stevec2 = self.stevec2
         kopija.faza = self.faza
         kopija.odstranitev_zetona = self.odstranitev_zetona
         kopija.poteka = self.poteka
         kopija.premik_zetona = self.premik_zetona
-        print(self.na_vrsti)
         kopija.na_vrsti = self.na_vrsti
+
+        
 
         kopija.slovar_polj = {}
         for indeks in self.slovar_polj:
@@ -101,13 +113,19 @@ class Igra():
                           self.slovar_polj[indeks].id_krogca)
             polje.zasedenost = self.slovar_polj[indeks].zasedenost
             kopija.slovar_polj[indeks] = polje
-        #M-> Sklepam, da bi radi dobili kopijo ven:
         return kopija
             
 
     def razveljavi(self):
-        (self.st_zetonov, self.faza, self.odstranitev_zetona,
-         self.poteka, self.premik_zetona, self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
+        print('Razveljavljam')
+        if self.zgodovina == []:
+            pass
+        else:
+            (self.st_zetonov, self.stevec1, self.stevec2,
+             self.faza, self.odstranitev_zetona,
+             self.premik_zetona,
+             self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
+            
 
     def povleci_potezo(self, index_polja):
         print('prisel do povleka poteze')
