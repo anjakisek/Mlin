@@ -10,9 +10,6 @@ class Racunalnik():
 
     def igraj(self):
         #sprozimo razmisljanje
-        print(self.gui.igra)
-        print(self.gui.igra.kopija())
-        print(self.gui.igra.kopija().odstranitev_zetona)
         self.mislec = threading.Thread(
             target=lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
 
