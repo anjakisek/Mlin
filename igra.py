@@ -42,8 +42,7 @@ def nasprotnik(igralec):
     
 
 class Igra():
-    def __init__(self, gui):
-        self.gui = gui
+    def __init__(self):
         self.plosca = [None]* 24
         self.st_zetonov = {IGRALEC_1: 9, IGRALEC_2: 9}
 
@@ -60,66 +59,50 @@ class Igra():
         #Polje, iz katerega zelimo premakniti zeton (v fazi FAZA_PREMAKNI)
         self.premik_zetona = None
         self.na_vrsti = IGRALEC_1
-        #self.zgodovina = [(self.st_zetonov, self.stevec1, self.stevec2,
-        #                  self.faza, self.odstranitev_zetona,
-        #                   self.premik_zetona,
-        #                   self.na_vrsti, self.seznam_krogcev)]
+        self.zgodovina = []
 
 
     def shrani_trenutno_stanje(self):
-        '''Shrani nabor s st. zetonov, fazo, odstranitev_zetona,
-        ali poteka, kdo je navrsti in slovarjem polj'''
-        pass
-        #for indeks in self.slovar_polj:
-        #    polje = Polje(self.slovar_polj[indeks].canvas,
-        #                  self.slovar_polj[indeks].id_krogca)
-        #    polje.zasedenost = self.slovar_polj[indeks].zasedenost
-        #    trenutni_slovar_polj[indeks] = polje
-        #self.zgodovina.append(
-        #    (self.st_zetonov, self.stevec1, self.stevec2,
-        #     self.faza, self.odstranitev_zetona,
-        #     self.premik_zetona, self.na_vrsti,
-        #     trenutni_slovar_polj))
+        '''Shrani nabor, ki vsebuje trenutne vrednosti atributov objekta Igra
+            na konec seznama self.zgodovina.'''
+        print('Shranjujem trenutno stanje')
+        self.zgodovina.append((self.plosca[:], self.st_zetonov,
+                               self.odstranitev_zetona,
+                               self.stevec1, self.stevec2,
+                               self.poteka, self.premik_zetona,
+                               self.na_vrsti))
         
 
-    #def kopija(self):
-    #    '''Napravi kopijo trenutne igre tako, da ustvari nove objekte Polja '''
-    #    print('Delam kopijo')
-    #    kopija = Igra(self.gui)
-    #    kopija.gui = self.gui
-    #    kopija.st_zetonov = self.st_zetonov
-    #    kopija.stevec1 = self.stevec1
-    #    kopija.stevec2 = self.stevec2
-    #    kopija.faza = self.faza
-     #  kopija.odstranitev_zetona = self.odstranitev_zetona
-     #   kopija.poteka = self.poteka
-     #   kopija.premik_zetona = self.premik_zetona
-     #   kopija.na_vrsti = self.na_vrsti
-
-        
-
-     #   kopija.slovar_polj = {}
-     #   for indeks in self.slovar_polj:
-     #       polje = Polje(self.slovar_polj[indeks].canvas,
-     #                     self.slovar_polj[indeks].id_krogca)
-     #       polje.zasedenost = self.slovar_polj[indeks].zasedenost
-     #       kopija.slovar_polj[indeks] = polje
-     #   return kopija
+    def kopija(self):
+        '''Napravi kopijo trenutne igre tako, da skopira trenutne atribute
+            igre, nato vrne kopijo igre.'''
+        print('Delam kopijo')
+        kopija = Igra()
+        kopija.plosca = self.plosca[:]
+        kopija.st_zetonov = self.st_zetonov
+        kopija.stevec1 = self.stevec1
+        kopija.stevec2 = self.stevec2
+        kopija.odstranitev_zetona = self.odstranitev_zetona
+        kopija.poteka = self.poteka
+        kopija.premik_zetona = self.premik_zetona
+        kopija.na_vrsti = self.na_vrsti
+        return kopija
             
 
-  #  def razveljavi(self):
-  #      print('Razveljavljam')
-  #      if self.zgodovina == []:
-  #          pass
-  #      else:
-  #          (self.st_zetonov, self.stevec1, self.stevec2,
-  #           self.faza, self.odstranitev_zetona,
-  #           self.premik_zetona,
-  #           self.na_vrsti, self.slovar_polj) = self.zgodovina.pop()
+    def razveljavi_potezo(self):
+        print('Razveljavljam')
+        if self.zgodovina == []:
+            print('Zgodovina je prazna')
+            pass
+        else:
+            (self.plosca, self.st_zetonov, self.odstranitev_zetona,
+             self.stevec1, self.stevec2,
+             self.poteka, self.premik_zetona,
+             self.na_vrsti) = self.zgodovina.pop()
             
 
     def povleci_potezo(self, index_polja):
-
+        '''Ce je poteza veljavna, jo povlece in vrne True, sicer vrne False'''
         if not self.je_veljavna_poteza(index_polja):
             self.premik_zetona = None
             return False
@@ -130,17 +113,23 @@ class Igra():
             if self.odstranitev_zetona:
                 self.plosca[index_polja] = None
                 self.odstranitev_zetona = False
-                self.st_zetonov[self.na_vrsti] -= 1
-                if not self.ali_je_konec:
+                self.st_zetonov[nasprotnik(self.na_vrsti)] -= 1
+                print('Odstranil sem zeton')
+                if not self.ali_je_konec():
+                    self.na_vrsti = nasprotnik(self.na_vrsti)
                     return True
                 else:
-                    self.na_vrsti = nasprotnik(self.na_vrsti)
+                    #Ce je konec, se igra ustavi
+                    #self.poteka = False
                     return True
             
             #FAZA_POSTAVI
             elif self.stevec1 > 0 or self.stevec2 > 0:
+                #TEZAVA: sprememba self.plosce popaci zgodovino!
+                print(self.zgodovina[-1][0])
                 self.plosca[index_polja] = self.na_vrsti
-                print('igra je postavila zeton')
+                print('Igra je postavila zeton')
+                print(self.zgodovina[-1][0])
                 if self.na_vrsti == IGRALEC_1:
                     self.stevec1 -= 1
                 elif self.na_vrsti == IGRALEC_2:
@@ -231,7 +220,7 @@ class Igra():
                 return False
             
         #########################################
-        ##Preverjanje pri FAZA_POSTAVITEV ##
+        ##Preverjanje pri FAZA_POSTAVITE##
         #########################################
         
         if self.stevec1 > 0 or self.stevec2 > 0:
@@ -262,9 +251,9 @@ class Igra():
                 if self.plosca[index_polja] is not None:
                     return False
 
-                #Ce so na plosci samo se 3 zetoni, lahko z njimi poljubno skacemo
-                # MOREBITNA NAPAKA
-                if self.st_zetonov[nasprotnik(self.na_vrsti)] == 3:
+                #Ce so na plosci samo se 3 zetoni,
+                #lahko z njimi poljubno skacemo
+                if self.st_zetonov[self.na_vrsti] == 3:
                     if self.plosca[index_polja] is None:
                         return True
                     else:
@@ -332,6 +321,7 @@ class Igra():
 
 
     def ali_je_konec(self):
+        '''Vrne True, ce je igre konec in False sicer.'''
         for igralec in self.st_zetonov:
             if self.st_zetonov[igralec] <= 2:
                 self.poteka = False
