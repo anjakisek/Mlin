@@ -1,20 +1,17 @@
 ﻿Treba je:
-- v igra.py v "vrstici 139" (<- ni več pravilna vrstica, v sklopu cesa je bilo to?) je delalo narobe, če nisem napisala 'nasprotnik(self.gui.na_vrsti.get())'. Razlog? Zdi se mi, da zdaj dela ok.
--Povoziti staro igro z novo, ko zelimo zaceti novo igro
+-Napis na vrhu programa se pri razveljavitvi ne popravi, dokler ne narediš nove poteze (morda premakneva izpisovanje v self.osvezi()?)
 -igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
 -minimax, racunalnik
 -(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
 
 
+Nedavno popravljeno:
+-Implementirana je kopija igre, zgodovina in razveljavitev poteze (v igra.py)
+-Misterij gledanja števila nasprotnikovih žetonov je popravljen.
+-Mislim da razveljavitev dela prav (razen zgornjega napisa -> glej gor)
+
 Komentarji:
-PROBLEM! Ko se poteza stori, nimava ločene poteze v igri in risanja na zaslon. Minimax ne sme risati na zaslon NIČ. Čreva je treba raztrančirati.
-	-Morda pri potezi dodava spremenljivko narisi =True/False, ki potezo povlece, nato pa jo narise, ali pa ne (zelo malo dela)
-
 -Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Mogoče bova kmalu naletela na težavo zaradi tega
-
--V Minimax.py, kaj trenutno dela metoda izracunaj_potezo? Zgleda, kot da se samo spremenljivke nastimavajo, noben pa z njimi nic ne pocne
-
--Kje in kako se bo klicala metoda minimax? Bova zunaj metode manjsala globino, ali znotraj (rekurzija)?
 
 
 
@@ -26,4 +23,4 @@ Vprašanja prof. Bauer
 
 Popravljeno:
 -Clovek vs Clovek dela!!!!!! :D :D :D
--dela skok v racunalnik kot igralec
+
