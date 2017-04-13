@@ -38,19 +38,20 @@ class Gui():
         self.igralec_2 = None
 
 
-        
         #Ce uporabnik zapre okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
+
+        #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
+        #slovar polj
+        self.igra = Igra()
 
         #Glavni menu
         menu = Menu(master)
         master.config(menu=menu)
 
-        #Podmenu
+        #Podmenu: Igra
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
-        menu_igra.add_command(label="Nova igra",
-                              command=self.zacni_igro)
         menu_igra.add_command(label="Clovek vs. Clovek",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
@@ -67,16 +68,17 @@ class Gui():
                               command=lambda: self.zacni_igro(
                                   Racunalnik(self, Minimax(globina)),
                                         Racunalnik(self, Minimax(globina))))
+        #Podmenu: Moznosti
+        menu_moznosti = Menu(menu)
+        menu.add_cascade(label="Moznosti", menu=menu_moznosti)
+        menu_moznosti.add_command(label="Razveljavi",
+                                  command=self.razveljavi)
 
-        
-        #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
-        #slovar polj
-        self.igra = Igra(self)
 
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
             master,
-            value='Dobrodosli! Kliknite na Nova igra, da pricnete z igro.')
+            value='Dobrodosli! Izberite tipe igralcev, da pricnete z igro.')
         self.sporocevalec = Label(
             master,
             textvariable = self.sporocilo)
@@ -259,7 +261,7 @@ class Gui():
             elif self.igra.na_vrsti == IGRALEC_2:
                 self.igralec_2.igraj()
             else:
-                print('Naprej ne more igrati nihèe')
+                print('Naprej ne more igrati nihce')
                 
 
         else:
@@ -291,10 +293,16 @@ class Gui():
     def prekini_igralce(self):
         #TODO
         pass
+
+    #Poskusno vpeljana razveljavitev:
+    def razveljavi(self):
+        self.igra.razveljavi_potezo()
+        self.osvezi_plosco()
+    
         
     def pripravi_novo_igro(self):
         self.igra.plosca = [None] * 24
-        #self.igra.zgodovina = []
+        self.igra.zgodovina = []
         self.igra.na_vrsti = IGRALEC_1
         self.igra.odstranitev_zetona = False
         self.igra.premik_zetona = None
