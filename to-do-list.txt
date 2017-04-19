@@ -1,26 +1,10 @@
 ﻿Treba je:
--Napis na vrhu programa se pri razveljavitvi ne popravi, dokler ne narediš nove poteze (morda premakneva izpisovanje v self.osvezi()?)
+-minimax ne zna premikat žetonov
 -igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
 -minimax, racunalnik
--(?) optimizirat prevejanje trojk v metodi je_veljavna_poteza (igra.py)
-
 
 Nedavno popravljeno:
--Implementirana je kopija igre, zgodovina in razveljavitev poteze (v igra.py)
--Misterij gledanja števila nasprotnikovih žetonov je popravljen.
+-Napis na vrhu programa se pri razveljavitvi ne popravi, dokler ne narediš nove poteze (morda premakneva izpisovanje v self.osvezi()?)
 -Mislim da razveljavitev dela prav (razen zgornjega napisa -> glej gor)
 
-Komentarji:
--Profesor ima potek igre (je konec, ni konec, pri nama self.poteka) kot spremenljivko zunaj classa. Mogoče bova kmalu naletela na težavo zaradi tega
-
-
-
-Vprašanja prof. Bauer
--morda nas mora skrbeti, da v eni potezi (shrani in kopija igre) ustvarimo dvakrat po 24 dodatnih polj? Je to preveč?
--kako se povozi Igra čez igro, ko se naredi novo igro?
--Kaj se dogaja pri mislecu, minimaxu, kopiji igre?
--A se da naredi_potezo v guiu nekako brcnit v igro, da jo bo potem minimax lahko klical, ali vse jovo na novo?
-
-Popravljeno:
--Clovek vs Clovek dela!!!!!! :D :D :D
 
