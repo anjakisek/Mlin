@@ -11,7 +11,8 @@ class Racunalnik():
     def igraj(self):
         #sprozimo razmisljanje
         self.mislec = threading.Thread(
-            target=lambda: self.algoritem.izracunaj_potezo(self.gui.igra.kopija()))
+            target=lambda: self.algoritem.izracunaj_potezo(
+                self.gui.igra.kopija()))
 
         #pozenemo vlakno
         self.mislec.start()
@@ -29,7 +30,6 @@ class Racunalnik():
 
     def prekini(self):
         if self.mislec:
-            logging.debug ("Prekinjamo {0}".format(self.mislec))
             # Algoritmu sporocimo, naj neha
             self.algoritem.prekini()
             #Pocakamo, da se mislec ustavi
