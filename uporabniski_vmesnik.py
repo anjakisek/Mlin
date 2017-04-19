@@ -236,34 +236,13 @@ class Gui():
     def naredi_potezo(self, index_polja):
         if self.igra.povleci_potezo(index_polja):
             self.osvezi_plosco()
-            if not self.igra.poteka:
-                self.sporocilo.set(
-                    'Igre je konec, zmagal je {}'.format(
-                     self.igra.na_vrsti))
-            elif self.igra.odstranitev_zetona:
-                self.sporocilo.set('Na vrsti je {} - odstranite žeton'
-                                   .format(self.igra.na_vrsti))
-            elif self.igra.stevec1 > 0 or self.igra.stevec2 > 0:
-                self.sporocilo.set('Na vrsti je {} - postavite žeton'
-                                   .format(self.igra.na_vrsti))
-            elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is None:
-                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
-                                   .format(self.igra.na_vrsti))
-            elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
-                self.sporocilo.set('Na vrsti je {} - premaknite žeton'
-                                   .format(self.igra.na_vrsti))
-
-            else:
-                print('Obstaja faza, ki je gui zdaj ni znal sprocesirati')
-
+            print(self.igra.veljavne_poteze())
             if self.igra.na_vrsti == IGRALEC_1:
                 self.igralec_1.igraj()
             elif self.igra.na_vrsti == IGRALEC_2:
                 self.igralec_2.igraj()
             else:
                 print('Naprej ne more igrati nihce')
-                
-
         else:
             if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
@@ -282,6 +261,26 @@ class Gui():
             else:
                 barva = 'white'
             self.plosca.itemconfigure(self.seznam_krogcev[polje], fill=barva)
+
+        if not self.igra.poteka:
+                self.sporocilo.set(
+                    'Igre je konec, zmagal je {}'.format(
+                     self.igra.na_vrsti))
+        elif self.igra.odstranitev_zetona:
+                self.sporocilo.set('Na vrsti je {} - odstranite žeton'
+                                   .format(self.igra.na_vrsti))
+        elif self.igra.stevec1 > 0 or self.igra.stevec2 > 0:
+                self.sporocilo.set('Na vrsti je {} - postavite žeton'
+                                   .format(self.igra.na_vrsti))
+        elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is None:
+                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
+                                   .format(self.igra.na_vrsti))
+        elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
+                self.sporocilo.set('Na vrsti je {} - premaknite žeton'
+                                   .format(self.igra.na_vrsti))
+
+        else:
+                print('Obstaja faza, ki je gui zdaj ni znal sprocesirati')
         
             
 
