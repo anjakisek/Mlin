@@ -41,11 +41,10 @@ class Minimax:
     def vrednost_pozicije(self):
         #Zaenkrat se zelo slaba cenilka
         #Iz nekega razloga je ta slovar vcasih prazen ???
-        print(self.igra.slovar_polj)
         vrednost = 0
         for trojka in trojke:
             seznam_zasedenosti = [
-                self.igra.slovar_polj[x].zasedenost for x in trojka]
+                self.igra.plosca[x] for x in trojka]
             if seznam_zasedenosti.count(self.jaz) == 3:
                 vrednost += 240
             elif seznam_zasedenosti.count(self.jaz) == 2 and (
@@ -56,6 +55,11 @@ class Minimax:
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 2 and (
                 seznam_zasedenosti.count(None) == 1):
                 vrednost -= 170
+        for i in (3,4,5,10,13,18,19,20):
+            if self.igra.plosca[i] == self.jaz:
+                vrednost += 10
+            elif self.igra.plosca[i] == nasprotnik(self.jaz):
+                vrednost -= 5
         vrednost += self.igra.st_zetonov[self.jaz] * 40
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 35
         print('Vrednost je: ', vrednost)
@@ -84,32 +88,31 @@ class Minimax:
                 if maksimiziramo:
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    print('Veljavne poteze:', self.igra.veljavne_poteze(),
-                          self.igra.zgodovina[-1])
                     for p in self.igra.veljavne_poteze():
-                        #self.igra.povleci_potezo(p)
-                        self.igra.gui.naredi_potezo(p, False)
+                        self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            #globina-1?
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                        self.igra.razveljavi()
+                        self.igra.razveljavi_potezo()
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
                             print('Vrednost najboljse: ', vrednost_najboljse)
+
+                #Minimiziramo
                 else:
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    print('Veljavne poteze:', self.igra.veljavne_poteze())
                     for p in self.igra.veljavne_poteze():
-                        #self.igra.povleci_potezo(p)
-                        self.igra.gui.naredi_potezo(p, False)
+                        self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            #globina-1?
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                        self.igra.razveljavi()
+                        self.igra.razveljavi_potezo()
                         if vrednost < vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
