@@ -44,6 +44,7 @@ def nasprotnik(igralec):
 class Igra():
     def __init__(self):
         self.plosca = [None]* 24
+        #Stevilo zetonov [IGRALEC_1, IGRALEC_2]
         self.st_zetonov = {IGRALEC_1: 9, IGRALEC_2: 9}
 
         #Ali smo v fazi odstranjevanja?
@@ -65,8 +66,10 @@ class Igra():
     def shrani_trenutno_stanje(self):
         '''Shrani nabor, ki vsebuje trenutne vrednosti atributov objekta Igra
             na konec seznama self.zgodovina.'''
-        print('Shranjujem trenutno stanje')
-        self.zgodovina.append((self.plosca[:], self.st_zetonov,
+        novi_st_zetonov = {}
+        for igralec in self.st_zetonov:
+            novi_st_zetonov[igralec] = self.st_zetonov[igralec]
+        self.zgodovina.append((self.plosca[:], novi_st_zetonov,
                                self.odstranitev_zetona,
                                self.stevec1, self.stevec2,
                                self.poteka, self.premik_zetona,
@@ -76,10 +79,13 @@ class Igra():
     def kopija(self):
         '''Napravi kopijo trenutne igre tako, da skopira trenutne atribute
             igre, nato vrne kopijo igre.'''
-        print('Delam kopijo')
         kopija = Igra()
         kopija.plosca = self.plosca[:]
-        kopija.st_zetonov = self.st_zetonov
+        
+        kopija.st_zetonov = {}
+        for igralec in self.st_zetonov:
+            kopija.st_zetonov[igralec] = self.st_zetonov[igralec]
+            
         kopija.stevec1 = self.stevec1
         kopija.stevec2 = self.stevec2
         kopija.odstranitev_zetona = self.odstranitev_zetona
@@ -90,7 +96,6 @@ class Igra():
             
 
     def razveljavi_potezo(self):
-        print('Razveljavljam')
         if self.zgodovina == []:
             print('Zgodovina je prazna')
             pass
@@ -114,7 +119,6 @@ class Igra():
                 self.plosca[index_polja] = None
                 self.odstranitev_zetona = False
                 self.st_zetonov[nasprotnik(self.na_vrsti)] -= 1
-                print('Odstranil sem zeton')
                 if not self.ali_je_konec():
                     self.na_vrsti = nasprotnik(self.na_vrsti)
                     return True
@@ -125,11 +129,7 @@ class Igra():
             
             #FAZA_POSTAVI
             elif self.stevec1 > 0 or self.stevec2 > 0:
-                #TEZAVA: sprememba self.plosce popaci zgodovino!
-                print(self.zgodovina[-1][0])
                 self.plosca[index_polja] = self.na_vrsti
-                print('Igra je postavila zeton')
-                print(self.zgodovina[-1][0])
                 if self.na_vrsti == IGRALEC_1:
                     self.stevec1 -= 1
                 elif self.na_vrsti == IGRALEC_2:
@@ -166,9 +166,6 @@ class Igra():
 
             else:
                 assert False, 'neveljavna faza!'
-                    
-                
-
 
 
 
@@ -228,7 +225,6 @@ class Igra():
             if self.plosca[index_polja] == None:
                 return True
             else:
-                print('Polje je ze zasedeno')
                 return False
 
 
@@ -261,17 +257,7 @@ class Igra():
 
                 #Zeton smemo premakniti le na povezana polja 
                 else:
-                    je_v_trojkah = []
-                    for trojka in trojke:
-                        if self.premik_zetona in trojka:
-                            je_v_trojkah.append(trojka)
-                            if len(je_v_trojkah) == 2:
-                                break
-                    for trojka in je_v_trojkah:
-                        a = trojka.index(self.premik_zetona)
-                        if index_polja in trojka:
-                            b = trojka.index(index_polja)
-                            if abs(b-a) == 1:
+                    if index_polja in self.povezana_polja(self.premik_zetona):
                                 return True                   
                     print('Niste izbrali veljavnega polja')
                     return False
@@ -280,6 +266,22 @@ class Igra():
             print('Faze ne delajo prav')
 
 
+    def povezana_polja(self, index_polja):
+        je_v_trojkah = []
+        for trojka in trojke:
+            if index_polja in trojka:
+                je_v_trojkah.append(trojka)
+                if len(je_v_trojkah) == 2:
+                    break
+        povezana_polja = []
+        for trojka in je_v_trojkah:
+            a = trojka.index(index_polja)
+            for polje in trojka:
+                b = trojka.index(polje)
+                if abs(b-a) == 1:
+                    povezana_polja.append(trojka[b])
+        return povezana_polja
+                    
 
 
     def preveri_trojke(self, index_polja):
