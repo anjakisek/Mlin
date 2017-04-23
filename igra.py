@@ -208,12 +208,10 @@ class Igra():
                     for index in range(0, 24):
                         if self.plosca[index] == nasprotnik(self.na_vrsti):
                             if not self.preveri_trojke(index):
-                                print('Izbrati morate zeton, ki ni v trojki')
                                 return False
                     return True
                                 
             else:
-                print('Niste kliknili na nasprotnikov zeton')
                 return False
             
         #########################################
@@ -239,7 +237,6 @@ class Igra():
                 if self.plosca[index_polja] == self.na_vrsti:
                     return True
                 else:
-                    print('Niste kliknili na svoj zeton')
                     return False
 
                
@@ -259,7 +256,6 @@ class Igra():
                 else:
                     if index_polja in self.povezana_polja(self.premik_zetona):
                                 return True                   
-                    print('Niste izbrali veljavnega polja')
                     return False
                 
         else:
@@ -314,7 +310,6 @@ class Igra():
                 else:
                     pass
             if koncaj is None:
-                print('Nasel sem trojko')
                 return True
             
         #Če ni našel nobene trojke:
@@ -327,7 +322,6 @@ class Igra():
         for igralec in self.st_zetonov:
             if self.st_zetonov[igralec] <= 2:
                 self.poteka = False
-                print('Vrnil sem :', igralec, 'True', self.poteka)
                 return True
         else:
             return False
