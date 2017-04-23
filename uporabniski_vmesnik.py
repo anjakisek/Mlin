@@ -3,13 +3,14 @@ from igra import *
 from racunalnik_igralec import *
 from clovek import *
 from minimax import *
+from alphabeta import *
 
 
 
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-globina = 2
+globina = 3
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -41,9 +42,11 @@ class Gui():
         #Ce uporabnik zapre okno
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
-        #Zacasno premaknjen naprej, da bo obstajala ze prej, kot pa rabimo
-        #slovar polj
+
         self.igra = Igra()
+
+        #Privzeti algoritem je minimax
+        self.algoritem = Minimax(globina)
 
         #Glavni menu
         menu = Menu(master)
@@ -59,20 +62,29 @@ class Gui():
         menu_igra.add_command(label="Clovek vs. Racunalnik",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
-                                        Racunalnik(self, Minimax(globina))))
+                                        Racunalnik(self, self.algoritem)))
         menu_igra.add_command(label="Racunalnik vs. Clovek",
                               command=lambda: self.zacni_igro(
-                                  Racunalnik(self, Minimax(globina)),
+                                  Racunalnik(self, self.algoritem),
                                                 Clovek(self)))
         menu_igra.add_command(label="Racunalnik vs. Racunalnik",
                               command=lambda: self.zacni_igro(
-                                  Racunalnik(self, Minimax(globina)),
-                                        Racunalnik(self, Minimax(globina))))
+                                  Racunalnik(self, self.algoritem),
+                                        Racunalnik(self, self.algoritem)))
+        #Podmenu: Tezavnost
+        menu_tezavnost = Menu(menu)
+        menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
+        menu_tezavnost.add_command(label="Zacetnik",
+                                  command=lambda: self.nastavi_algoritem(Minimax(globina)))
+        menu_tezavnost.add_command(label="Mojster",
+                                  command=lambda: self.nastavi_algoritem(AlphaBeta(globina)))
+
         #Podmenu: Moznosti
         menu_moznosti = Menu(menu)
         menu.add_cascade(label="Moznosti", menu=menu_moznosti)
         menu_moznosti.add_command(label="Razveljavi",
                                   command=self.razveljavi)
+        
 
 
         #Napis nad igralno plosco
@@ -84,18 +96,16 @@ class Gui():
             textvariable = self.sporocilo)
         self.sporocevalec.grid(row=0, columnspan = 2)
 
-        #Stevec, ki bo prikazoval, koliko zetonov
-        #lahko prvi igralec se polozi na plosco
-        #self.stevec1 = IntVar(master, value=9)
+        #Stevec, ki bo prikazoval, koliko zetonov lahko
+        # prvi igralec se polozi na plosco
         self.napis1 = Label(
             master,
             text= "Preostali {}: {}".format(
                 IGRALEC_1, self.igra.stevec1))
         self.napis1.grid(row=2, column=0)
         
-        #Stevec, ki bo prikazoval, koliko zetonov
-        #lahko drugi igralec se polozi na plosco
-        self.stevec2 = IntVar(master, value=9)
+        #Stevec, ki bo prikazoval, koliko zetonov lahko
+        # drugi igralec se polozi na plosco
         self.napis2 = Label(
             master,
             text= "Preostali {}: {}".format(
@@ -103,9 +113,8 @@ class Gui():
         self.napis2.grid(row=2, column=1)
 
 
-
+        #Seznam krogcev hrani id naslove krogcev na canvasu
         self.seznam_krogcev = []
-
 
         
         #Igralna plosca
@@ -118,7 +127,7 @@ class Gui():
 
         ##############################################
         ##############################################
-        #povezem polja med seboj
+        #Povezem polja med seboj
         for i in range(0, 3):
             self.plosca.create_rectangle(VELIKOST_PLOSCE * (1/8 + i/8),
                                          VELIKOST_PLOSCE * (1/8 + i/8),
@@ -134,7 +143,7 @@ class Gui():
         self.plosca.create_line(5 * VELIKOST_PLOSCE/8, VELIKOST_PLOSCE/2,7 * VELIKOST_PLOSCE/8,
                                 VELIKOST_PLOSCE/2)
         
-        #ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
+        #Ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
         # vrstnem redu
         for k in range(0, 2): #krogci 10-15
             for i in range(0, 3):
@@ -195,17 +204,16 @@ class Gui():
         #################################
 
     
-
-        #ob kliku na plosco poklice funkcijo, primerno trenutni fazi igre
+        #Ob kliku na plosco poklice funkcijo, primerno trenutni fazi igre
         self.plosca.bind("<Button-1>", self.klik)
 
     
 
 
-        
-
+    
 
     def zacni_igro(self, igralec1, igralec2):
+        '''Pripravi novo igro, nastavi tipe igralcev in pozene prvega igralca v tek'''
         self.prekini_igralce()
         self.igralec_1 = igralec1
         self.igralec_2 = igralec2
@@ -216,6 +224,7 @@ class Gui():
 
 
     def klik(self, event):
+        '''Ob kliku ugotovi, kam smo kliknili, in poklice odziv na klik glede na trenutnega igralca'''
         if not self.igra.poteka:
             pass
         else:
@@ -233,25 +242,33 @@ class Gui():
                     elif self.igra.na_vrsti == IGRALEC_2:
                         self.igralec_2.klik(index_polja)
 
+
     def naredi_potezo(self, index_polja):
+        '''Naroci igri, da potezo izvede, nato izrise trenutno plosco in pozene igro naprej'''
         if self.igra.povleci_potezo(index_polja):
             self.osvezi_plosco()
+
+            #pozene naslednjega igralca v igro
             if self.igra.na_vrsti == IGRALEC_1:
                 self.igralec_1.igraj()
             elif self.igra.na_vrsti == IGRALEC_2:
                 self.igralec_2.igraj()
             else:
-                print('Naprej ne more igrati nihce')
+                pass
+        #Ce poteza ni bila veljavna in ni naredil nic, samo ponastavi napis nad plosco
         else:
             if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
 
     def osvezi_plosco(self):
+        '''Prebarva polja in osvezi napise nad plosco'''
         self.napis1.config(text = "Preostali {}: "
                            .format(IGRALEC_1)+ str(self.igra.stevec1))
         self.napis2.config(text = "Preostali {}: "
                            .format(IGRALEC_2)+ str(self.igra.stevec2))
+
+        #Barvanje polj
         for polje in range(0, 24):
             if self.igra.plosca[polje] == IGRALEC_1:
                 barva = BARVA_1
@@ -261,7 +278,7 @@ class Gui():
                 barva = 'white'
             self.plosca.itemconfigure(self.seznam_krogcev[polje], fill=barva, width = 1)
         
-
+        #Spremeni napis glede na fazo igre
         if not self.igra.poteka:
                 self.sporocilo.set(
                     'Igre je konec, zmagal je {}'.format(
@@ -282,9 +299,11 @@ class Gui():
                 
 
         else:
-                print('Obstaja faza, ki je gui zdaj ni znal sprocesirati')
+             pass
         
-            
+    def nastavi_algoritem(self, algoritem):
+        '''Ce bo izbran igralec racunalnik, mu zdej nastavimo algoritem za razmisljanje.'''
+        self.algoritem = algoritem
 
         
     def zapri_okno(self, master):
@@ -292,16 +311,20 @@ class Gui():
         master.destroy()
 
     def prekini_igralce(self):
-        #TODO
-        pass
+        if self.igralec_1 is not None and self.igralec_2 is not None:
+            self.igralec_1.prekini()
+            self.igralec_2.prekini()
+        else:
+            pass
+        
 
-    #Poskusno vpeljana razveljavitev:
     def razveljavi(self):
         self.igra.razveljavi_potezo()
         self.osvezi_plosco()
     
         
     def pripravi_novo_igro(self):
+        '''Pobrise trenutno plosco, izrise prazno in ponastavi vse stevce.'''
         self.igra.plosca = [None] * 24
         self.igra.zgodovina = []
         self.igra.na_vrsti = IGRALEC_1
