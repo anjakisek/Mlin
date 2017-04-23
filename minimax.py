@@ -1,5 +1,6 @@
 import logging
 from igra import *
+import random
 
 
 
@@ -62,7 +63,7 @@ class Minimax:
                 vrednost -= 5
         vrednost += self.igra.st_zetonov[self.jaz] * 40
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 35
-        print('Vrednost je: ', vrednost)
+        #print('Vrednost je: ', vrednost)
         return vrednost
                 
                
@@ -88,7 +89,9 @@ class Minimax:
                 if maksimiziramo:
                     najboljsa_poteza = None
                     vrednost_najboljse = -Minimax.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    veljavne = self.igra.veljavne_poteze()
+                    random.shuffle(veljavne)
+                    for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
                             #globina-1?
@@ -99,13 +102,16 @@ class Minimax:
                         if vrednost > vrednost_najboljse:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
-                            print('Vrednost najboljse: ', vrednost_najboljse)
+                            
 
                 #Minimiziramo
                 else:
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    for p in self.igra.veljavne_poteze():
+                    veljane = self.igra.veljavne_poteze()
+                    veljavne = self.igra.veljavne_poteze()
+                    random.shuffle(veljavne)
+                    for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
                             #globina-1?
@@ -117,7 +123,7 @@ class Minimax:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
                             
-                assert (najboljsa_poteza is not None), "minimax: izracunana poteza je None"
+                #assert (najboljsa_poteza is not None), "minimax: izracunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "minimax: nedefinirano stanje igre"
