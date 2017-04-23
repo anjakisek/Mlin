@@ -61,9 +61,8 @@ class Minimax:
                 vrednost += 10
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
                 vrednost -= 5
-        vrednost += self.igra.st_zetonov[self.jaz] * 40
-        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 35
-        #print('Vrednost je: ', vrednost)
+        vrednost += self.igra.st_zetonov[self.jaz] * 100
+        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 80
         return vrednost
                 
                
