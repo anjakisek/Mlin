@@ -9,7 +9,7 @@ from minimax import *
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-globina = 3
+globina = 2
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -236,7 +236,6 @@ class Gui():
     def naredi_potezo(self, index_polja):
         if self.igra.povleci_potezo(index_polja):
             self.osvezi_plosco()
-            print(self.igra.veljavne_poteze())
             if self.igra.na_vrsti == IGRALEC_1:
                 self.igralec_1.igraj()
             elif self.igra.na_vrsti == IGRALEC_2:
@@ -260,7 +259,8 @@ class Gui():
                 barva = BARVA_2
             else:
                 barva = 'white'
-            self.plosca.itemconfigure(self.seznam_krogcev[polje], fill=barva)
+            self.plosca.itemconfigure(self.seznam_krogcev[polje], fill=barva, width = 1)
+        
 
         if not self.igra.poteka:
                 self.sporocilo.set(
@@ -278,6 +278,8 @@ class Gui():
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
                 self.sporocilo.set('Na vrsti je {} - premaknite žeton'
                                    .format(self.igra.na_vrsti))
+                self.plosca.itemconfigure(self.seznam_krogcev[self.igra.premik_zetona], width=3)
+                
 
         else:
                 print('Obstaja faza, ki je gui zdaj ni znal sprocesirati')
