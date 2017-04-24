@@ -58,9 +58,10 @@ class AlphaBeta:
                 vrednost -= 170
         for i in (3,4,5,10,13,18,19,20):
             if self.igra.plosca[i] == self.jaz:
-                vrednost += 10
+                vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
-                vrednost -= 5
+                vrednost -= 3
+        vrednost += 200 - 2 * self.igra.st_potez
         vrednost += self.igra.st_zetonov[self.jaz] * 40
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 35
         return vrednost
