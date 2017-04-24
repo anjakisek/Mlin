@@ -19,14 +19,15 @@ class Minimax:
 
     def izracunaj_potezo(self, igra):
         #potezo bo treba vracati kot indeks polja, na katerega se bo igralo
-
         
         #poklicali jo bomo iz vzporednega vlakna
         self.igra = igra
         self.prekinitev = False
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
-        
+
+##        if self.igra.st_potez in [10,20]:
+##            self.globina += 1
         (poteza, vrednost) = self.minimax(self.globina, True)
         self.jaz = None
         self.igra = None
@@ -58,11 +59,12 @@ class Minimax:
                 vrednost -= 170
         for i in (3,4,5,10,13,18,19,20):
             if self.igra.plosca[i] == self.jaz:
-                vrednost += 10
+                vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
-                vrednost -= 5
-        vrednost += self.igra.st_zetonov[self.jaz] * 100
-        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 80
+                vrednost -= 3
+        vrednost += 200 - 2 * self.igra.st_potez
+        vrednost += self.igra.st_zetonov[self.jaz] * 400
+        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 380
         return vrednost
                 
                
