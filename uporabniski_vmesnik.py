@@ -74,10 +74,12 @@ class Gui():
         #Podmenu: Tezavnost
         menu_tezavnost = Menu(menu)
         menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
-        menu_tezavnost.add_command(label="Zacetnik",
-                                  command=lambda: self.nastavi_algoritem(Minimax(globina)))
-        menu_tezavnost.add_command(label="Mojster",
-                                  command=lambda: self.nastavi_algoritem(AlphaBeta(globina)))
+        menu_tezavnost.add_radiobutton(label="Zacetnik",
+                                  variable=self.algoritem,
+                                       value=(Minimax(globina)))
+        menu_tezavnost.add_radiobutton(label="Mojster",
+                                  variable=self.algoritem,
+                                   value=(AlphaBeta(globina+4)))
 
         #Podmenu: Moznosti
         menu_moznosti = Menu(menu)
@@ -283,6 +285,11 @@ class Gui():
                 self.sporocilo.set(
                     'Igre je konec, zmagal je {}'.format(
                      self.igra.na_vrsti))
+                if self.igra.na_vrsti == IGRALEC_1:
+                    barva = BARVA_1
+                elif self.igra.na_vrsti == IGRALEC_2:
+                    barva = BARVA_2
+                self.sporocevalec.configure(bg = barva)
         elif self.igra.odstranitev_zetona:
                 self.sporocilo.set('Na vrsti je {} - odstranite žeton'
                                    .format(self.igra.na_vrsti))
@@ -300,10 +307,6 @@ class Gui():
 
         else:
              pass
-        
-    def nastavi_algoritem(self, algoritem):
-        '''Ce bo izbran igralec racunalnik, mu zdej nastavimo algoritem za razmisljanje.'''
-        self.algoritem = algoritem
 
         
     def zapri_okno(self, master):
@@ -331,6 +334,8 @@ class Gui():
         self.igra.odstranitev_zetona = False
         self.igra.premik_zetona = None
         self.igra.stevec1 = 9
+        #Ponastavi barvo sporocevalca: TODO
+        self.sporocevalec.configure(bg = None)
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
         self.igra.stevec2 = 9
