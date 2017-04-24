@@ -64,6 +64,8 @@ class Igra():
         self.premik_zetona = None
         
         self.na_vrsti = IGRALEC_1
+
+        self.st_potez = 0
         
         self.zgodovina = []
 
@@ -78,7 +80,7 @@ class Igra():
                                self.odstranitev_zetona,
                                self.stevec1, self.stevec2,
                                self.poteka, self.premik_zetona,
-                               self.na_vrsti))
+                               self.na_vrsti, self.st_potez))
         
 
     def kopija(self):
@@ -97,6 +99,7 @@ class Igra():
         kopija.poteka = self.poteka
         kopija.premik_zetona = self.premik_zetona
         kopija.na_vrsti = self.na_vrsti
+        kopija.st_potez = self.st_potez
         return kopija
             
 
@@ -109,7 +112,7 @@ class Igra():
             (self.plosca, self.st_zetonov, self.odstranitev_zetona,
              self.stevec1, self.stevec2,
              self.poteka, self.premik_zetona,
-             self.na_vrsti) = self.zgodovina.pop()
+             self.na_vrsti, self.st_potez) = self.zgodovina.pop()
             
 
     def povleci_potezo(self, index_polja):
@@ -121,7 +124,7 @@ class Igra():
         
         else:
             self.shrani_trenutno_stanje()
-            
+            self.st_potez += 1
             #FAZA_ODSTRANI
             if self.odstranitev_zetona:
                 self.plosca[index_polja] = None
@@ -168,6 +171,9 @@ class Igra():
                         return True
                     else:
                         self.na_vrsti = nasprotnik(self.na_vrsti)
+                        if self.zablokiran():
+                            self.na_vrsti = nasprotnik(self.na_vrsti)
+                            self.poteka = False
                         return True
 
             else:
@@ -233,7 +239,6 @@ class Igra():
         # Premikanje zetonov - FAZA_PREMIKANJE #
         ########################################
         elif self.stevec1 == 0 and self.stevec2 == 0:
-
             #Ce izbiramo zeton za premik, moramo izbrati svojega
             if self.premik_zetona == None:
                 if self.plosca[index_polja] == self.na_vrsti:
@@ -321,7 +326,17 @@ class Igra():
         return False
 
 
+    def zablokiran(self):
+        for i in range(24):
+            if self.plosca[i] == self.na_vrsti:
+                for polje in self.povezana_polja(i):
+                    if self.plosca[polje] == None:
+                        return False
+        return True
+        
+            
 
+    
     def ali_je_konec(self):
         '''Vrne True, ce je igre konec in False sicer. Pri tem nastavi
         self.poteka na pravilno vrednost.'''
@@ -329,6 +344,7 @@ class Igra():
             if self.st_zetonov[igralec] <= 2:
                 self.poteka = False
                 return True
+        
         else:
             return False
 
