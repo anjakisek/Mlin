@@ -327,11 +327,12 @@ class Igra():
 
 
     def zablokiran(self):
-        for i in range(24):
-            if self.plosca[i] == self.na_vrsti:
-                for polje in self.povezana_polja(i):
-                    if self.plosca[polje] == None:
-                        return False
+        if self.stevec1 == 0 and self.stevec2 == 0:
+            for i in range(24):
+                if self.plosca[i] == self.na_vrsti:
+                    for polje in self.povezana_polja(i):
+                        if self.plosca[polje] == None:
+                            return False
         return True
         
             
