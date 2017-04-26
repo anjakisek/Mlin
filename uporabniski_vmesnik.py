@@ -20,6 +20,7 @@ globina = 3
 ## |  - 15 16 17  -  |
 ## | 18  - 19  - 20  |
 ##21  -  - 22  -  - 23
+
 def sredisce(krogec):
     (x1, y1, x2, y2) = krogec
     return ((x1 + x2) / 2, (y1 + y2) /2)
@@ -285,11 +286,6 @@ class Gui():
                 self.sporocilo.set(
                     'Igre je konec, zmagal je {}'.format(
                      self.igra.na_vrsti))
-                if self.igra.na_vrsti == IGRALEC_1:
-                    barva = BARVA_1
-                elif self.igra.na_vrsti == IGRALEC_2:
-                    barva = BARVA_2
-                self.sporocevalec.configure(bg = barva)
         elif self.igra.odstranitev_zetona:
                 self.sporocilo.set('Na vrsti je {} - odstranite žeton'
                                    .format(self.igra.na_vrsti))
@@ -334,8 +330,6 @@ class Gui():
         self.igra.odstranitev_zetona = False
         self.igra.premik_zetona = None
         self.igra.stevec1 = 9
-        #Ponastavi barvo sporocevalca: TODO
-        self.sporocevalec.configure(bg = None)
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
         self.igra.stevec2 = 9
@@ -343,6 +337,7 @@ class Gui():
                 text = "Preostali {}: ".format(IGRALEC_2)+ str(self.igra.stevec2))
         self.igra.st_zetonov[IGRALEC_1] = 9
         self.igra.st_zetonov[IGRALEC_2] = 9
+        self.igra.st_potez = 0
         self.osvezi_plosco()
 
 
