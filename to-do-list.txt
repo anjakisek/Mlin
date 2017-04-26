@@ -2,9 +2,10 @@
 -igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
 -alphabeta necesa ne pocne dobro
 -minimax je včasih kot 3 letni otrok - treba je popravit cenilko
+-Če pride do situacije, ko imata oba igralca 3 žetone, sta računalnika izenačena, igre ne bo nikoli konec
+-Računalnik se ne prekine dobro vsakič, ko začneš novo igro
 
 Nedavno popravljeno:
--Napis na vrhu programa se pri razveljavitvi ne popravi, dokler ne narediš nove poteze (morda premakneva izpisovanje v self.osvezi()?)
--Mislim da razveljavitev dela prav (razen zgornjega napisa -> glej gor)
+
 
 
