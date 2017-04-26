@@ -5,10 +5,11 @@ import random
 class AlphaBeta:
     
     #vrednost
-    ZMAGA = 10000
+    ZMAGA = 100000
     NESKONCNO = ZMAGA + 1
 
     def __init__(self, globina):
+        self.zacetna_globina = globina
         self.globina = globina
         self.prekinitev = False #ce je treba koncati
         self.igra = None #objekt igre
@@ -28,6 +29,14 @@ class AlphaBeta:
         self.prekinitev = False
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
+
+        st_veljavnih_potez = len(self.igra.veljavne_poteze())
+        if st_veljavnih_potez < 5:
+            self.globina = self.zacetna_globina + 2
+        elif st_veljavnih_potez < 10:
+            self.globina = self.zacetna_globina + 1
+        else:
+            self.globina = self.zacetna_globina
         
         (poteza, vrednost) = self.alphabeta(
                         self.globina, -AlphaBeta.NESKONCNO,AlphaBeta.NESKONCNO,  True)
@@ -60,10 +69,10 @@ class AlphaBeta:
             if self.igra.plosca[i] == self.jaz:
                 vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
-                vrednost -= 3
+                vrednost -= 5
         vrednost += 200 - 2 * self.igra.st_potez
-        vrednost += self.igra.st_zetonov[self.jaz] * 40
-        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 35
+        vrednost += self.igra.st_zetonov[self.jaz] * 400
+        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 400
         return vrednost
                 
                
