@@ -28,9 +28,9 @@ class Minimax:
         self.poteza = None # tu bomo zapisali najboljso potezo
 
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
-        if st_veljavnih_potez < 5:
+        if st_veljavnih_potez < 8:
             self.globina = self.zacetna_globina + 2
-        elif st_veljavnih_potez < 10:
+        elif st_veljavnih_potez < 15:
             self.globina = self.zacetna_globina + 1
         else:
             self.globina = self.zacetna_globina
