@@ -10,7 +10,7 @@ from alphabeta import *
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-globina = 3
+GLOBINA = 3
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -47,7 +47,7 @@ class Gui():
         self.igra = Igra()
 
         #Privzeti algoritem je minimax
-        self.algoritem = Minimax(globina)
+        self.algoritem = Minimax(GLOBINA)
 
         #Glavni menu
         menu = Menu(master)
@@ -77,10 +77,10 @@ class Gui():
         menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
         menu_tezavnost.add_radiobutton(label="Zacetnik",
                                   variable=self.algoritem,
-                                       value=(Minimax(globina)))
+                                       value=(Minimax(GLOBINA)))
         menu_tezavnost.add_radiobutton(label="Mojster",
                                   variable=self.algoritem,
-                                   value=(AlphaBeta(globina+4)))
+                                   value=(AlphaBeta(GLOBINA+4)))
 
         #Podmenu: Moznosti
         menu_moznosti = Menu(menu)
