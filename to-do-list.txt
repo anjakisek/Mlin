@@ -1,4 +1,5 @@
 ﻿Treba je:
+-Promovirati je_v_trojkah (igra) v svojo metodo? (na vsaj 3 mestih se pojavi istih 6 vrstic)
 -igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
 -alphabeta necesa ne pocne dobro
 -minimax je včasih kot 3 letni otrok - treba je popravit cenilko
