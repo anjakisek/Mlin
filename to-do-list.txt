@@ -1,13 +1,16 @@
 ﻿Treba je:
 -Če se igra s kašknim računalniškim igralcem, včasih ne vidi zablokiranosti?
 -Promovirati je_v_trojkah (igra) v svojo metodo? (na vsaj 3 mestih se pojavi istih 6 vrstic)
--igre je konec tudi, če ni možne poteze. V naredi_potezo sem zakomentirala to možnost, nečesa ni v redu počel in se mi še ni ljubilo debuggat
--alphabeta necesa ne pocne dobro
+
 -minimax je včasih kot 3 letni otrok - treba je popravit cenilko
 -Če pride do situacije, ko imata oba igralca 3 žetone, sta računalnika izenačena, igre ne bo nikoli konec
 -Računalnik se ne prekine dobro vsakič, ko začneš novo igro
 
-Nedavno popravljeno:
+Vprašanja za profesorja:
+-Kako je s povečavo okna ter izgledom aplikacije? Mora biti to lepše?
+-Kakšen nasvet za cenilko - računalnik se včasih obnaša čudno; drugače, kot bi odreagiral človek.
+-Kakšen zamik je priporočljiv za povlek poteze? Zdaj je nastavljen na 1, bi moralo biti to manj?
+-Kako naj bi izgledala dokumentacija?
 
 
 
