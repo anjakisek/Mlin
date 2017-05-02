@@ -50,6 +50,7 @@ class Minimax:
         #Zaenkrat se zelo slaba cenilka
         #Iz nekega razloga je ta slovar vcasih prazen ???
         vrednost = 0
+        #Trojke so nam vsec, skoraj trojke tudi
         for trojka in trojke:
             seznam_zasedenosti = [
                 self.igra.plosca[x] for x in trojka]
@@ -58,17 +59,41 @@ class Minimax:
             elif seznam_zasedenosti.count(self.jaz) == 2 and (
                 seznam_zasedenosti.count(None) == 1):
                 vrednost += 200
+            #Bolj nam je vazno postaviti svojo trojko, kot blokirati nasprotnikovo
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 3:
                 vrednost -= 210
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 2 and (
                 seznam_zasedenosti.count(None) == 1):
                 vrednost -= 170
+
+        #Polja v srednjem kvadratu so stratesko boljsa:
         for i in (3,4,5,10,13,18,19,20):
             if self.igra.plosca[i] == self.jaz:
                 vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
                 vrednost -= 5
+
+        #Zetoni, ki so si blizu, so vec vredni:
+##        for i in range(24):
+##            if self.igra.plosca[i] == self.jaz:
+##                ze_preverjena = []
+##                for polje in self.igra.povezana_polja(i):
+##                    je_v_trojkah = []
+##                    for trojka in trojke:
+##                        if polje in trojka:
+##                            je_v_trojkah.append(trojka)
+##                            if len(je_v_trojkah) == 2:
+##                                break
+##                    for trojka in je_v_trojkah:
+##                        for index in trojka:
+##                            if self.igra.plosca[index] == self.jaz:
+##                                vrednost += 50
+##                        ze_preverjena.append(trojka)
+##            else:
+##                pass
+        #Zelimo, da se igra cimprej konca:
         vrednost += 200 - 2 * self.igra.st_potez
+        #Dobro je imeti cimvec svojih zetonov:
         vrednost += self.igra.st_zetonov[self.jaz] * 400
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 400
         return vrednost

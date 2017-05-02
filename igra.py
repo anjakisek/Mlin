@@ -150,6 +150,10 @@ class Igra():
                     return True
                 else:
                     self.na_vrsti = nasprotnik(self.na_vrsti)
+                    if self.stevec2 == 0:
+                        if self.zablokiran():
+                            self.na_vrsti = nasprotnik(self.na_vrsti)
+                            self.poteka = False
                     return True
 
             #FAZA_PREMAKNI_ZETON
@@ -327,6 +331,7 @@ class Igra():
 
 
     def zablokiran(self):
+        '''Vrne True, ce igralec na potezi nima mozne veljavne poteze.'''
         if self.stevec1 == 0 and self.stevec2 == 0:
             for i in range(24):
                 if self.plosca[i] == self.na_vrsti:
