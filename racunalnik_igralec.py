@@ -25,14 +25,20 @@ class Racunalnik():
     def preveri_potezo(self):
         #vsake 100ms preveri, ce je mislec ze koncal
         if self.algoritem.poteza is not None:
+##            self.gui.naredi_potezo(self.algoritem.poteza)
+##            self.mislec = None
+            
             self.pretekli_cas = time.time() - self.zacni_meriti_cas
-            if self.pretekli_cas > 1/2:
-                self.gui.naredi_potezo(self.algoritem.poteza)
-                self.mislec = None
-            else:
-                self.gui.plosca.after(200, self.gui.naredi_potezo(
-                    self.algoritem.poteza))
-                self.mislec = None
+##            if self.pretekli_cas > 1/2:
+##                self.gui.naredi_potezo(self.algoritem.poteza)
+##                self.mislec = None
+##            else:
+##                self.gui.plosca.after(200, self.gui.naredi_potezo(
+##                    self.algoritem.poteza))
+##                self.mislec = None
+            if self.pretekli_cas < 1/2:
+                time.sleep(1)
+            self.gui.naredi_potezo(self.algoritem.poteza)
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
 
@@ -47,4 +53,3 @@ class Racunalnik():
 
     def klik(self, p):
         pass
-    
