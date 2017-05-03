@@ -54,6 +54,7 @@ class Gui():
         master.config(menu=menu)
 
         #Podmenu: Igra
+        #Uporabnik lahko izbere, kakšni tipi igralcev bodo igro igrali
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Clovek vs. Clovek",
@@ -73,6 +74,8 @@ class Gui():
                                   Racunalnik(self, self.algoritem),
                                         Racunalnik(self, self.algoritem)))
         #Podmenu: Tezavnost
+        #Tezavnost se nastavlja z izbiro algoritma, lažji je minimax, težji
+        #pa minimax z alpha beta rezi in poveèano globino
         menu_tezavnost = Menu(menu)
         menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
         menu_tezavnost.add_radiobutton(label="Zacetnik",
@@ -83,6 +86,7 @@ class Gui():
                                    value=(AlphaBeta(GLOBINA+4)))
 
         #Podmenu: Moznosti
+        #Uporabnik lahko razveljavi potezo
         menu_moznosti = Menu(menu)
         menu.add_cascade(label="Moznosti", menu=menu_moznosti)
         menu_moznosti.add_command(label="Razveljavi",
@@ -116,7 +120,8 @@ class Gui():
         self.napis2.grid(row=2, column=1)
 
 
-        #Seznam krogcev hrani id naslove krogcev na canvasu
+        #Seznam krogcev hrani id naslove krogcev na canvasu. Urejeni bodo v
+        #enakem vrstnem redu, kot so oštevilèena pripadajoca polja na plosci
         self.seznam_krogcev = []
 
         
@@ -213,7 +218,6 @@ class Gui():
     
 
 
-    
 
     def zacni_igro(self, igralec1, igralec2):
         '''Pripravi novo igro, nastavi tipe igralcev in pozene prvega igralca v tek'''
@@ -264,6 +268,8 @@ class Gui():
                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
 
+
+
     def osvezi_plosco(self):
         '''Prebarva polja in osvezi napise nad plosco'''
         self.napis1.config(text = "Preostali {}: "
@@ -298,6 +304,7 @@ class Gui():
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
                 self.sporocilo.set('Na vrsti je {} - premaknite žeton'
                                    .format(self.igra.na_vrsti))
+                #Odebeli krogec, ki ga premikamo
                 self.plosca.itemconfigure(self.seznam_krogcev[self.igra.premik_zetona], width=3)
                 
 
