@@ -53,7 +53,7 @@ class Igra():
         #Ali smo v fazi odstranjevanja?
         self.odstranitev_zetona = False
 
-        #Iz stevca vemo, v kateri fazi smo
+        #Stevec steje, koliko zetonov se lahko polozimo na plosco
         self.stevec1 = 9
         self.stevec2 = 9
 
