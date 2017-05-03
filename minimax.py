@@ -1,4 +1,3 @@
-import logging
 from igra import *
 import random
 
@@ -19,7 +18,8 @@ class Minimax:
         self.prekinitev = True
 
     def izracunaj_potezo(self, igra):
-        #potezo bo treba vracati kot indeks polja, na katerega se bo igralo
+        '''Poisce najboljso potezo in jo vrne kot indeks polja, na katerega
+    se bo igralo.'''
         
         #poklicali jo bomo iz vzporednega vlakna
         self.igra = igra
@@ -27,6 +27,7 @@ class Minimax:
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
 
+        #Po dolecenem stevilu potez se globina poveca.
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
         if st_veljavnih_potez < 8:
             self.globina = self.zacetna_globina + 2
@@ -34,12 +35,12 @@ class Minimax:
             self.globina = self.zacetna_globina + 1
         else:
             self.globina = self.zacetna_globina
+            
         (poteza, vrednost) = self.minimax(self.globina, True)
         self.jaz = None
         self.igra = None
         if not self.prekinitev:
             # Potezo izvedemo v primeru, da nismo bili prekinjeni
-            logging.debug("minimax: poteza {0}, vrednost {1}".format(poteza, vrednost))
             self.poteza = poteza
 
     #vrednost
@@ -47,8 +48,7 @@ class Minimax:
     NESKONCNO = ZMAGA + 1
     
     def vrednost_pozicije(self):
-        #Zaenkrat se zelo slaba cenilka
-        #Iz nekega razloga je ta slovar vcasih prazen ???
+        '''Oceni vrednost trenutne pozicije.'''
         vrednost = 0
         #Trojke so nam vsec, skoraj trojke tudi
         for trojka in trojke:
@@ -59,6 +59,7 @@ class Minimax:
             elif seznam_zasedenosti.count(self.jaz) == 2 and (
                 seznam_zasedenosti.count(None) == 1):
                 vrednost += 200
+                
             #Bolj nam je vazno postaviti svojo trojko, kot blokirati nasprotnikovo
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 3:
                 vrednost -= 210
@@ -91,18 +92,20 @@ class Minimax:
 ##                        ze_preverjena.append(trojka)
 ##            else:
 ##                pass
+                
         #Zelimo, da se igra cimprej konca:
         vrednost += 200 - 2 * self.igra.st_potez
-        #Dobro je imeti cimvec svojih zetonov:
+        
+        #Dobro je imeti cimvec svojih zetonov in cim manj nasprotnikovih:
         vrednost += self.igra.st_zetonov[self.jaz] * 400
-        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 400
+        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 380
         return vrednost
                 
                
 
     def minimax(self, globina, maksimiziramo):
+        '''Preveri poteze do dolocene globine, vrne najbolje ocenjeno potezo in njeno vrednost.'''
         if self.prekinitev:
-            print('Prekinjajo me')
             return (None, 0)
 
         #Povem mu, kdaj je prisel do konca
@@ -126,7 +129,7 @@ class Minimax:
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #globina-1?
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
@@ -146,7 +149,7 @@ class Minimax:
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #globina-1?
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
                             vrednost = self.minimax(globina-1, not maksimiziramo)[1]
@@ -155,7 +158,6 @@ class Minimax:
                             vrednost_najboljse = vrednost
                             najboljsa_poteza = p
                             
-                #assert (najboljsa_poteza is not None), "minimax: izracunana poteza je None"
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "minimax: nedefinirano stanje igre"
