@@ -21,7 +21,8 @@ class AlphaBeta:
         self.prekinitev = True
 
     def izracunaj_potezo(self, igra):
-        #potezo bo treba vracati kot indeks polja, na katerega se bo igralo
+        '''Poisce najboljso potezo in jo vrne kot indeks polja, na katerega
+    se bo igralo.'''
 
         
         #poklicali jo bomo iz vzporednega vlakna
@@ -29,7 +30,8 @@ class AlphaBeta:
         self.prekinitev = False
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
-
+        
+        #Po dolecenem stevilu potez se globina poveca.
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
         if st_veljavnih_potez < 8:
             self.globina = self.zacetna_globina + 2
@@ -49,8 +51,7 @@ class AlphaBeta:
     
     
     def vrednost_pozicije(self):
-        #Zaenkrat se zelo slaba cenilka
-        #Iz nekega razloga je ta slovar vcasih prazen ???
+        '''Oceni vrednost trenutne pozicije.'''
         vrednost = 0
         #Trojke so nam vsec, skoraj trojke tudi
         for trojka in trojke:
@@ -104,7 +105,6 @@ class AlphaBeta:
 
     def alphabeta(self, globina, alpha, beta, maksimiziramo):
         if self.prekinitev:
-            print('Prekinjajo me')
             return (None, 0)
 
         #Povem mu, kdaj je prisel do konca
@@ -128,7 +128,7 @@ class AlphaBeta:
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #globina-1?
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
@@ -157,7 +157,7 @@ class AlphaBeta:
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
                         if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #globina-1?
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
@@ -174,10 +174,7 @@ class AlphaBeta:
                                 break
                         self.igra.razveljavi_potezo()
                         najboljsa_poteza = p
-
-
-                            
-                #assert (najboljsa_poteza is not None), "minimax: izracunana poteza je None"
+                        
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "minimax: nedefinirano stanje igre"
