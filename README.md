@@ -12,7 +12,8 @@ Za zagon program je potrebno zagnati datoteko _uporabniski_vmesnik.py_.
 # Struktura igre:
 Igra je razdeljena v več datotek:
 - uporabniski_vmesnik.py
-	- Glavni program, ki izriše igralno ploščo in skrbi, da se narejena poteza izriše na zaslonu. V menijski vrstici so naslednja okenca:
+
+	Glavni program, ki izriše igralno ploščo in skrbi, da se narejena poteza izriše na zaslonu. V menijski vrstici so naslednja okenca:
 	- _Igra_ : uporabnik lahko izbere tipe igralcev (kombinacije igralca-človeka in računalniškega igralca)
 	- _Težavnost_: v kolikor uporabnik izbere računalniškega igralca, lahko izbira med težjo in lažjo zahtevnostjo igre. Privzeta tezavnost je lazja, ki uporablja algoritem minimax, za težjo zahtevnost pa uporablja minimax z alphabeta rezanjem in povečano globino iskanja.
 	- _Moznosti_: uporabnik lahko razveljavi svojo potezo.
