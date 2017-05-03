@@ -10,6 +10,7 @@ class Racunalnik():
         self.mislec = None #vlakno za razmisljanje
 
     def igraj(self):
+        '''V vzporednem vlaknu sprozi razmislanje o novi potezi'''
         #sprozimo razmisljanje
         self.mislec = threading.Thread(
             target=lambda: self.algoritem.izracunaj_potezo(
@@ -23,21 +24,15 @@ class Racunalnik():
         self.gui.plosca.after(100, self.preveri_potezo)
 
     def preveri_potezo(self):
+        '''Po dolocenem casu preveri, ali je vlakno ze naslo optimalno potezo in
+    potezo naredi s primernim zamikom.'''
+        
         #vsake 100ms preveri, ce je mislec ze koncal
         if self.algoritem.poteza is not None:
-##            self.gui.naredi_potezo(self.algoritem.poteza)
-##            self.mislec = None
             
             self.pretekli_cas = time.time() - self.zacni_meriti_cas
-##            if self.pretekli_cas > 1/2:
-##                self.gui.naredi_potezo(self.algoritem.poteza)
-##                self.mislec = None
-##            else:
-##                self.gui.plosca.after(200, self.gui.naredi_potezo(
-##                    self.algoritem.poteza))
-##                self.mislec = None
             if self.pretekli_cas < 1/2:
-                time.sleep(1)
+                time.sleep(2/3)
             self.gui.naredi_potezo(self.algoritem.poteza)
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
