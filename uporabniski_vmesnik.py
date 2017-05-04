@@ -54,7 +54,7 @@ class Gui():
         master.config(menu=menu)
 
         #Podmenu: Igra
-        #Uporabnik lahko izbere, kakšni tipi igralcev bodo igro igrali
+        #Uporabnik lahko izbere, kaksni tipi igralcev bodo igro igrali
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
         menu_igra.add_command(label="Clovek vs. Clovek",
@@ -74,8 +74,8 @@ class Gui():
                                   Racunalnik(self, self.algoritem),
                                         Racunalnik(self, self.algoritem)))
         #Podmenu: Tezavnost
-        #Tezavnost se nastavlja z izbiro algoritma, lažji je minimax, težji
-        #pa minimax z alpha beta rezi in poveèano globino
+        #Tezavnost se nastavlja z izbiro algoritma, lazji je minimax, tezji
+        #pa minimax z alpha beta rezi in povecano globino
         menu_tezavnost = Menu(menu)
         menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
         menu_tezavnost.add_radiobutton(label="Zacetnik",
@@ -121,7 +121,7 @@ class Gui():
 
 
         #Seznam krogcev hrani id naslove krogcev na canvasu. Urejeni bodo v
-        #enakem vrstnem redu, kot so oštevilèena pripadajoca polja na plosci
+        #enakem vrstnem redu, kot so ostevilcena pripadajoca polja na plosci
         self.seznam_krogcev = []
 
         
@@ -226,7 +226,7 @@ class Gui():
         self.igralec_2 = igralec2
         self.igra.poteka = True
         self.pripravi_novo_igro()
-        self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
+        self.sporocilo.set('Na vrsti je {} - postavite zeton'.format(self.igra.na_vrsti))
         self.igralec_1.igraj()
 
 
@@ -265,7 +265,7 @@ class Gui():
         #Ce poteza ni bila veljavna in ni naredil nic, samo ponastavi napis nad plosco
         else:
             if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
-                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
+                self.sporocilo.set('Na vrsti je {} - izberite zeton za premik'
                                    .format(self.igra.na_vrsti))
 
 
@@ -292,17 +292,17 @@ class Gui():
                 self.sporocilo.set(
                     'Igre je konec, zmagal je {}'.format(
                      self.igra.na_vrsti))
-        elif self.igra.odstranitev_zetona:
-                self.sporocilo.set('Na vrsti je {} - odstranite žeton'
+        elif self.igra.ali_odstranjujemo_zeton:
+                self.sporocilo.set('Na vrsti je {} - odstranite zeton'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 > 0 or self.igra.stevec2 > 0:
-                self.sporocilo.set('Na vrsti je {} - postavite žeton'
+                self.sporocilo.set('Na vrsti je {} - postavite zeton'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is None:
-                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
+                self.sporocilo.set('Na vrsti je {} - izberite zeton za premik'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
-                self.sporocilo.set('Na vrsti je {} - premaknite žeton'
+                self.sporocilo.set('Na vrsti je {} - premaknite zeton'
                                    .format(self.igra.na_vrsti))
                 #Odebeli krogec, ki ga premikamo
                 self.plosca.itemconfigure(self.seznam_krogcev[self.igra.premik_zetona], width=3)
@@ -331,20 +331,12 @@ class Gui():
         
     def pripravi_novo_igro(self):
         '''Pobrise trenutno plosco, izrise prazno in ponastavi vse stevce.'''
-        self.igra.plosca = [None] * 24
-        self.igra.zgodovina = []
-        self.igra.na_vrsti = IGRALEC_1
-        self.igra.odstranitev_zetona = False
-        self.igra.premik_zetona = None
-        self.igra.stevec1 = 9
+        self.igra = Igra()
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
         self.igra.stevec2 = 9
         self.napis2.config(
                 text = "Preostali {}: ".format(IGRALEC_2)+ str(self.igra.stevec2))
-        self.igra.st_zetonov[IGRALEC_1] = 9
-        self.igra.st_zetonov[IGRALEC_2] = 9
-        self.igra.st_potez = 0
         self.osvezi_plosco()
 
 
