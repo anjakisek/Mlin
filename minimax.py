@@ -123,40 +123,52 @@ class Minimax:
                 #ena stopnja minimaxa
                 if maksimiziramo:
                     najboljsa_poteza = None
-                    vrednost_najboljse = -Minimax.NESKONCNO
+                    vrednost_najboljse = -Minimax.NESKONCNO 
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
-                    for p in veljavne:
-                        self.igra.povleci_potezo(p)
-                        if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
-                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                            vrednost = self.minimax(globina-1, maksimiziramo)[1]
-                        else:
-                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                        self.igra.razveljavi_potezo()
-                        if vrednost > vrednost_najboljse:
-                            vrednost_najboljse = vrednost
-                            najboljsa_poteza = p
+
+                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
+                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
+                    if len(veljavne) == 0:
+                        return (None, vrednost_najboljse)
+                    else:
+                        for p in veljavne:
+                            self.igra.povleci_potezo(p)
+                            if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
+                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                                vrednost = self.minimax(globina-1, maksimiziramo)[1]
+                            else:
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                            self.igra.razveljavi_potezo()
+                            if vrednost > vrednost_najboljse:
+                                vrednost_najboljse = vrednost
+                                najboljsa_poteza = p
 
 
                 #Minimiziramo
                 else:
                     najboljsa_poteza = None
                     vrednost_najboljse = Minimax.NESKONCNO
-                    veljane = self.igra.veljavne_poteze()
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
-                    for p in veljavne:
-                        self.igra.povleci_potezo(p)
-                        if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
-                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                            vrednost = self.minimax(globina-1, maksimiziramo)[1]
-                        else:
-                            vrednost = self.minimax(globina-1, not maksimiziramo)[1]
-                        self.igra.razveljavi_potezo()
-                        if vrednost < vrednost_najboljse:
-                            vrednost_najboljse = vrednost
-                            najboljsa_poteza = p
+
+                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
+                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
+                    if len(veljavne) == 0:
+                        return (None, vrednost_najboljse)
+                        
+                    else:
+                        for p in veljavne:
+                            self.igra.povleci_potezo(p)
+                            if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
+                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                                vrednost = self.minimax(globina-1, maksimiziramo)[1]
+                            else:
+                                vrednost = self.minimax(globina-1, not maksimiziramo)[1]
+                            self.igra.razveljavi_potezo()
+                            if vrednost < vrednost_najboljse:
+                                vrednost_najboljse = vrednost
+                                najboljsa_poteza = p
 
                 if najboljsa_poteza == None:
                     logging.debug("alphabeta nima poteze v poziciji: {}".format(self.igra.plosca))
