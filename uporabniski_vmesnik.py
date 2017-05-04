@@ -9,10 +9,10 @@ import logging
 # Odkomentiraj za debug:
 logging.basicConfig(level=logging.DEBUG)
 
-#dolocimo velikost plosce in polja
+#Dolocimo velikost plosce in polja ter globino
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-GLOBINA = 3
+GLOBINA = 2
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -38,6 +38,8 @@ def sredisce(krogec):
 class Gui():
 
     def __init__(self, master):
+        
+        #Kasneje nastavi igralce glede na uporabnikovo izbiro
         self.igralec_1 = None
         self.igralec_2 = None
 
@@ -205,9 +207,6 @@ class Gui():
             else:
                 self.seznam_krogcev = self.seznam_krogcev + seznam
 
-
-
-
         #################################
         #################################
 
@@ -221,12 +220,11 @@ class Gui():
 
     def zacni_igro(self, igralec1, igralec2):
         '''Pripravi novo igro, nastavi tipe igralcev in pozene prvega igralca v tek'''
-        logging.debug("Prekinajmo igralce")
         self.prekini_igralce()
         self.igralec_1 = igralec1
         self.igralec_2 = igralec2
         self.pripravi_novo_igro()
-        self.sporocilo.set('Na vrsti je {} - postavite zeton'.format(self.igra.na_vrsti))
+        self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
         self.igralec_1.igraj()
 
 
@@ -253,7 +251,6 @@ class Gui():
     def naredi_potezo(self, index_polja):
         '''Naroci igri, da potezo izvede, nato izrise trenutno plosco in pozene igro naprej'''
         if self.igra.povleci_potezo(index_polja):
-            logging.debug("Poteza {0} je veljavna.".format(index_polja))
             self.osvezi_plosco()
 
             #pozene naslednjega igralca v igro
@@ -265,9 +262,8 @@ class Gui():
                 pass
         #Ce poteza ni bila veljavna in ni naredil nic, samo ponastavi napis nad plosco
         else:
-            logging.debug("Poteza {0} ni veljavna.".format(index_polja))
             if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
-                self.sporocilo.set('Na vrsti je {} - izberite zeton za premik'
+                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
 
 
@@ -295,26 +291,26 @@ class Gui():
                     'Igre je konec, zmagal je {}'.format(
                      self.igra.na_vrsti))
         elif self.igra.ali_odstranjujemo_zeton:
-                self.sporocilo.set('Na vrsti je {} - odstranite zeton'
+                self.sporocilo.set('Na vrsti je {} - odstranite žeton'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 > 0 or self.igra.stevec2 > 0:
-                self.sporocilo.set('Na vrsti je {} - postavite zeton'
+                self.sporocilo.set('Na vrsti je {} - postavite žeton'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is None:
-                self.sporocilo.set('Na vrsti je {} - izberite zeton za premik'
+                self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
         elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0 and self.igra.premik_zetona is not None:
-                self.sporocilo.set('Na vrsti je {} - premaknite zeton'
+                self.sporocilo.set('Na vrsti je {} - premaknite žeton'
                                    .format(self.igra.na_vrsti))
                 #Odebeli krogec, ki ga premikamo
                 self.plosca.itemconfigure(self.seznam_krogcev[self.igra.premik_zetona], width=3)
-
 
         else:
              pass
 
 
     def zapri_okno(self, master):
+        '''Prekine igralce in ubije program.'''
         self.prekini_igralce()
         master.destroy()
 
@@ -330,7 +326,7 @@ class Gui():
 
 
     def pripravi_novo_igro(self):
-        '''Pobrise trenutno plosco, izrise prazno in ponastavi vse stevce.'''
+        '''Pobrise trenutno plosco, izrise prazno in ustvari nov objekt Igra.'''
         self.igra = Igra()
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
