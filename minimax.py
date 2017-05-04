@@ -128,7 +128,7 @@ class Minimax:
                     random.shuffle(veljavne)
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
-                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                        if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
                             #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
@@ -148,7 +148,7 @@ class Minimax:
                     random.shuffle(veljavne)
                     for p in veljavne:
                         self.igra.povleci_potezo(p)
-                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                        if self.igra.ali_odstranjujemo_zeton or self.igra.premik_zetona is not None:
                             #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
                             vrednost = self.minimax(globina-1, maksimiziramo)[1]
                         else:
