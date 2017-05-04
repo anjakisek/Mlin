@@ -3,7 +3,7 @@ from tkinter import *
 #Previdno pri spreminjanju imen igralcev!
 IGRALEC_1 = 'modri'
 BARVA_1 = 'blue'
-IGRALEC_2 = 'rdeci'
+IGRALEC_2 = 'rdeči'
 BARVA_2 = 'red'
 
 
@@ -39,7 +39,7 @@ def nasprotnik(igralec):
     else:
         assert False, 'Zgodila se je napaka pri menjavi igralcev'
 
-    
+
 
 class Igra():
     def __init__(self):
@@ -57,16 +57,16 @@ class Igra():
         self.stevec1 = 9
         self.stevec2 = 9
 
-        #Izvemo, ali moramo koncati
-        self.poteka = False
-        
+        # Ali igra ternutno poteka (na zacetku seveda poteka)
+        self.poteka = True
+
         #Polje, iz katerega zelimo premakniti zeton (v fazi FAZA_PREMAKNI)
         self.premik_zetona = None
-        
+
         self.na_vrsti = IGRALEC_1
 
         self.st_potez = 0
-        
+
         self.zgodovina = []
 
 
@@ -81,18 +81,18 @@ class Igra():
                                self.stevec1, self.stevec2,
                                self.poteka, self.premik_zetona,
                                self.na_vrsti, self.st_potez))
-        
+
 
     def kopija(self):
         '''Napravi kopijo trenutne igre tako, da skopira trenutne atribute
             igre, nato vrne kopijo igre.'''
         kopija = Igra()
         kopija.plosca = self.plosca[:]
-        
+
         kopija.st_zetonov = {}
         for igralec in self.st_zetonov:
             kopija.st_zetonov[igralec] = self.st_zetonov[igralec]
-            
+
         kopija.stevec1 = self.stevec1
         kopija.stevec2 = self.stevec2
         kopija.odstranitev_zetona = self.odstranitev_zetona
@@ -101,7 +101,7 @@ class Igra():
         kopija.na_vrsti = self.na_vrsti
         kopija.st_potez = self.st_potez
         return kopija
-            
+
 
     def razveljavi_potezo(self):
         '''Igri posreduje atribute zadnjega elementa v seznamu zgodovine,
@@ -113,7 +113,7 @@ class Igra():
              self.stevec1, self.stevec2,
              self.poteka, self.premik_zetona,
              self.na_vrsti, self.st_potez) = self.zgodovina.pop()
-            
+
 
     def povleci_potezo(self, index_polja):
         '''Ce je poteza veljavna, jo povlece in vrne True, sicer vrne False'''
@@ -121,7 +121,7 @@ class Igra():
         if not self.je_veljavna_poteza(index_polja):
             self.premik_zetona = None
             return False
-        
+
         else:
             self.shrani_trenutno_stanje()
             self.st_potez += 1
@@ -135,7 +135,7 @@ class Igra():
                     return True
                 else:
                     return True
-            
+
             #FAZA_POSTAVI
             elif self.stevec1 > 0 or self.stevec2 > 0:
                 self.plosca[index_polja] = self.na_vrsti
@@ -145,7 +145,7 @@ class Igra():
                     self.stevec2 -= 1
 
                 #Preveri se trojke in morebiti zamenja, kdo je na potezi
-                if self.preveri_trojke(index_polja):
+                if self.je_v_trojki(index_polja):
                     self.odstranitev_zetona = True
                     return True
                 else:
@@ -156,21 +156,21 @@ class Igra():
                             self.poteka = False
                     return True
 
-            #FAZA_PREMAKNI_ZETON
+            #FAZA_PREMAKNI_IZBERI ali FAZA_PREMAKNI
             elif self.stevec1 == 0 and self.stevec2 == 0:
-                
+
                 #FAZA_PREMAKNI_IZBERI
                 if self.premik_zetona is None:
                     self.premik_zetona = index_polja
                     return True
-                    
-                #FAZA_PREMAKNI_POSTAVI
+
+                #FAZA_PREMAKNI
                 else:
                     self.plosca[index_polja] = self.na_vrsti
                     self.plosca[self.premik_zetona] = None
                     self.premik_zetona = None
                     #Preveri se trojke in morebiti zamenja, kdo je na potezi
-                    if self.preveri_trojke(index_polja):
+                    if self.je_v_trojki(index_polja):
                         self.odstranitev_zetona = True
                         return True
                     else:
@@ -200,36 +200,36 @@ class Igra():
         '''ob pregledu aktivnega polja, na katerega zelimo igrati, vrne True,
         ce je poteza veljavna, ter False sicer.'''
 
-        
+
         ################################
         #### Odstranjevanje zetona #####
         ################################
         if self.odstranitev_zetona:
             #Ce v potezi tece faza odstranitve, pogleda, ce je polje,
             # ki ga je treba odstraniti, nasprotnikovo
-            
+
             if self.plosca[index_polja] == nasprotnik(self.na_vrsti):
                 #Ce zeton, ki ga zelimo odstraniti ni v trojki, je poteza
                 #veljavna:
-                if not self.preveri_trojke(index_polja):
+                if not self.je_v_trojki(index_polja):
                     return True
-                
+
                 #Ce zeton, ki ga zelimo odstraniti, je v trojki, bo poteza
                 #veljavna le, ce je vsak nasprotnikov zeton v trojki
                 else:
                     for index in range(0, 24):
                         if self.plosca[index] == nasprotnik(self.na_vrsti):
-                            if not self.preveri_trojke(index):
+                            if not self.je_v_trojki(index):
                                 return False
                     return True
-                                
+
             else:
                 return False
-            
+
         #########################################
         ##Preverjanje pri FAZA_POSTAVITE##
         #########################################
-        
+
         if self.stevec1 > 0 or self.stevec2 > 0:
         #Ce smo v fazi dodajanja zetonov, lahko dodamo zeton na prazno polje
             if self.plosca[index_polja] == None:
@@ -250,7 +250,7 @@ class Igra():
                 else:
                     return False
 
-               
+
             else:
                 if self.plosca[index_polja] is not None:
                     return False
@@ -263,12 +263,12 @@ class Igra():
                     else:
                         return False
 
-                #Zeton smemo premakniti le na povezana polja 
+                #Zeton smemo premakniti le na povezana polja
                 else:
                     if index_polja in self.povezana_polja(self.premik_zetona):
-                                return True                   
+                                return True
                     return False
-                
+
         else:
             print('Faze ne delajo prav')
 
@@ -289,44 +289,17 @@ class Igra():
                 if abs(b-a) == 1:
                     povezana_polja.append(trojka[b])
         return povezana_polja
-                    
 
 
-    def preveri_trojke(self, index_polja):
-        '''Preveri, ali je bila formirana trojka.'''
-        
-        je_v_trojkah = []
-        
-        for trojka in trojke:
-            if index_polja in trojka:
-                je_v_trojkah.append(trojka)
-                if len(je_v_trojkah) == 2:
-                    break
-        for trojka in je_v_trojkah:
-            zasedenost = None
-            koncaj = None #kontroliramo, ali se mora zanka prekiniti ali ne
-            for index in trojka:
-                #okupiranost = kdo je po potezi na polju
-                #zasedenost = kaksne barve zbiramo v trojki
-                okupiranost = self.plosca[index]
-                if koncaj is None:
-                    if okupiranost == None:
-                        koncaj = True
-                        break
-                        #eno polje v trojki je prazno - trojke ni
-                    elif zasedenost == None:
-                        #nastavimo barvo trojke, ki jo iščemo
-                        zasedenost = okupiranost
-                    elif zasedenost != okupiranost:
-                        #v trojki je kakšna drugačna barva kot prej
-                        koncaj = True
-                        break
-                else:
-                    pass
-            if koncaj is None:
+
+    def je_v_trojki(self, polje):
+        '''Preveri, ali je dano polje v trojki. Vrni True, če je, sicer False.'''
+
+        # Gremo po trojkah, ki vsebujejo polje
+        for (i,j,k) in [t for t in trojke if polje in t]:
+            if (self.plosca[i] != None and self.plosca[i] == self.plosca[j] == self.plosca[k]):
+                # nasli smo neprazno trojko
                 return True
-            
-        #Če ni našel nobene trojke:
         return False
 
 
@@ -339,10 +312,10 @@ class Igra():
                         if self.plosca[polje] == None:
                             return False
         return True
-        
-            
 
-    
+
+
+
     def ali_je_konec(self):
         '''Vrne True, ce je igre konec in False sicer. Pri tem nastavi
         self.poteka na pravilno vrednost.'''
@@ -350,11 +323,6 @@ class Igra():
             if self.st_zetonov[igralec] <= 2:
                 self.poteka = False
                 return True
-        
+
         else:
             return False
-
-
-
-
-                

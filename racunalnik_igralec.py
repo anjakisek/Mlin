@@ -26,13 +26,14 @@ class Racunalnik():
     def preveri_potezo(self):
         '''Po dolocenem casu preveri, ali je vlakno ze naslo optimalno potezo in
     potezo naredi s primernim zamikom.'''
-        
+
         #vsake 100ms preveri, ce je mislec ze koncal
         if self.algoritem.poteza is not None:
-            
+
             self.pretekli_cas = time.time() - self.zacni_meriti_cas
             if self.pretekli_cas < 1/2:
                 time.sleep(2/3)
+            # XXX potezo naredimo samo, če nismo bili prekinjeni
             self.gui.naredi_potezo(self.algoritem.poteza)
         else:
             self.gui.plosca.after(100, self.preveri_potezo)
@@ -44,7 +45,7 @@ class Racunalnik():
             #Pocakamo, da se mislec ustavi
             self.mislec.join()
             self.mislec = None
-    
+
 
     def klik(self, p):
         pass

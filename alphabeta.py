@@ -1,9 +1,10 @@
 from igra import *
 import random
+import logging
 
 
 class AlphaBeta:
-    
+
     #vrednost
     ZMAGA = 100000
     NESKONCNO = ZMAGA + 1
@@ -24,13 +25,13 @@ class AlphaBeta:
         '''Poisce najboljso potezo in jo vrne kot indeks polja, na katerega
     se bo igralo.'''
 
-        
+
         #poklicali jo bomo iz vzporednega vlakna
         self.igra = igra
         self.prekinitev = False
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
-        
+
         #Po dolecenem stevilu potez se globina poveca.
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
         if st_veljavnih_potez < 8:
@@ -39,7 +40,7 @@ class AlphaBeta:
             self.globina = self.zacetna_globina + 1
         else:
             self.globina = self.zacetna_globina
-        
+
         (poteza, vrednost) = self.alphabeta(
                         self.globina, -AlphaBeta.NESKONCNO,AlphaBeta.NESKONCNO,  True)
         self.jaz = None
@@ -48,8 +49,8 @@ class AlphaBeta:
             # Potezo izvedemo v primeru, da nismo bili prekinjeni
             self.poteza = poteza
 
-    
-    
+
+
     def vrednost_pozicije(self):
         '''Oceni vrednost trenutne pozicije.'''
         vrednost = 0
@@ -75,7 +76,7 @@ class AlphaBeta:
                 vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
                 vrednost -= 5
-        
+
 ##      #Zetoni, ki so si blizu, so vec vredni:
 ##        for i in range(24):
 ##            if self.igra.plosca[i] == self.jaz:
@@ -100,8 +101,8 @@ class AlphaBeta:
         vrednost += self.igra.st_zetonov[self.jaz] * 400
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 400
         return vrednost
-                
-               
+
+
 
     def alphabeta(self, globina, alpha, beta, maksimiziramo):
         if self.prekinitev:
@@ -119,7 +120,7 @@ class AlphaBeta:
                 return (None, self.vrednost_pozicije())
             else:
 
-                #ena stopnja 
+                #ena stopnja
                 if maksimiziramo:
                     vrednost_najboljse = -AlphaBeta.NESKONCNO
                     najboljsa_poteza = None
@@ -135,7 +136,7 @@ class AlphaBeta:
                             alpha = max(alpha, vrednost_najboljse)
                             if beta <= alpha:
                                 break
-                        
+
                         else:
                             vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
@@ -145,8 +146,8 @@ class AlphaBeta:
                                 break
                         self.igra.razveljavi_potezo()
                         najboljsa_poteza = p
-                    
-                            
+
+
 
                 #Minimiziramo
                 else:
@@ -164,7 +165,7 @@ class AlphaBeta:
                             alpha = min(alpha, vrednost_najboljse)
                             if beta <= alpha:
                                 break
-                        
+
                         else:
                             vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
@@ -174,7 +175,10 @@ class AlphaBeta:
                                 break
                         self.igra.razveljavi_potezo()
                         najboljsa_poteza = p
-                        
+
+                if najboljsa_poteza == None:
+                    logging.debug("alphabeta nima poteze v poziciji: {}".format(self.igra.plosca))
+                    assert False
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
             assert False, "minimax: nedefinirano stanje igre"

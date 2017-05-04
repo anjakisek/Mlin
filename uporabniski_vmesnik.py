@@ -4,8 +4,10 @@ from racunalnik_igralec import *
 from clovek import *
 from minimax import *
 from alphabeta import *
+import logging
 
-
+# Odkomentiraj za debug:
+logging.basicConfig(level=logging.DEBUG)
 
 #dolocimo velikost plosce in polja
 VELIKOST_PLOSCE = 400
@@ -36,7 +38,7 @@ def sredisce(krogec):
 class Gui():
 
     def __init__(self, master):
-        self.igralec_1 = None 
+        self.igralec_1 = None
         self.igralec_2 = None
 
 
@@ -44,7 +46,7 @@ class Gui():
         master.protocol("WM_DELETE_WINDOW", lambda: self.zapri_okno(master))
 
 
-        self.igra = Igra()
+        self.igra = None # Igre še nismo začeli igrati
 
         #Privzeti algoritem je minimax
         self.algoritem = Minimax(GLOBINA)
@@ -91,32 +93,30 @@ class Gui():
         menu.add_cascade(label="Moznosti", menu=menu_moznosti)
         menu_moznosti.add_command(label="Razveljavi",
                                   command=self.razveljavi)
-        
+
 
 
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
             master,
-            value='Dobrodosli! Izberite tipe igralcev, da pricnete z igro.')
+            value='Dobrodošli! Izberite tipe igralcev, da pričnete z igro.')
         self.sporocevalec = Label(
             master,
             textvariable = self.sporocilo)
-        self.sporocevalec.grid(row=0, columnspan = 2)
+        self.sporocevalec.grid(row=0, columnspan = 2, sticky=E+W)
 
         #Stevec, ki bo prikazoval, koliko zetonov lahko
         # prvi igralec se polozi na plosco
         self.napis1 = Label(
             master,
-            text= "Preostali {}: {}".format(
-                IGRALEC_1, self.igra.stevec1))
+            text= "")
         self.napis1.grid(row=2, column=0)
-        
+
         #Stevec, ki bo prikazoval, koliko zetonov lahko
         # drugi igralec se polozi na plosco
         self.napis2 = Label(
             master,
-            text= "Preostali {}: {}".format(
-                IGRALEC_2, self.igra.stevec2))
+            text= "")
         self.napis2.grid(row=2, column=1)
 
 
@@ -124,7 +124,7 @@ class Gui():
         #enakem vrstnem redu, kot so oštevilèena pripadajoca polja na plosci
         self.seznam_krogcev = []
 
-        
+
         #Igralna plosca
         self.plosca = Canvas(
             master, width = VELIKOST_PLOSCE, height = VELIKOST_PLOSCE,
@@ -150,7 +150,7 @@ class Gui():
                                 VELIKOST_PLOSCE/2)
         self.plosca.create_line(5 * VELIKOST_PLOSCE/8, VELIKOST_PLOSCE/2,7 * VELIKOST_PLOSCE/8,
                                 VELIKOST_PLOSCE/2)
-        
+
         #Ustvarim 24 pik/polj in njihove id shranim v seznam krogcev v pravilnem
         # vrstnem redu
         for k in range(0, 2): #krogci 10-15
@@ -204,27 +204,27 @@ class Gui():
                 self.seznam_krogcev = seznam + self.seznam_krogcev
             else:
                 self.seznam_krogcev = self.seznam_krogcev + seznam
-                
-        
-        
-                                         
+
+
+
+
         #################################
         #################################
 
-    
+
         #Ob kliku na plosco poklice funkcijo, primerno trenutni fazi igre
         self.plosca.bind("<Button-1>", self.klik)
 
-    
+
 
 
 
     def zacni_igro(self, igralec1, igralec2):
         '''Pripravi novo igro, nastavi tipe igralcev in pozene prvega igralca v tek'''
+        logging.debug("Prekinajmo igralce")
         self.prekini_igralce()
         self.igralec_1 = igralec1
         self.igralec_2 = igralec2
-        self.igra.poteka = True
         self.pripravi_novo_igro()
         self.sporocilo.set('Na vrsti je {} - postavite žeton'.format(self.igra.na_vrsti))
         self.igralec_1.igraj()
@@ -232,7 +232,7 @@ class Gui():
 
     def klik(self, event):
         '''Ob kliku ugotovi, kam smo kliknili, in poklice odziv na klik glede na trenutnega igralca'''
-        if not self.igra.poteka:
+        if (self.igra is None) or (not self.igra.poteka):
             pass
         else:
             (a,b) = (event.x, event.y)
@@ -253,6 +253,7 @@ class Gui():
     def naredi_potezo(self, index_polja):
         '''Naroci igri, da potezo izvede, nato izrise trenutno plosco in pozene igro naprej'''
         if self.igra.povleci_potezo(index_polja):
+            logging.debug("Poteza {0} je veljavna.".format(index_polja))
             self.osvezi_plosco()
 
             #pozene naslednjega igralca v igro
@@ -264,6 +265,7 @@ class Gui():
                 pass
         #Ce poteza ni bila veljavna in ni naredil nic, samo ponastavi napis nad plosco
         else:
+            logging.debug("Poteza {0} ni veljavna.".format(index_polja))
             if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
@@ -286,7 +288,7 @@ class Gui():
             else:
                 barva = 'white'
             self.plosca.itemconfigure(self.seznam_krogcev[polje], fill=barva, width = 1)
-        
+
         #Spremeni napis glede na fazo igre
         if not self.igra.poteka:
                 self.sporocilo.set(
@@ -306,45 +308,34 @@ class Gui():
                                    .format(self.igra.na_vrsti))
                 #Odebeli krogec, ki ga premikamo
                 self.plosca.itemconfigure(self.seznam_krogcev[self.igra.premik_zetona], width=3)
-                
+
 
         else:
              pass
 
-        
+
     def zapri_okno(self, master):
         self.prekini_igralce()
         master.destroy()
 
     def prekini_igralce(self):
-        if self.igralec_1 is not None and self.igralec_2 is not None:
+        if self.igralec_1 is not None:
             self.igralec_1.prekini()
+        if self.igralec_2 is not None:
             self.igralec_2.prekini()
-        else:
-            pass
-        
 
     def razveljavi(self):
         self.igra.razveljavi_potezo()
         self.osvezi_plosco()
-    
-        
+
+
     def pripravi_novo_igro(self):
         '''Pobrise trenutno plosco, izrise prazno in ponastavi vse stevce.'''
-        self.igra.plosca = [None] * 24
-        self.igra.zgodovina = []
-        self.igra.na_vrsti = IGRALEC_1
-        self.igra.odstranitev_zetona = False
-        self.igra.premik_zetona = None
-        self.igra.stevec1 = 9
+        self.igra = Igra()
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
-        self.igra.stevec2 = 9
         self.napis2.config(
                 text = "Preostali {}: ".format(IGRALEC_2)+ str(self.igra.stevec2))
-        self.igra.st_zetonov[IGRALEC_1] = 9
-        self.igra.st_zetonov[IGRALEC_2] = 9
-        self.igra.st_potez = 0
         self.osvezi_plosco()
 
 
