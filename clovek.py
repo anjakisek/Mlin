@@ -1,4 +1,3 @@
-import logging
 
 class Clovek():
     def __init__(self, gui):
@@ -11,5 +10,4 @@ class Clovek():
         pass
 
     def klik(self, p):
-        logging.debug("Clovek dela potezo {}".format(p))
         self.gui.naredi_potezo(p)
