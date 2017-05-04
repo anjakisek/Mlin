@@ -32,7 +32,7 @@ class Racunalnik():
 
             self.pretekli_cas = time.time() - self.zacni_meriti_cas
             if self.pretekli_cas < 1/2:
-                time.sleep(2/3)
+                time.sleep(1/2)
             # XXX potezo naredimo samo, če nismo bili prekinjeni
             self.gui.naredi_potezo(self.algoritem.poteza)
         else:
