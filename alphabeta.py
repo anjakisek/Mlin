@@ -126,26 +126,32 @@ class AlphaBeta:
                     najboljsa_poteza = None
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
-                    for p in veljavne:
-                        self.igra.povleci_potezo(p)
-                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                            vrednost_najboljse = max(vrednost_najboljse,
+                    
+                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
+                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
+                    if len(veljavne) == 0:
+                        return (None, vrednost_najboljse)
+                    else:
+                        for p in veljavne:
+                            self.igra.povleci_potezo(p)
+                            if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                                vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
-                            alpha = max(alpha, vrednost_najboljse)
-                            if beta <= alpha:
-                                break
+                                alpha = max(alpha, vrednost_najboljse)
+                                if beta <= alpha:
+                                    break
 
-                        else:
-                            vrednost_najboljse = max(vrednost_najboljse,
+                            else:
+                                vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     not maksimiziramo)[1])
-                            alpha = max(alpha, vrednost_najboljse)
-                            if beta <= alpha:
-                                break
-                        self.igra.razveljavi_potezo()
-                        najboljsa_poteza = p
+                                alpha = max(alpha, vrednost_najboljse)
+                                if beta <= alpha:
+                                    break
+                            self.igra.razveljavi_potezo()
+                            najboljsa_poteza = p
 
 
 
@@ -155,26 +161,32 @@ class AlphaBeta:
                     najboljsa_poteza = None
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
-                    for p in veljavne:
-                        self.igra.povleci_potezo(p)
-                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                            vrednost_najboljse = min(vrednost_najboljse,
+
+                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
+                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
+                    if len(veljavne) == 0:
+                        return (None, vrednost_najboljse)
+                    else:
+                        for p in veljavne:
+                            self.igra.povleci_potezo(p)
+                            if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                                vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
-                            alpha = min(alpha, vrednost_najboljse)
-                            if beta <= alpha:
-                                break
+                                alpha = min(alpha, vrednost_najboljse)
+                                if beta <= alpha:
+                                    break
 
-                        else:
-                            vrednost_najboljse = min(vrednost_najboljse,
+                            else:
+                                vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     not maksimiziramo)[1])
-                            alpha = min(alpha, vrednost_najboljse)
-                            if beta <= alpha:
-                                break
-                        self.igra.razveljavi_potezo()
-                        najboljsa_poteza = p
+                                alpha = min(alpha, vrednost_najboljse)
+                                if beta <= alpha:
+                                    break
+                            self.igra.razveljavi_potezo()
+                            najboljsa_poteza = p
 
                 if najboljsa_poteza == None:
                     logging.debug("alphabeta nima poteze v poziciji: {}".format(self.igra.plosca))
