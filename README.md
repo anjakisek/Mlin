@@ -20,7 +20,7 @@ Igra je razdeljena v več datotek:
 
 - igra.py
 	- V uporabniškem vmesniku je seznam, kjer so v seznamu _seznam_krogcev_ shranjeni id posameznih krogcev na plošči, Igra pa uporablja seznam _plosca_, kjer vsak element ponazarja zasedenost določenega polja. Seznamoma so skupni indeksi, torej: četrti element v seznamu predstavja četrto polje.
-	- Igra je razdeljena v 4 faze: postavljanje žetonov, odstranjevanje žetonov, izbiranje žetona za premik in izbiranje polja, kamor bomo žeton premaknili. Tako poteza, kjer izberemo žeton, ga premaknemo na drugo polje in zaradi morebitne trojke odstranimo še nasprotnikov žeton, šteje za tri poteze, čeprav smo na vrsti le enkrat. Znotraj faze premikanja tudi velja, da če ima igralec na razpolago le še tri žetone, se lahko premakne na poljubno mesto, ne le na povezana polja.
+	- Igra je razdeljena v 4 faze: _POSTAVI_, _ODSTRANI_, _PREMAKNI_IZBERI_ in _PREMAKNI_POSTAVI_. Tako poteza, kjer izberemo žeton, ga premaknemo na drugo polje in zaradi morebitne trojke odstranimo še nasprotnikov žeton, šteje za tri poteze, čeprav smo na vrsti le enkrat. Znotraj faze premikanja tudi velja, da če ima igralec na razpolago le še tri žetone, se lahko premakne na poljubno mesto, ne le na povezana polja.
 
 - clovek.py
 
