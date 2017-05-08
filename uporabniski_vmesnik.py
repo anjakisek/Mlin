@@ -8,7 +8,7 @@ from alphabeta import *
 
 
 #Dolocimo velikost plosce in polja ter globino
-VELIKOST_PLOSCE = 400
+VELIKOST_PLOSCE = 500
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
 GLOBINA = 3
 
