@@ -4,15 +4,13 @@ from racunalnik_igralec import *
 from clovek import *
 from minimax import *
 from alphabeta import *
-import logging
 
-# Odkomentiraj za debug:
-logging.basicConfig(level=logging.DEBUG)
+
 
 #Dolocimo velikost plosce in polja ter globino
 VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-GLOBINA = 2
+GLOBINA = 3
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -61,28 +59,29 @@ class Gui():
         #Uporabnik lahko izbere, kaksni tipi igralcev bodo igro igrali
         menu_igra = Menu(menu)
         menu.add_cascade(label="Igra", menu=menu_igra)
-        menu_igra.add_command(label="Clovek vs. Clovek",
+        menu_igra.add_command(label="Človek vs. Človek",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
                                 Clovek(self)))
-        menu_igra.add_command(label="Clovek vs. Racunalnik",
+        menu_igra.add_command(label="Človek vs. Računalnik",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
                                         Racunalnik(self, self.algoritem)))
-        menu_igra.add_command(label="Racunalnik vs. Clovek",
+        menu_igra.add_command(label="Računalnik vs. Človek",
                               command=lambda: self.zacni_igro(
                                   Racunalnik(self, self.algoritem),
                                                 Clovek(self)))
-        menu_igra.add_command(label="Racunalnik vs. Racunalnik",
+        menu_igra.add_command(label="Računalnik vs. Računalnik",
                               command=lambda: self.zacni_igro(
                                   Racunalnik(self, self.algoritem),
                                         Racunalnik(self, self.algoritem)))
+        
         #Podmenu: Tezavnost
         #Tezavnost se nastavlja z izbiro algoritma, lazji je minimax, tezji
         #pa minimax z alpha beta rezi in povecano globino
         menu_tezavnost = Menu(menu)
-        menu.add_cascade(label="Tezavnost", menu=menu_tezavnost)
-        menu_tezavnost.add_radiobutton(label="Zacetnik",
+        menu.add_cascade(label="Težavnost", menu=menu_tezavnost)
+        menu_tezavnost.add_radiobutton(label="Začetnik",
                                   variable=self.algoritem,
                                        value=(Minimax(GLOBINA)))
         menu_tezavnost.add_radiobutton(label="Mojster",
@@ -92,7 +91,7 @@ class Gui():
         #Podmenu: Moznosti
         #Uporabnik lahko razveljavi potezo
         menu_moznosti = Menu(menu)
-        menu.add_cascade(label="Moznosti", menu=menu_moznosti)
+        menu.add_cascade(label="Možnosti", menu=menu_moznosti)
         menu_moznosti.add_command(label="Razveljavi",
                                   command=self.razveljavi)
 
@@ -101,7 +100,7 @@ class Gui():
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
             master,
-            value='Dobrodošli! Izberite tipe igralcev, da pričnete z igro.')
+            value='Dobrodošli! Za pričetek igre izberite tipe igralcev.')
         self.sporocevalec = Label(
             master,
             textvariable = self.sporocilo)
@@ -326,7 +325,7 @@ class Gui():
 
 
     def pripravi_novo_igro(self):
-        '''Pobrise trenutno plosco, izrise prazno in ustvari nov objekt Igra.'''
+        '''Ustvari nov objekt Igra, pobrise trenutno plosco in izrise prazno.'''
         self.igra = Igra()
         self.napis1.config(
                 text = "Preostali {}: ".format(IGRALEC_1)+ str(self.igra.stevec1))
