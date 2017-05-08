@@ -156,7 +156,7 @@ class Igra():
                     self.ali_odstranjujemo_zeton = True
                     return True
                 else:
-                    #Preveri, ali so nasprotnikovi zetoni zablokirani
+                    #Preveri, ali so nasprotnikovi zetoni zablokiran_igraleci
                     if self.stevec1 == 0:
                         if not self.ali_je_konec():
                             self.na_vrsti = nasprotnik(self.na_vrsti)
@@ -176,7 +176,7 @@ class Igra():
 
                 #FAZA_PREMAKNI
                 #Izbrani zeton premakne na izbrano mesto. Preveri trojke ter ali je nasprotnik
-                # zablokiran.
+                # zablokiran_igralec.
                 else:
                     self.plosca[index_polja] = self.na_vrsti
                     self.plosca[self.premik_zetona] = None
@@ -256,12 +256,13 @@ class Igra():
             #Izbrati moramo svoj zeton
             if self.premik_zetona == None:
                 if self.plosca[index_polja] == self.na_vrsti:
-                    return True
+                    if not self.ali_je_zeton_zablokiran(index_polja):
+                        return True
                 else:
                     return False
 
         ##################################
-        #####  FAZA_PREMAKNI_IZBERI  #####
+        #####  FAZA_PREMAKNI_POSTAVI  #####
         ##################################
                 
             else:
@@ -286,21 +287,18 @@ class Igra():
             print('Faze ne delajo prav')
 
 
-    def povezana_polja(self, index_polja):
+    def povezana_polja(self, polje):
         '''Vrne seznam polj, ki so z danim povezana.'''
-        je_v_trojkah = []
-        for trojka in trojke:
-            if index_polja in trojka:
-                je_v_trojkah.append(trojka)
-                if len(je_v_trojkah) == 2:
-                    break
         povezana_polja = []
-        for trojka in je_v_trojkah:
-            a = trojka.index(index_polja)
-            for polje in trojka:
-                b = trojka.index(polje)
-                if abs(b-a) == 1:
-                    povezana_polja.append(trojka[b])
+        #Pregledamo vse trojke, ki vsebujejo polje
+        for (i,j,k) in [t for t in trojke if polje in t]:
+            #Ce je polje na sredini trojke, je povezan s stranskima
+            if polje == i or polje == k:
+                povezana_polja.append(j)
+            #Ce je polje pri strani, je povezan le s sredinskim
+            elif polje == j:
+                povezana_polja.extend((i,k))
+                
         return povezana_polja
 
 
@@ -316,7 +314,7 @@ class Igra():
         return False
 
 
-    def zablokiran(self):
+    def zablokiran_igralec(self):
         '''Vrne True, ce nasprotnik igralca, ki je na potezi, nima mozne veljavne poteze,
         in False sicer.'''
         for i in range(24):
@@ -324,6 +322,13 @@ class Igra():
                 for polje in self.povezana_polja(i):
                     if self.plosca[polje] == None:
                         return False
+        return True
+
+    def ali_je_zeton_zablokiran(self, polje):
+        '''Vrne True, ce se zeton na danem polju ne more premakniti nikamor, in False sicer.'''
+        for t in self.povezana_polja(polje):
+            if self.plosca[t] == None:
+                return False
         return True
 
 
@@ -336,7 +341,7 @@ class Igra():
             if self.st_zetonov[igralec] <= 2:
                 self.poteka = False
                 return True
-            elif self.zablokiran():
+            elif self.zablokiran_igralec():
                 self.poteka = False
                 return True
         
