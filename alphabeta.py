@@ -63,6 +63,7 @@ class AlphaBeta:
             elif seznam_zasedenosti.count(self.jaz) == 2 and (
                 seznam_zasedenosti.count(None) == 1):
                 vrednost += 200
+
             #Bolj nam je vazno postaviti svojo trojko, kot blokirati nasprotnikovo
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 3:
                 vrednost -= 210
@@ -71,37 +72,38 @@ class AlphaBeta:
                 vrednost -= 170
 
         #Polja v srednjem kvadratu so stratesko boljsa:
-        for i in (3,4,5,10,13,18,19,20):
+        for i in (4,10,13,19):
             if self.igra.plosca[i] == self.jaz:
                 vrednost += 5
             elif self.igra.plosca[i] == nasprotnik(self.jaz):
                 vrednost -= 5
 
-##      #Zetoni, ki so si blizu, so vec vredni:
-##        for i in range(24):
-##            if self.igra.plosca[i] == self.jaz:
-##                ze_preverjena = []
-##                for polje in self.igra.povezana_polja(i):
-##                    je_v_trojkah = []
-##                    for trojka in trojke:
-##                        if polje in trojka:
-##                            je_v_trojkah.append(trojka)
-##                            if len(je_v_trojkah) == 2:
-##                                break
-##                    for trojka in je_v_trojkah:
-##                        for index in trojka:
-##                            if self.igra.plosca[index] == self.jaz:
-##                                vrednost += 50
-##                        ze_preverjena.append(trojka)
-##            else:
-##                pass
         #Zelimo, da se igra cimprej konca:
         vrednost += 200 - 2 * self.igra.st_potez
-        #Dobro je imeti cimvec svojih zetonov:
-        vrednost += self.igra.st_zetonov[self.jaz] * 400
-        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 400
-        return vrednost
 
+        #Dobro je imeti cimvec svojih zetonov in cim manj nasprotnikovih:
+        vrednost += self.igra.st_zetonov[self.jaz] * 400
+        vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 380
+
+        #pogledamo, ce je narejena dvojka s skupnim krajiscem
+        for (i,j,k,l,m) in skupna_krajisca:
+            if self.igra.plosca[i] is None and self.igra.plosca[m] is None and self.igra.plosca[j] is not None and self.igra.plosca[j] == self.igra.plosca[k] == self.igra.plosca[l]:
+                if self.igra.plosca[i] == self.jaz:
+                    vrednost += 2000
+                #nasprotnikovi zablokirani
+                elif self.igra.plosca[i] == nasprotnik(self.jaz):
+                    vrednost -= 1700
+
+        #presteje zablokirane zetone
+        for i in range(24):
+            if self.igra.je_zeton_zablokiran(i):
+                #moji zablokirani
+                if self.igra.plosca[i] == self.jaz:
+                    vrednost -= 40
+                #nasprotnikovi zablokirani
+                elif self.igra.plosca[i] == nasprotnik(self.jaz):
+                    vrednost += 50
+        return vrednost
 
 
     def alphabeta(self, globina, alpha, beta, maksimiziramo):
@@ -127,31 +129,26 @@ class AlphaBeta:
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
                     
-                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
-                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
-                    if len(veljavne) == 0:
-                        return (None, vrednost_najboljse)
-                    else:
-                        for p in veljavne:
-                            self.igra.povleci_potezo(p)
-                            if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                                vrednost_najboljse = max(vrednost_najboljse,
+                    for p in veljavne:
+                        self.igra.povleci_potezo(p)
+                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                            vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
-                                alpha = max(alpha, vrednost_najboljse)
-                                if beta <= alpha:
-                                    break
+                            alpha = max(alpha, vrednost_najboljse)
+                            if beta <= alpha:
+                                break
 
-                            else:
-                                vrednost_najboljse = max(vrednost_najboljse,
+                        else:
+                            vrednost_najboljse = max(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     not maksimiziramo)[1])
-                                alpha = max(alpha, vrednost_najboljse)
-                                if beta <= alpha:
-                                    break
-                            self.igra.razveljavi_potezo()
-                            najboljsa_poteza = p
+                            alpha = max(alpha, vrednost_najboljse)
+                            if beta <= alpha:
+                                break
+                        self.igra.razveljavi_potezo()
+                        najboljsa_poteza = p
 
 
 
@@ -162,31 +159,26 @@ class AlphaBeta:
                     veljavne = self.igra.veljavne_poteze()
                     random.shuffle(veljavne)
 
-                    #Vcasih zeli premakniti zeton, ki se ga ne da nikamor premakniti, zato je seznam
-                    #veljavnih potez prazen. Na tak primer se ne oziramo, zato ima najslabso mozno vrednost.
-                    if len(veljavne) == 0:
-                        return (None, vrednost_najboljse)
-                    else:
-                        for p in veljavne:
-                            self.igra.povleci_potezo(p)
-                            if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
-                                #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
-                                vrednost_najboljse = min(vrednost_najboljse,
+                    for p in veljavne:
+                        self.igra.povleci_potezo(p)
+                        if self.igra.odstranitev_zetona or self.igra.premik_zetona is not None:
+                            #pri dolocenih fazah igre se igralec, ki je na potezi, ne zamenja
+                            vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     maksimiziramo)[1])
-                                alpha = min(alpha, vrednost_najboljse)
-                                if beta <= alpha:
-                                    break
+                            alpha = min(alpha, vrednost_najboljse)
+                            if beta <= alpha:
+                                break
 
-                            else:
-                                vrednost_najboljse = min(vrednost_najboljse,
+                        else:
+                            vrednost_najboljse = min(vrednost_najboljse,
                                                      self.alphabeta(globina-1, alpha, beta,
                                                                     not maksimiziramo)[1])
-                                alpha = min(alpha, vrednost_najboljse)
-                                if beta <= alpha:
-                                    break
-                            self.igra.razveljavi_potezo()
-                            najboljsa_poteza = p
+                            alpha = min(alpha, vrednost_najboljse)
+                            if beta <= alpha:
+                                break
+                        self.igra.razveljavi_potezo()
+                        najboljsa_poteza = p
 
                 if najboljsa_poteza == None:
                     logging.debug("alphabeta nima poteze v poziciji: {}".format(self.igra.plosca))
