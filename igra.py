@@ -256,7 +256,10 @@ class Igra():
             #Izbrati moramo svoj zeton
             if self.premik_zetona == None:
                 if self.plosca[index_polja] == self.na_vrsti:
-                    if not self.ali_je_zeton_zablokiran(index_polja):
+                    #Ce je v fazi skakanja
+                    if self.st_zetonov[self.na_vrsti] == 3:
+                        return True
+                    elif not self.je_zeton_zablokiran(index_polja):
                         return True
                 else:
                     return False
@@ -324,7 +327,7 @@ class Igra():
                         return False
         return True
 
-    def ali_je_zeton_zablokiran(self, polje):
+    def je_zeton_zablokiran(self, polje):
         '''Vrne True, ce se zeton na danem polju ne more premakniti nikamor, in False sicer.'''
         for t in self.povezana_polja(polje):
             if self.plosca[t] == None:
