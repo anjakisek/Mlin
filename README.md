@@ -1,6 +1,9 @@
 ﻿# Mlin
 Igrica [Mlin](https://en.wikipedia.org/wiki/Nine_Men%27s_Morris).
 Za zagon program je potrebno zagnati datoteko _uporabniski_vmesnik.py_.
+Predpogoji:
+- Python 3
+- Tkinter
 
 # Načrt dela:
 - 20.3. - 26. 3.: Postavitev repozitorija, uporabniški vmesnik
