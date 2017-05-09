@@ -1,9 +1,0 @@
-﻿
-
--Promovirati je_v_trojkah (igra) v svojo metodo? (na vsaj 3 mestih se pojavi istih 6 vrstic)
--Poprava cenilke
-
-
-
-
-
