@@ -1,6 +1,13 @@
 from igra import *
 import random
-import logging
+
+
+#Ker ni nekega logicnega zaporedja povezanih polj, sem trojke s skupnimi krajsici
+#izpisane shranila tukaj
+
+skupna_krajisca = [(21,9,0,1,2),(0,1,2,14,23),(2,14,23,22,21),(23,22,21,9,0),
+                   (18,10,3,4,5),(3,4,5,13,20),(5,13,20,19,18), (20,19,18,10,3),
+                   (15,11,6,7,8),(6,7,8,12,17),(8,12,17,16,15),(17,16,15,11,6)]
 
 
 class AlphaBeta:
@@ -85,16 +92,15 @@ class AlphaBeta:
         vrednost += self.igra.st_zetonov[self.jaz] * 400
         vrednost -= self.igra.st_zetonov[nasprotnik(self.jaz)] * 380
 
-        #pogledamo, ce je narejena dvojka s skupnim krajiscem
+        #Pogledamo, ce je narejena dvojka s skupnim krajiscem
         for (i,j,k,l,m) in skupna_krajisca:
             if self.igra.plosca[i] is None and self.igra.plosca[m] is None and self.igra.plosca[j] is not None and self.igra.plosca[j] == self.igra.plosca[k] == self.igra.plosca[l]:
                 if self.igra.plosca[i] == self.jaz:
                     vrednost += 2000
-                #nasprotnikovi zablokirani
                 elif self.igra.plosca[i] == nasprotnik(self.jaz):
                     vrednost -= 1700
 
-        #presteje zablokirane zetone
+        #Presteje zablokirane zetone
         for i in range(24):
             if self.igra.je_zeton_zablokiran(i):
                 #moji zablokirani
@@ -122,7 +128,7 @@ class AlphaBeta:
                 return (None, self.vrednost_pozicije())
             else:
 
-                #ena stopnja
+                #ena stopnja maksimiziranja
                 if maksimiziramo:
                     vrednost_najboljse = -AlphaBeta.NESKONCNO
                     najboljsa_poteza = None
@@ -181,7 +187,6 @@ class AlphaBeta:
                         najboljsa_poteza = p
 
                 if najboljsa_poteza == None:
-                    logging.debug("alphabeta nima poteze v poziciji: {}".format(self.igra.plosca))
                     assert False
                 return (najboljsa_poteza, vrednost_najboljse)
         else:
