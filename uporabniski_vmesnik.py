@@ -8,9 +8,9 @@ from alphabeta import *
 
 
 #Dolocimo velikost plosce in polja ter globino
-VELIKOST_PLOSCE = 500
+VELIKOST_PLOSCE = 400
 VELIKOST_POLJA = VELIKOST_PLOSCE/25
-GLOBINA = 3
+GLOBINA = 2
 
 ##OSTEVILCENJE POLJ
 ## 0  -  -  1  -  -  2
@@ -83,10 +83,11 @@ class Gui():
         menu.add_cascade(label="Težavnost", menu=menu_tezavnost)
         menu_tezavnost.add_radiobutton(label="Začetnik",
                                   variable=self.algoritem,
-                                       value=(Minimax(GLOBINA)))
+                                  value=(Minimax(GLOBINA)))
         menu_tezavnost.add_radiobutton(label="Mojster",
                                   variable=self.algoritem,
                                    value=(AlphaBeta(GLOBINA+4)))
+        
 
         #Podmenu: Moznosti
         #Uporabnik lahko razveljavi potezo
@@ -100,7 +101,7 @@ class Gui():
         #Napis nad igralno plosco
         self.sporocilo = StringVar(
             master,
-            value='Dobrodošli! Za pričetek igre izberite tipe igralcev.')
+            value='Dobrodošli!  Za pričetek izberite vrsto igre.')
         self.sporocevalec = Label(
             master,
             textvariable = self.sporocilo)
@@ -261,7 +262,10 @@ class Gui():
                 pass
         #Ce poteza ni bila veljavna in ni naredil nic, samo ponastavi napis nad plosco
         else:
-            if self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
+            if self.igra.ali_odstranjujemo_zeton:
+                self.sporocilo.set('Na vrsti je {} - odstranite žeton'
+                                   .format(self.igra.na_vrsti))
+            elif self.igra.stevec1 == 0 and self.igra.stevec2 == 0:
                 self.sporocilo.set('Na vrsti je {} - izberite žeton za premik'
                                    .format(self.igra.na_vrsti))
 
