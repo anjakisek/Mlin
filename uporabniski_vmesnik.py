@@ -62,19 +62,19 @@ class Gui():
         menu_igra.add_command(label="Človek vs. Človek",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
-                                Clovek(self)))
+                                  Clovek(self)))
         menu_igra.add_command(label="Človek vs. Računalnik",
                               command=lambda: self.zacni_igro(
                                   Clovek(self),
-                                        Racunalnik(self, self.algoritem)))
+                                  Racunalnik(self, self.algoritem)))
         menu_igra.add_command(label="Računalnik vs. Človek",
                               command=lambda: self.zacni_igro(
                                   Racunalnik(self, self.algoritem),
-                                                Clovek(self)))
+                                  Clovek(self)))
         menu_igra.add_command(label="Računalnik vs. Računalnik",
                               command=lambda: self.zacni_igro(
                                   Racunalnik(self, self.algoritem),
-                                        Racunalnik(self, self.algoritem)))
+                                  Racunalnik(self, self.algoritem)))
         
         #Podmenu: Tezavnost
         #Tezavnost se nastavlja z izbiro algoritma, lazji je minimax, tezji
@@ -318,6 +318,7 @@ class Gui():
         master.destroy()
 
     def prekini_igralce(self):
+        '''Poklice ustrezne metode za prekinitev igralcev.'''
         if self.igralec_1 is not None:
             self.igralec_1.prekini()
         if self.igralec_2 is not None:
@@ -326,6 +327,7 @@ class Gui():
     def razveljavi(self):
         self.igra.razveljavi_potezo()
         self.osvezi_plosco()
+        
 
 
     def pripravi_novo_igro(self):
