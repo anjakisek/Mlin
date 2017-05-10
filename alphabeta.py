@@ -39,11 +39,11 @@ class AlphaBeta:
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
 
-        #Po dolecenem stevilu potez se globina poveca.
+        #Ce je veljavnih potez zelo malo, povecamo globino
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
-        if st_veljavnih_potez < 8:
+        if st_veljavnih_potez < 4:
             self.globina = self.zacetna_globina + 2
-        elif st_veljavnih_potez < 15:
+        elif st_veljavnih_potez < 12:
             self.globina = self.zacetna_globina + 1
         else:
             self.globina = self.zacetna_globina
@@ -71,7 +71,7 @@ class AlphaBeta:
                 seznam_zasedenosti.count(None) == 1):
                 vrednost += 200
 
-            #Bolj nam je vazno postaviti svojo trojko, kot blokirati nasprotnikovo
+            #Bolj nam je vazno postaviti svojo trojko kot blokirati nasprotnikovo
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 3:
                 vrednost -= 210
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 2 and (
