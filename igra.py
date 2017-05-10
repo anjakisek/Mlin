@@ -156,7 +156,7 @@ class Igra():
                     self.ali_odstranjujemo_zeton = True
                     return True
                 else:
-                    #Preveri, ali so nasprotnikovi zetoni zablokiran_igraleci
+                    #Preveri, ali so nasprotnikovi zetoni zablokirani
                     if self.stevec1 == 0:
                         if not self.ali_je_konec():
                             self.na_vrsti = nasprotnik(self.na_vrsti)
@@ -165,7 +165,7 @@ class Igra():
                         self.na_vrsti = nasprotnik(self.na_vrsti)
                         return True
 
-            #FAZA_PREMAKNI_IZBERI ali FAZA_PREMAKNI
+            #FAZA_PREMAKNI_IZBERI ali FAZA_PREMAKNI_POSTAVI
             elif self.stevec1 == 0 and self.stevec2 == 0:
 
                 #FAZA_PREMAKNI_IZBERI
@@ -174,9 +174,9 @@ class Igra():
                     self.premik_zetona = index_polja
                     return True
 
-                #FAZA_PREMAKNI
+                #FAZA_PREMAKNI_POSTAVI
                 #Izbrani zeton premakne na izbrano mesto. Preveri trojke ter ali je nasprotnik
-                # zablokiran_igralec.
+                # zablokiran.
                 else:
                     self.plosca[index_polja] = self.na_vrsti
                     self.plosca[self.premik_zetona] = None
@@ -197,7 +197,7 @@ class Igra():
 
 
     def veljavne_poteze(self):
-        '''Naredi seznam z indeksi vseh polj, na katere lahko igramo.'''
+        '''Vrne seznam z indeksi vseh polj, na katere lahko igramo.'''
         poteze = []
         for indeks in range(len(self.plosca)):
             if self.je_veljavna_poteza(indeks):
@@ -256,7 +256,7 @@ class Igra():
             #Izbrati moramo svoj zeton
             if self.premik_zetona == None:
                 if self.plosca[index_polja] == self.na_vrsti:
-                    #Ce je v fazi skakanja
+                    #Ce je v fazi skakanja, lahko izberemo tudi zablokiranega, sicer ne
                     if self.st_zetonov[self.na_vrsti] == 3:
                         return True
                     elif not self.je_zeton_zablokiran(index_polja):
@@ -283,11 +283,11 @@ class Igra():
                 #Zeton smemo premakniti le na povezana polja
                 else:
                     if index_polja in self.povezana_polja(self.premik_zetona):
-                                return True
+                        return True
                     return False
 
         else:
-            print('Faze ne delajo prav')
+            assert False, "Faze ne delajo prav."
 
 
     def povezana_polja(self, polje):
@@ -308,7 +308,6 @@ class Igra():
 
     def je_v_trojki(self, polje):
         '''Preveri, ali je dano polje v trojki. Vrni True, če je, sicer False.'''
-
         # Gremo po trojkah, ki vsebujejo polje
         for (i,j,k) in [t for t in trojke if polje in t]:
             if (self.plosca[i] != None and self.plosca[i] == self.plosca[j] == self.plosca[k]):
@@ -323,6 +322,7 @@ class Igra():
         for i in range(24):
             if self.plosca[i] == nasprotnik(self.na_vrsti):
                 for polje in self.povezana_polja(i):
+                    #Ce najde vsaj eno povezano prazno polje, zeton ni zablokiran
                     if self.plosca[polje] == None:
                         return False
         return True
