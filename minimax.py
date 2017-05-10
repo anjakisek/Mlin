@@ -45,11 +45,11 @@ class Minimax:
         self.jaz = self.igra.na_vrsti
         self.poteza = None # tu bomo zapisali najboljso potezo
 
-        #Po dolecenem stevilu potez se globina poveca.
+        #Ce je veljavnih potez malo, se globina poveca
         st_veljavnih_potez = len(self.igra.veljavne_poteze())
-        if st_veljavnih_potez < 8:
+        if st_veljavnih_potez < 4:
             self.globina = self.zacetna_globina + 2
-        elif st_veljavnih_potez < 15:
+        elif st_veljavnih_potez < 12:
             self.globina = self.zacetna_globina + 1
         else:
             self.globina = self.zacetna_globina
@@ -78,7 +78,7 @@ class Minimax:
                 seznam_zasedenosti.count(None) == 1):
                 vrednost += 270
 
-            #Bolj nam je vazno postaviti svojo trojko, kot blokirati nasprotnikovo
+            #Bolj nam je vazno postaviti svojo trojko kot blokirati nasprotnikovo
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 3:
                 vrednost -= 250
             elif seznam_zasedenosti.count(nasprotnik(self.jaz)) == 2 and (
@@ -107,7 +107,7 @@ class Minimax:
                 elif self.igra.plosca[i] == nasprotnik(self.jaz):
                     vrednost -= 1700
 
-        #Presteje zablokirane zetone
+        #Prestejemo zablokirane zetone
         for i in range(24):
             if self.igra.je_zeton_zablokiran(i):
                 #moji zablokirani
